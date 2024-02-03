@@ -4,14 +4,13 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 public class Amp extends Command {
   
   private final Shooter shooter;
-  private double speed = 0.25;
+  private double speed = 1; // TODO: Change to amp motor speed (in rotations per second)
 
   public Amp(Shooter shooter) {
     this.shooter = shooter;
@@ -25,10 +24,7 @@ public class Amp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    speed = MathUtil.clamp(speed, 0, 1);
     shooter.startMotors(speed, "Amp");
-
   }
 
   // Called once the command ends or is interrupted.

@@ -4,13 +4,12 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 public class Shoot extends Command {
   private final Shooter shooter;
-  private double speed = 0.25;
+  private double speed = 1; // Change to intake motor speed (in rotations per second)
 
   public static void wait(int ms) {
     try {
@@ -34,8 +33,9 @@ public class Shoot extends Command {
   @Override
   public void execute() {
 
-    shooter.shoot(0.5);
-    speed = MathUtil.clamp(speed, 0, 1);
+    if (shooter.canShoot) {
+      shooter.shoot(speed);
+    }
     wait(2000);
     shooter.setDefault();
 

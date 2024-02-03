@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 
 public class Shooter extends SubsystemBase {
 
@@ -16,15 +17,16 @@ public class Shooter extends SubsystemBase {
   private final TalonFX leftShootMotor = new TalonFX(0); // TODO: Set to left motor device Id
   private final TalonFX rightShootMotor = new TalonFX(0); // TODO: Set to left motor device Id
   private final TalonFX intakeMotor = new TalonFX(0); // TODO: Set to left motor device Id
-  private double speed = 0;  // Switch to velocity
+  private double speed = 0;
+  private VelocityVoltage velocity = new VelocityVoltage(speed);
   private String position = "Default";
   public boolean canShoot = false;
 
   public Shooter() {}
 
   public void shooterInit() {
-    SmartDashboard.putNumber("Shooter Motor Speed", 0);
-    SmartDashboard.putString("Shooter Position", "Default");
+    SmartDashboard.putNumber("Shooter Motor Speed", speed);
+    SmartDashboard.putString("Shooter Position", position);
     leftShootMotor.setInverted(true); // TODO: Change to Right/Left to invert shooting motor
   }
 
@@ -34,18 +36,18 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter Motor Speed", speed);
     SmartDashboard.putString("Shooter Position", position);
     if (position == "Amp") {
-      pivotMotor.setPosition(0.2);  // TODO: Change to fit amp angle
+      pivotMotor.setPosition(0.1);  // TODO: Change to fit amp angle
     } else if (position == "Speaker") {
-      pivotMotor.setPosition(0.1);  // TODO: Change to fit speaker angle
+      pivotMotor.setPosition(0.05);  // TODO: Change to fit speaker angle
     }
-    rightShootMotor.set(speed);  // Switch to velocity
-    leftShootMotor.set(speed);  // Switch to velocity
+    rightShootMotor.setControl(velocity.withVelocity(speed));
+    leftShootMotor.setControl(velocity.withVelocity(speed));
     canShoot = true;
   }
 
   public void shoot(double speed) {
     if (this.speed != 0 && (this.position == "Default")) { // If shooter is in position and ready to fire
-      intakeMotor.set(speed);  // Switch to velocity
+      intakeMotor.setControl(velocity.withVelocity(speed));
     }
     canShoot = false;
   }
@@ -53,13 +55,13 @@ public class Shooter extends SubsystemBase {
   public void setDefault() {
     SmartDashboard.putNumber("Shooter Motor Speed", 0);
     SmartDashboard.putString("Shooter Position", "Default");
-    intakeMotor.set(0);  // Switch to velocity
-    rightShootMotor.set(0);  // Switch to velocity
-    leftShootMotor.set(0);  // Switch to velocity
+    intakeMotor.setControl(velocity.withVelocity(0));
+    rightShootMotor.setControl(velocity.withVelocity(0));
+    leftShootMotor.setControl(velocity.withVelocity(0));
     if (this.position == "Amp") {
-      pivotMotor.setPosition(-0.2);  // TODO: Change to fit amp angle
+      pivotMotor.setPosition(-0.1);  // TODO: Change to fit amp angle
     } else if (this.position == "Speaker") {
-      pivotMotor.setPosition(-0.1);  // TODO: Change to fit speaker angle
+      pivotMotor.setPosition(-0.05);  // TODO: Change to fit speaker angle
     }
     this.position = "Default";
   }

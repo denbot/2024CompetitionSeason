@@ -13,10 +13,6 @@ public class ShooterTest extends SubsystemBase {
   private double shooterSpeed = 0.0;
   private VelocityVoltage velocity = new VelocityVoltage(shooterSpeed);
   private TalonFX happyMotor2 = new TalonFX(0);
-
-  public ShooterTest() {}
-    
-
   @Override
   public void periodic() {
     happyMotor2.setControl(velocity.withVelocity(shooterSpeed));

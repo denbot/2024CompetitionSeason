@@ -25,10 +25,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final Shooter m_shooter = new Shooter();
-  private final Amp m_amp = new Amp(m_shooter);
-  private final Speaker m_speaker = new Speaker(m_shooter);
-  private final Shoot m_shoot = new Shoot(m_shooter);
+  private final Shooter shooterSubsystem = new Shooter();
+  private final Amp ampCommand = new Amp(shooterSubsystem);
+  private final Speaker speakerCommand = new Speaker(shooterSubsystem);
+  private final Shoot shootCommand = new Shoot(shooterSubsystem);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -56,9 +56,9 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.a().onTrue(m_amp);
-    m_driverController.b().onTrue(m_speaker);
-    m_driverController.rightTrigger().onTrue(m_shoot);
+    m_driverController.a().onTrue(ampCommand);
+    m_driverController.b().onTrue(speakerCommand);
+    m_driverController.rightTrigger().onTrue(shootCommand);
   }
 
   /**

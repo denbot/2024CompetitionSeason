@@ -4,40 +4,37 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
+// import frc.robot.subsystens.Intake; TODO: coordinate with intake to import the right subsystem
 
 public class Shoot extends Command {
   private final Shooter shooter;
   private double speed = 1; // Change to intake motor speed (in rotations per second)
-
-  public static void wait(int ms) {
-    try {
-      Thread.sleep(ms);
-    }
-    catch(InterruptedException ex) {
-      Thread.currentThread().interrupt();
-    }
-  }
+  private Timer timer = new Timer();
 
   public Shoot(Shooter shooter) {
     this.shooter = shooter;
     addRequirements(shooter);
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
+  public void initialize() {
+    timer.reset();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    if (shooter.canShoot) {
-      shooter.shoot(speed);
+    if (timer.hasElapsed(2)){
+      shooter.setDefault();
+    } else {
+      if (shooter.motorsAtShootingSpeed) { // TODO: Add "and intake has a peice" 
+        shooter.shoot();
+        // TODO: Interact with intake subsystem to run belt
+      }
     }
-    wait(2000);
-    shooter.setDefault();
 
   }
 

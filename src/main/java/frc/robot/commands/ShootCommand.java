@@ -7,14 +7,14 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
-// import frc.robot.subsystens.Intake; TODO: coordinate with intake to import the right subsystem
+// import frc.robot.subsystens.Intake; TODO Coordinate with intake to import the right subsystem
 
-public class Shoot extends Command {
+public class ShootCommand extends Command {
   private final Shooter shooter;
-  private double speed = 1; // Change to intake motor speed (in rotations per second)
+  private double speed = 1; // TODO Change to intake motor speed (in rotations per second)
   private Timer timer = new Timer();
 
-  public Shoot(Shooter shooter) {
+  public ShootCommand(Shooter shooter) {
     this.shooter = shooter;
     addRequirements(shooter);
   }
@@ -26,25 +26,23 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    if (timer.hasElapsed(2)){
-      shooter.setDefault();
-    } else {
-      if (shooter.motorsAtShootingSpeed) { // TODO: Add "and intake has a peice" 
-        shooter.shoot();
-        // TODO: Interact with intake subsystem to run belt
-      }
+    if (timer.get() == 0 && shooter.canShoot()) { // TODO: Add "and intake has a peice" 
+      // TODO Move intake
+      timer.start();
     }
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    shooter.stopMotors();
+    shooter.setDefault();
+    // TODO stop the intake
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timer.hasElapsed(2);
   }
 }

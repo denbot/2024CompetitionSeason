@@ -10,71 +10,74 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 
 public class Shooter extends SubsystemBase {
 
   private final TalonFX pivotMotor = new TalonFX(0); // TODO: Set to pivot motor device Id
   private final TalonFX leftShootMotor = new TalonFX(0); // TODO: Set to left motor device Id
   private final TalonFX rightShootMotor = new TalonFX(0); // TODO: Set to right motor device Id
-  private double speed = 0;
-  private VelocityVoltage velocity = new VelocityVoltage(speed);
-  public static boolean motorsAtShootingSpeed = false;
-  private final String smartDashboardSpeed = "Shooter Motor Speed";
-  private final String smartDashboardPosition = "Shooter Motor Speed";
+  private double targetVelocity = 0;
+  private double motorVelocity = 0;
+  private boolean motorsAtShootingSpeed = false;
+  private VelocityVoltage velocity = new VelocityVoltage(targetVelocity);
+  private MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0.1);
+  private final String SMART_DASHBOARD_VELOCITY = "Shooter Motor Velocity";
+  private final String SMART_DASHBOARD_TARGET_VELOCITY = "Shooter Motor Target Velocity";
+  private final String SMART_DASHBOARD_POSITION = "Shooter Motor Position";
 
-  public enum position {
+  public enum Position {
     DEFAULT,
     AMP,
     SPEAKER;
   }
 
-  public static position positionOfArm = position.DEFAULT;
-
-  public Shooter() {}
+  private static Position positionOfArm = Position.DEFAULT;
 
   public void shooterInit() {
-    SmartDashboard.putNumber(smartDashboardSpeed, speed);
-    SmartDashboard.putString(smartDashboardPosition, positionOfArm.toString());
+    SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
+    SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
+    SmartDashboard.putString(SMART_DASHBOARD_POSITION, positionOfArm.toString());
     leftShootMotor.setInverted(true); // TODO: Change to Right/Left to invert shooting motor
   }
 
-  public void startMotors(double speed, position position) {
-    this.speed = speed;
+  public void startMotors(double speed, Position position) {
+    targetVelocity = speed;
     positionOfArm = position;
-    SmartDashboard.putNumber(smartDashboardSpeed, speed);
-    SmartDashboard.putString(smartDashboardPosition, positionOfArm.toString());
-    if (position == position.AMP) {
-      pivotMotor.setPosition(-0.05);  // TODO: Change to fit amp angle
-    } else if (position == position.SPEAKER) {
-      pivotMotor.setPosition(-0.1);  // TODO: Change to fit speaker angle
+    if (position == Position.AMP) {
+      motionMagicVoltage = new MotionMagicVoltage(-0.05);  // TODO: Change to fit amp angle -- not controled yet
+    } else if (position == Position.SPEAKER) {
+      motionMagicVoltage = new MotionMagicVoltage(-0.1);  // TODO: Change to fit speaker angle -- not controled yet
     }
     rightShootMotor.setControl(velocity.withVelocity(speed));
     leftShootMotor.setControl(velocity.withVelocity(speed));
   }
 
-  public void shoot() {
-    if (motorsAtShootingSpeed == true) { // If shooter is in position and ready to fire
-      motorsAtShootingSpeed = false;
-    }
+  public boolean canShoot() {
+    return motorsAtShootingSpeed && positionOfArm != Position.DEFAULT;
   }
 
   public void setDefault() {
-    SmartDashboard.putNumber(smartDashboardSpeed, 0);
-    SmartDashboard.putString(smartDashboardPosition, positionOfArm.toString());
+    if (positionOfArm == Position.AMP) {
+      motionMagicVoltage = new MotionMagicVoltage(0.05);  // TODO: Change to fit amp angle -- not controled yet
+    } else if (positionOfArm == Position.SPEAKER) {
+      motionMagicVoltage = new MotionMagicVoltage(0.1);  // TODO: Change to fit speaker angle -- not controled yet
+    }
+    positionOfArm = Position.DEFAULT;
+  }
+
+  public void stopMotors() {
     rightShootMotor.setControl(velocity.withVelocity(0));
     leftShootMotor.setControl(velocity.withVelocity(0));
-    if (positionOfArm == position.AMP) {
-      pivotMotor.setPosition(-0.1);  // TODO: Change to fit amp angle
-    } else if (positionOfArm == position.SPEAKER) {
-      pivotMotor.setPosition(-0.05);  // TODO: Change to fit speaker angle
-    }
-    positionOfArm = position.DEFAULT;
   }
 
   @Override
   public void periodic() {
-    if (leftShootMotor.getVelocity().refresh().equals(Math.round(speed/25)*25) && positionOfArm != position.DEFAULT) { // This will effectively give a range of 25 RPM for comparing
-      motorsAtShootingSpeed = true;
-    }
+    motorVelocity = leftShootMotor.getVelocity().getValue();
+    motorsAtShootingSpeed = motorVelocity <= targetVelocity + 10 && motorVelocity >= targetVelocity - 10;
+    SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
+    SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
+    SmartDashboard.putString(SMART_DASHBOARD_POSITION, positionOfArm.toString());
+    pivotMotor.setControl(motionMagicVoltage); // -- not controled yet
   }
 }

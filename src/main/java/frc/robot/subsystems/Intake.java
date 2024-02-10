@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Timer;
 
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -18,51 +19,56 @@ public class Intake extends SubsystemBase {
 
     private final TalonFX intakeMotor = new TalonFX(0);
 
-    boolean status = intakeMotor.isAlive();
-    // Will change intakeMotorVelocity
-    double intakeMotorVelocity = 1;
+    private boolean status = intakeMotor.isAlive();
+    // TODO: Change intakeMotorVelocity
+    private double intakeMotorVelocity = 1;
     private VelocityVoltage velocity = new VelocityVoltage(intakeMotorVelocity);
 
-    enum IntakeState {
+    private enum IntakeState {
         IDLE, // No motors are moving, no note is inside the mechanism
         INTAKING, // Motors are moving, note is not yet where we need it to be
         HOLDING, // No motors are moving, note is where it needs to be and is contained in the robot
         EJECTING; // Motors are moving, note is being moved into the gears
     }
+    private Timer timer = new Timer();
+    
 
-    public static IntakeState CurrentState = IntakeState.IDLE;
-
-    public Intake() {
-        // SmartDashboard displays to test sensors
-        SmartDashboard.putBoolean("Motor Functional?", status);
-        SmartDashboard.putNumber("Intake Motor Speed (RPM)", intakeMotorVelocity);
-    }
+    private static IntakeState currentState = IntakeState.IDLE;
 
     @Override
     public void periodic() {
-        switch (CurrentState) {
+        SmartDashboard.putBoolean("Motor Functional?", status);
+        SmartDashboard.putNumber("Intake Motor Speed (RPM)", intakeMotorVelocity);
+        boolean noteAtPreIntakeSensor = ! preIntakeSensor.get();
+        boolean noteAtIntakeSensor = ! intakeSensor.get();
+        boolean noteAtShooterSensor = ! shooterSensor.get();
+        switch (currentState) {
             case IDLE:
-                if (preIntakeSensor.get() == false) {
+                if (noteAtPreIntakeSensor) {
                     intakeMotor.setControl(velocity.withVelocity(intakeMotorVelocity));
-                    CurrentState = IntakeState.INTAKING;
+                    currentState = IntakeState.INTAKING;
                 }
                 break;
             case INTAKING:
-                if (preIntakeSensor.get() == true && intakeSensor.get() == true) {
-                    CurrentState = IntakeState.IDLE;
+                if (timer.get() == 0 && !noteAtPreIntakeSensor){
+                    timer.start();
                 }
-                if (shooterSensor.get() == false) {
-                    CurrentState = IntakeState.HOLDING;
+                if (noteAtShooterSensor) {
+                    timer.reset();
+                    currentState = IntakeState.HOLDING;
+                } else if (! noteAtPreIntakeSensor && ! noteAtIntakeSensor && timer.hasElapsed(2)) {
+                    timer.reset();
+                    currentState = IntakeState.IDLE;
                 }
                 break;
             case HOLDING:
-                intakeMotor.set(0);
+                intakeMotor.stopMotor();
                 break;
             case EJECTING:
                 intakeMotor.setControl(velocity.withVelocity(intakeMotorVelocity));
-                if (shooterSensor.get() == true) {
-                    intakeMotor.set(0);
-                    CurrentState = IntakeState.IDLE;
+                if (! noteAtShooterSensor) {
+                    intakeMotor.stopMotor();
+                    currentState = IntakeState.IDLE;
                 }
                 break;
         }
@@ -70,10 +76,10 @@ public class Intake extends SubsystemBase {
 
     // Called on by shooter subsystem
     public void shoot() {
-        CurrentState = IntakeState.EJECTING;
+        currentState = IntakeState.EJECTING;
     }
 
     public void disable() {
-        intakeMotor.set(0);
+        intakeMotor.stopMotor();
     }
 }

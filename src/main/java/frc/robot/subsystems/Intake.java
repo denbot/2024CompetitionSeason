@@ -17,7 +17,7 @@ public class Intake extends SubsystemBase {
     private final DigitalInput intakeSensor = new DigitalInput(1);
     private final DigitalInput shooterSensor = new DigitalInput(2);
 
-    private final TalonFX intakeMotor = new TalonFX(0);
+    private final TalonFX intakeMotor = new TalonFX(4);
 
     private boolean status = intakeMotor.isAlive();
     // TODO: Change intakeMotorVelocity

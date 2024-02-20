@@ -15,9 +15,9 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 
 public class Shooter extends SubsystemBase {
 
-  private final TalonFX pivotMotor = new TalonFX(14, Constants.OperatorConstants.canivoreSerial);
-  private final TalonFX leftShootMotor = new TalonFX(5, Constants.OperatorConstants.canivoreSerial);
-  private final TalonFX rightShootMotor = new TalonFX(13, Constants.OperatorConstants.canivoreSerial); 
+  private final TalonFX pivotMotor = new TalonFX(14);
+  private final TalonFX leftShootMotor = new TalonFX(5);
+  private final TalonFX rightShootMotor = new TalonFX(13); 
   private double targetVelocity = 0;
   private double motorVelocity = 0;
   private boolean motorsAtShootingSpeed = false;

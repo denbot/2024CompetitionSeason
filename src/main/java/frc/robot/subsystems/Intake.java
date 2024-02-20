@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Constants;
 
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -17,7 +18,7 @@ public class Intake extends SubsystemBase {
     private final DigitalInput intakeSensor = new DigitalInput(1);
     private final DigitalInput shooterSensor = new DigitalInput(2);
 
-    private final TalonFX intakeMotor = new TalonFX(4);
+    private final TalonFX intakeMotor = new TalonFX(4, Constants.OperatorConstants.canivoreSerial);
 
     private boolean status = intakeMotor.isAlive();
     // TODO: Change intakeMotorVelocity
@@ -35,31 +36,62 @@ public class Intake extends SubsystemBase {
 
     private static IntakeState currentState = IntakeState.IDLE;
 
+    public void intakeInit() {
+        TalonFX.optimizeBusUtilizationForAll(intakeMotor);
+        timer.stop();
+        timer.reset();
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Motor Functional?", status);
         SmartDashboard.putNumber("Intake Motor Speed (RPM)", intakeMotorVelocity);
+        SmartDashboard.putBoolean("Pre Intake Sensor", preIntakeSensor.get());
+        SmartDashboard.putString("Intake State", currentState.name());
+        SmartDashboard.putNumber("Timer", timer.get());
         boolean noteAtPreIntakeSensor = ! preIntakeSensor.get();
         boolean noteAtIntakeSensor = ! intakeSensor.get();
         boolean noteAtShooterSensor = ! shooterSensor.get();
         switch (currentState) {
             case IDLE:
                 if (noteAtPreIntakeSensor) {
-                    intakeMotor.setControl(velocity.withVelocity(intakeMotorVelocity));
+                    //intakeMotor.setControl(velocity.withVelocity(intakeMotorVelocity));
+                    intakeMotor.set(0.2);
                     currentState = IntakeState.INTAKING;
+                    timer.stop();
+                    timer.reset();
                 }
                 break;
             case INTAKING:
-                if (timer.get() == 0 && !noteAtPreIntakeSensor){
-                    timer.start();
+                if (noteAtPreIntakeSensor || noteAtIntakeSensor) {
+                    if(timer.get() != 0) {
+                        timer.stop();
+                        timer.reset();
+                        intakeMotor.set(0);
+                    }
+                } else {
+                    // Our note is no at either intake sensor, start our timer to stop our motors
+                    if(timer.get() == 0) {
+                        timer.start();
+                    }
                 }
-                if (noteAtShooterSensor) {
-                    timer.reset();
-                    currentState = IntakeState.HOLDING;
-                } else if (! noteAtPreIntakeSensor && ! noteAtIntakeSensor && timer.hasElapsed(2)) {
-                    timer.reset();
+
+                if (timer.hasElapsed(2)) {
                     currentState = IntakeState.IDLE;
+                    timer.stop();
+                    timer.reset();
+                    intakeMotor.set(0);
                 }
+                // if (timer.get() == 0 && noteAtPreIntakeSensor){
+                //     timer.start();
+                // }
+                // if (noteAtShooterSensor) {
+                //     timer.reset();
+                //     currentState = IntakeState.HOLDING;
+                // } else if (! noteAtPreIntakeSensor && ! noteAtIntakeSensor && timer.hasElapsed(2)) {
+                //     timer.reset();
+                //     currentState = IntakeState.IDLE;
+                // }
                 break;
             case HOLDING:
                 intakeMotor.stopMotor();

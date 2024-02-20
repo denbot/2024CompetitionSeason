@@ -10,6 +10,10 @@ import frc.robot.commands.AmpCommand;
 import frc.robot.commands.SpeakerCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Intake;
+
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -26,6 +30,7 @@ public class RobotContainer {
   private final AmpCommand ampCommand = new AmpCommand(shooterSubsystem);
   private final SpeakerCommand speakerCommand = new SpeakerCommand(shooterSubsystem);
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem);
+  private final Intake intakeSubsystem = new Intake();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -35,6 +40,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    shooterSubsystem.shooterInit();
+    intakeSubsystem.intakeInit();
   }
 
   /**

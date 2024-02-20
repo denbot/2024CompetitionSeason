@@ -15,5 +15,6 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final String canivoreSerial = "D75CCE723353385320202034111303FF";
   }
 }

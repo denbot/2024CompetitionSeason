@@ -5,8 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import frc.robot.RobotContainer;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -87,7 +90,12 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    SmartDashboard.putNumber("ControllerLeftX", m_robotContainer.getJoystickLeftX());
+    SmartDashboard.putNumber("ControllerLeftY", m_robotContainer.getJoystickLeftY());
+    SmartDashboard.putNumber("ControllerRightX", m_robotContainer.getJoystickRightX());
+    SmartDashboard.putNumber("ControllerRightY", m_robotContainer.getJoystickRightY());
+  }
 
   @Override
   public void teleopExit() {}

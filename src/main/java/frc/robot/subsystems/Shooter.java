@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -14,9 +15,9 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 
 public class Shooter extends SubsystemBase {
 
-  private final TalonFX pivotMotor = new TalonFX(14);
-  private final TalonFX leftShootMotor = new TalonFX(5);
-  private final TalonFX rightShootMotor = new TalonFX(13); 
+  private final TalonFX pivotMotor = new TalonFX(14, Constants.OperatorConstants.canivoreSerial);
+  private final TalonFX leftShootMotor = new TalonFX(5, Constants.OperatorConstants.canivoreSerial);
+  private final TalonFX rightShootMotor = new TalonFX(13, Constants.OperatorConstants.canivoreSerial); 
   private double targetVelocity = 0;
   private double motorVelocity = 0;
   private boolean motorsAtShootingSpeed = false;
@@ -39,6 +40,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
     SmartDashboard.putString(SMART_DASHBOARD_POSITION, positionOfArm.toString());
     leftShootMotor.setInverted(true); // TODO: Change to Right/Left to invert shooting motor
+    TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
   }
 
   public void startMotors(double speed, Position position) {

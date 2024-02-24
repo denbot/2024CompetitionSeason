@@ -15,17 +15,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.generated.TunerConstants;
+import frc.robot.generated.*;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AmpCommand;
 import frc.robot.commands.SpeakerCommand;
 import frc.robot.commands.ShootCommand;
-import frc.robot.subsystems.*;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.SwerveSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -42,7 +40,7 @@ public class RobotContainer {
   private final Intake intakeSubsystem = new Intake();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController driverController =
+  public final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -95,12 +93,26 @@ public class RobotContainer {
     // reset the field-centric heading on left bumper press
     driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
+
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     
     drivetrain.registerTelemetry(telemetry::telemeterize);
     }
   }
+  public double getJoystickLeftX() {
+    return driverController.getLeftX();
+  }
+  public double getJoystickLeftY() {
+    return driverController.getLeftY();
+  }
+  public double getJoystickRightX() {
+    return driverController.getRightX();
+  }
+  public double getJoystickRightY() {
+    return driverController.getRightY();
+  }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

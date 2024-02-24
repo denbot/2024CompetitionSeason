@@ -13,6 +13,8 @@ import frc.robot.Constants;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import frc.robot.Constants;
+
 public class Intake extends SubsystemBase {
     private final DigitalInput preIntakeSensor = new DigitalInput(0);
     private final DigitalInput intakeSensor = new DigitalInput(1);

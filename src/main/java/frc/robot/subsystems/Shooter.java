@@ -13,6 +13,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 
+import frc.robot.Constants;
+
 public class Shooter extends SubsystemBase {
 
   private final TalonFX pivotMotor = new TalonFX(14, Constants.OperatorConstants.canivoreSerial);

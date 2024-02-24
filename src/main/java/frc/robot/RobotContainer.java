@@ -19,6 +19,7 @@ import frc.robot.generated.*;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AmpCommand;
+import frc.robot.commands.Eject;
 import frc.robot.commands.SpeakerCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.Shooter;
@@ -34,10 +35,13 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Shooter shooterSubsystem = new Shooter();
+  private final Intake intakeSubsystem = new Intake();
+
+  
   private final AmpCommand ampCommand = new AmpCommand(shooterSubsystem);
   private final SpeakerCommand speakerCommand = new SpeakerCommand(shooterSubsystem);
-  private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem);
-  private final Intake intakeSubsystem = new Intake();
+  private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
+  private final Eject eject = new Eject(intakeSubsystem, -0.2);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =
@@ -77,6 +81,7 @@ public class RobotContainer {
   private void configureBindings() {
     driverController.a().onTrue(ampCommand);
     driverController.b().onTrue(speakerCommand);
+    driverController.leftTrigger().onTrue(eject);
     driverController.rightTrigger().onTrue(shootCommand);
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically

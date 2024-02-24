@@ -43,18 +43,19 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putString(SMART_DASHBOARD_POSITION, positionOfArm.toString());
     leftShootMotor.setInverted(true); // TODO: Change to Right/Left to invert shooting motor
     TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
+    stopMotors();
   }
 
   public void startMotors(double speed, Position position) {
     targetVelocity = speed;
     positionOfArm = position;
     if (position == Position.AMP) {
-      motionMagicVoltage = new MotionMagicVoltage(-0.05);  // TODO: Change to fit amp angle -- not controled yet
+      // motionMagicVoltage = new MotionMagicVoltage(-0.05);  // TODO: Change to fit amp angle -- not controled yet
     } else if (position == Position.SPEAKER) {
-      motionMagicVoltage = new MotionMagicVoltage(-0.1);  // TODO: Change to fit speaker angle -- not controled yet
+      // motionMagicVoltage = new MotionMagicVoltage(-0.1);  // TODO: Change to fit speaker angle -- not controled yet
     }
-    rightShootMotor.setControl(velocity.withVelocity(speed));
-    leftShootMotor.setControl(velocity.withVelocity(speed));
+    rightShootMotor.set(targetVelocity);
+    leftShootMotor.set(targetVelocity);
   }
 
   public boolean canShoot() {
@@ -63,16 +64,16 @@ public class Shooter extends SubsystemBase {
 
   public void setDefault() {
     if (positionOfArm == Position.AMP) {
-      motionMagicVoltage = new MotionMagicVoltage(0.05);  // TODO: Change to fit amp angle -- not controled yet
+      // motionMagicVoltage = new MotionMagicVoltage(0.05);  // TODO: Change to fit amp angle -- not controled yet
     } else if (positionOfArm == Position.SPEAKER) {
-      motionMagicVoltage = new MotionMagicVoltage(0.1);  // TODO: Change to fit speaker angle -- not controled yet
+      // motionMagicVoltage = new MotionMagicVoltage(0.1);  // TODO: Change to fit speaker angle -- not controled yet
     }
     positionOfArm = Position.DEFAULT;
   }
 
   public void stopMotors() {
-    rightShootMotor.setControl(velocity.withVelocity(0));
-    leftShootMotor.setControl(velocity.withVelocity(0));
+    rightShootMotor.set(0);
+    leftShootMotor.set(0);
   }
 
   @Override

@@ -13,19 +13,18 @@ import frc.robot.Constants;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import frc.robot.Constants;
-
 public class Intake extends SubsystemBase {
-    private final DigitalInput preIntakeSensor = new DigitalInput(0);
-    private final DigitalInput intakeSensor = new DigitalInput(1);
-    private final DigitalInput shooterSensor = new DigitalInput(2);
+    private final DigitalInput preIntakeSensor = new DigitalInput(7);
+    private final DigitalInput intakeSensor = new DigitalInput(8);
+    private final DigitalInput shooterSensor = new DigitalInput(9);
 
     private final TalonFX intakeMotor = new TalonFX(4, Constants.OperatorConstants.canivoreSerial);
 
     private boolean status = intakeMotor.isAlive();
     // TODO: Change intakeMotorVelocity
-    private double intakeMotorVelocity = 1;
+    private double intakeMotorVelocity = 4;
     private VelocityVoltage velocity = new VelocityVoltage(intakeMotorVelocity);
+    private boolean isEjecting = false;
 
     private enum IntakeState {
         IDLE, // No motors are moving, no note is inside the mechanism
@@ -42,6 +41,21 @@ public class Intake extends SubsystemBase {
         TalonFX.optimizeBusUtilizationForAll(intakeMotor);
         timer.stop();
         timer.reset();
+        intakeMotor.setInverted(true);
+    }
+
+    public void eject(double speed) {
+        intakeMotor.set(speed);
+        isEjecting = true;
+        switch (currentState) {
+            case HOLDING:
+                currentState = IntakeState.IDLE;
+        }
+    }
+
+    public void shoot(double speed) {
+        intakeMotor.set(speed);
+        currentState = IntakeState.EJECTING;
     }
 
     @Override
@@ -56,9 +70,11 @@ public class Intake extends SubsystemBase {
         boolean noteAtShooterSensor = ! shooterSensor.get();
         switch (currentState) {
             case IDLE:
-                if (noteAtPreIntakeSensor) {
+                if (noteAtPreIntakeSensor || noteAtIntakeSensor) {
                     //intakeMotor.setControl(velocity.withVelocity(intakeMotorVelocity));
-                    intakeMotor.set(0.2);
+                    if (! isEjecting) {
+                        intakeMotor.set(0.2);
+                    }
                     currentState = IntakeState.INTAKING;
                     timer.stop();
                     timer.reset();
@@ -69,7 +85,6 @@ public class Intake extends SubsystemBase {
                     if(timer.get() != 0) {
                         timer.stop();
                         timer.reset();
-                        intakeMotor.set(0);
                     }
                 } else {
                     // Our note is no at either intake sensor, start our timer to stop our motors
@@ -78,11 +93,18 @@ public class Intake extends SubsystemBase {
                     }
                 }
 
-                if (timer.hasElapsed(2)) {
+                if (noteAtShooterSensor && ! isEjecting) {
+                    timer.stop();
+                    intakeMotor.set(0);
+                    currentState = IntakeState.INTAKING;
+                }
+
+                if (timer.hasElapsed(0.2)) {
                     currentState = IntakeState.IDLE;
                     timer.stop();
                     timer.reset();
                     intakeMotor.set(0);
+                    isEjecting = false;
                 }
                 // if (timer.get() == 0 && noteAtPreIntakeSensor){
                 //     timer.start();
@@ -98,8 +120,7 @@ public class Intake extends SubsystemBase {
             case HOLDING:
                 intakeMotor.stopMotor();
                 break;
-            case EJECTING:
-                intakeMotor.setControl(velocity.withVelocity(intakeMotorVelocity));
+            case EJECTING:;
                 if (! noteAtShooterSensor) {
                     intakeMotor.stopMotor();
                     currentState = IntakeState.IDLE;

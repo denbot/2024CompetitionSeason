@@ -3,10 +3,12 @@ package frc.robot.subsystems;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
@@ -37,6 +39,13 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
         return run(() -> this.setControl(requestSupplier.get()));
+    }
+
+    public void optimizeCan() {
+        for (int i = 0; i < Modules.length; i ++) {
+            SwerveModule module = Modules[i];
+            TalonFX.optimizeBusUtilizationForAll(module.getDriveMotor(), module.getSteerMotor());
+        }
     }
 
     private void startSimThread() {

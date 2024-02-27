@@ -1,6 +1,7 @@
 package frc.robot.generated;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
@@ -122,7 +123,6 @@ public class TunerConstants {
 
     private static final double kBackRightXPosInches = -11.25;
     private static final double kBackRightYPosInches = -11.25;
-
 
     private static final SwerveModuleConstants FrontLeft = ConstantCreator.createModuleConstants(
             kFrontLeftSteerMotorId, kFrontLeftDriveMotorId, kFrontLeftEncoderId, kFrontLeftEncoderOffset, Units.inchesToMeters(kFrontLeftXPosInches), Units.inchesToMeters(kFrontLeftYPosInches), kInvertLeftSide);

@@ -65,8 +65,11 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
-    shooterSubsystem.shooterInit();
     intakeSubsystem.intakeInit();
+    shooterSubsystem.shooterInit();
+    intakeSubsystem.optomizeCan();
+    shooterSubsystem.optomizeCan();
+    drivetrain.optimizeCan();
   }
 
   /**

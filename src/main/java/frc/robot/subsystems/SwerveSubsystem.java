@@ -42,7 +42,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
     }
 
     public void optimizeCan() {
-        for (int i = 0; i > 3; i ++) {
+        for (int i = 0; i < Modules.length; i ++) {
             SwerveModule module = Modules[i];
             TalonFX.optimizeBusUtilizationForAll(module.getDriveMotor(), module.getSteerMotor());
         }

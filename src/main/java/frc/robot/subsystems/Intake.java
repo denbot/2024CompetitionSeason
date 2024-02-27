@@ -38,10 +38,13 @@ public class Intake extends SubsystemBase {
     private static IntakeState currentState = IntakeState.IDLE;
 
     public void intakeInit() {
-        TalonFX.optimizeBusUtilizationForAll(intakeMotor);
         timer.stop();
         timer.reset();
         intakeMotor.setInverted(true);
+    }
+
+    public void optomizeCan() {
+        TalonFX.optimizeBusUtilizationForAll(intakeMotor);
     }
 
     public void eject(double speed) {

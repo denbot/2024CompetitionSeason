@@ -41,9 +41,12 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
     SmartDashboard.putString(SMART_DASHBOARD_POSITION, positionOfArm.toString());
-    leftShootMotor.setInverted(true); // TODO: Change to Right/Left to invert shooting motor
-    TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
+    leftShootMotor.setInverted(true);
     stopMotors();
+  }
+
+  public void optomizeCan() {
+    TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
   }
 
   public void startMotors(double speed, Position position) {

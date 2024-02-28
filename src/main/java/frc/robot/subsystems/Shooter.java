@@ -6,28 +6,36 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.controls.VelocityVoltage;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
-
 import frc.robot.Constants;
+
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CANcoderConfigurator;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 
 public class Shooter extends SubsystemBase {
 
-  private final TalonFX pivotMotor = new TalonFX(14, Constants.OperatorConstants.canivoreSerial);
+  public final TalonFX pivotMotor = new TalonFX(14, Constants.OperatorConstants.canivoreSerial);
   private final TalonFX leftShootMotor = new TalonFX(5, Constants.OperatorConstants.canivoreSerial);
   private final TalonFX rightShootMotor = new TalonFX(13, Constants.OperatorConstants.canivoreSerial); 
   private double targetVelocity = 0;
   private double motorVelocity = 0;
   private boolean motorsAtShootingSpeed = false;
-  private VelocityVoltage velocity = new VelocityVoltage(targetVelocity);
-  private MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0.1);
+  private MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0);
   private final String SMART_DASHBOARD_VELOCITY = "Shooter Motor Velocity";
   private final String SMART_DASHBOARD_TARGET_VELOCITY = "Shooter Motor Target Velocity";
   private final String SMART_DASHBOARD_POSITION = "Shooter Motor Position";
+
+  public CANcoder wristPositionEncoder = new CANcoder(18);
 
   public enum Position {
     DEFAULT,
@@ -41,7 +49,23 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
     SmartDashboard.putString(SMART_DASHBOARD_POSITION, positionOfArm.toString());
+
     leftShootMotor.setInverted(true);
+
+    MagnetSensorConfigs wristPositionMagnetConfigs = new MagnetSensorConfigs();
+    wristPositionMagnetConfigs.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+    wristPositionMagnetConfigs.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+    wristPositionMagnetConfigs.MagnetOffset = 0;  // TODO Calibrate this with a command
+    wristPositionEncoder.getConfigurator().apply(wristPositionMagnetConfigs);
+
+    FeedbackConfigs pivotConfigs = new FeedbackConfigs();
+    pivotConfigs.FeedbackRemoteSensorID = wristPositionEncoder.getDeviceID();
+    pivotConfigs.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+    pivotConfigs.RotorToSensorRatio = 45 / 8;
+    pivotMotor.getConfigurator().apply(pivotConfigs);
+    pivotMotor.getConfigurator().apply
+
+    TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
     stopMotors();
   }
 
@@ -53,9 +77,13 @@ public class Shooter extends SubsystemBase {
     targetVelocity = speed;
     positionOfArm = position;
     if (position == Position.AMP) {
-      // motionMagicVoltage = new MotionMagicVoltage(-0.05);  // TODO: Change to fit amp angle -- not controled yet
+      motionMagicVoltage = new MotionMagicVoltage(0.1);
+      motionMagicVoltage = motionMagicVoltage.withOverrideBrakeDurNeutral(true);
+      pivotMotor.setControl(motionMagicVoltage);
     } else if (position == Position.SPEAKER) {
-      // motionMagicVoltage = new MotionMagicVoltage(-0.1);  // TODO: Change to fit speaker angle -- not controled yet
+      motionMagicVoltage = new MotionMagicVoltage(0.2);
+      motionMagicVoltage = motionMagicVoltage.withOverrideBrakeDurNeutral(true);
+      pivotMotor.setControl(motionMagicVoltage);
     }
     rightShootMotor.set(targetVelocity);
     leftShootMotor.set(targetVelocity);
@@ -67,9 +95,13 @@ public class Shooter extends SubsystemBase {
 
   public void setDefault() {
     if (positionOfArm == Position.AMP) {
-      // motionMagicVoltage = new MotionMagicVoltage(0.05);  // TODO: Change to fit amp angle -- not controled yet
+      motionMagicVoltage = new MotionMagicVoltage(0);
+      motionMagicVoltage = motionMagicVoltage.withOverrideBrakeDurNeutral(true);
+      pivotMotor.setControl(motionMagicVoltage);
     } else if (positionOfArm == Position.SPEAKER) {
-      // motionMagicVoltage = new MotionMagicVoltage(0.1);  // TODO: Change to fit speaker angle -- not controled yet
+      motionMagicVoltage = new MotionMagicVoltage(0);
+      motionMagicVoltage = motionMagicVoltage.withOverrideBrakeDurNeutral(true);
+      pivotMotor.setControl(motionMagicVoltage);
     }
     positionOfArm = Position.DEFAULT;
   }

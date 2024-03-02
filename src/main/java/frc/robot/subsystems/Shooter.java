@@ -4,23 +4,18 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.smartdashboard.*;
-
-import frc.robot.Constants;
-
+import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.ctre.phoenix6.controls.VelocityVoltage;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.CANcoderConfigurator;
-import com.ctre.phoenix6.configs.FeedbackConfigs;
-import com.ctre.phoenix6.configs.MagnetSensorConfigs;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
 
@@ -63,7 +58,6 @@ public class Shooter extends SubsystemBase {
     pivotConfigs.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
     pivotConfigs.RotorToSensorRatio = 45 / 8;
     pivotMotor.getConfigurator().apply(pivotConfigs);
-    pivotMotor.getConfigurator().apply
 
     TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
     stopMotors();
@@ -71,6 +65,12 @@ public class Shooter extends SubsystemBase {
 
   public void optomizeCan() {
     TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
+  }
+
+  public void setAngle(double angle) {
+    motionMagicVoltage = new MotionMagicVoltage(angle / 360);
+    motionMagicVoltage = motionMagicVoltage.withOverrideBrakeDurNeutral(true);
+    pivotMotor.setControl(motionMagicVoltage);
   }
 
   public void startMotors(double speed, Position position) {

@@ -29,8 +29,10 @@ public class Shooter extends SubsystemBase {
   private final String SMART_DASHBOARD_VELOCITY = "Shooter Motor Velocity";
   private final String SMART_DASHBOARD_TARGET_VELOCITY = "Shooter Motor Target Velocity";
   private final String SMART_DASHBOARD_POSITION = "Shooter Motor Position";
+  private final String SMART_DASHBOARD_TARGET_POSITION = "Shooter Motor Target Position";
 
   public CANcoder wristPositionEncoder = new CANcoder(18);
+  private double targetArmPosition = 0;
 
   public enum Position {
     DEFAULT,
@@ -44,6 +46,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
     SmartDashboard.putString(SMART_DASHBOARD_POSITION, positionOfArm.toString());
+    SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_POSITION, targetArmPosition);
 
     leftShootMotor.setInverted(true);
 
@@ -71,6 +74,7 @@ public class Shooter extends SubsystemBase {
     motionMagicVoltage = new MotionMagicVoltage(angle / 360);
     motionMagicVoltage = motionMagicVoltage.withOverrideBrakeDurNeutral(true);
     pivotMotor.setControl(motionMagicVoltage);
+    targetArmPosition = angle;
   }
 
   public void startMotors(double speed, Position position) {
@@ -118,6 +122,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
     SmartDashboard.putString(SMART_DASHBOARD_POSITION, positionOfArm.toString());
+    SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_POSITION, targetArmPosition);
     pivotMotor.setControl(motionMagicVoltage); // -- not controled yet
   }
 }

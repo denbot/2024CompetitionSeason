@@ -33,19 +33,12 @@ public class Shooter extends SubsystemBase {
 
   public CANcoder wristPositionEncoder = new CANcoder(18);
   private double targetArmPosition = 0;
-
-  public enum Position {
-    DEFAULT,
-    AMP,
-    SPEAKER;
-  }
-
-  private static Position positionOfArm = Position.DEFAULT;
+  private static double positionOfArm = 0;
 
   public void shooterInit() {
     SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
-    SmartDashboard.putString(SMART_DASHBOARD_POSITION, positionOfArm.toString());
+    SmartDashboard.putNumber(SMART_DASHBOARD_POSITION, positionOfArm);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_POSITION, targetArmPosition);
 
     leftShootMotor.setInverted(true);
@@ -77,37 +70,18 @@ public class Shooter extends SubsystemBase {
     targetArmPosition = angle;
   }
 
-  public void startMotors(double speed, Position position) {
+  public void startMotors(double speed) {
     targetVelocity = speed;
-    positionOfArm = position;
-    if (position == Position.AMP) {
-      motionMagicVoltage = new MotionMagicVoltage(0.1);
-      motionMagicVoltage = motionMagicVoltage.withOverrideBrakeDurNeutral(true);
-      pivotMotor.setControl(motionMagicVoltage);
-    } else if (position == Position.SPEAKER) {
-      motionMagicVoltage = new MotionMagicVoltage(0.2);
-      motionMagicVoltage = motionMagicVoltage.withOverrideBrakeDurNeutral(true);
-      pivotMotor.setControl(motionMagicVoltage);
-    }
     rightShootMotor.set(targetVelocity);
     leftShootMotor.set(targetVelocity);
   }
 
   public boolean canShoot() {
-    return motorsAtShootingSpeed && positionOfArm != Position.DEFAULT;
+    return motorsAtShootingSpeed && !pivotMotor.isAlive();
   }
 
   public void setDefault() {
-    if (positionOfArm == Position.AMP) {
-      motionMagicVoltage = new MotionMagicVoltage(0);
-      motionMagicVoltage = motionMagicVoltage.withOverrideBrakeDurNeutral(true);
-      pivotMotor.setControl(motionMagicVoltage);
-    } else if (positionOfArm == Position.SPEAKER) {
-      motionMagicVoltage = new MotionMagicVoltage(0);
-      motionMagicVoltage = motionMagicVoltage.withOverrideBrakeDurNeutral(true);
-      pivotMotor.setControl(motionMagicVoltage);
-    }
-    positionOfArm = Position.DEFAULT;
+    setAngle(0);
   }
 
   public void stopMotors() {
@@ -119,9 +93,10 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     motorVelocity = leftShootMotor.getVelocity().getValue();
     motorsAtShootingSpeed = motorVelocity <= targetVelocity + 10 && motorVelocity >= targetVelocity - 10;
+    positionOfArm = pivotMotor.getPosition().getValue() * 360;
     SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
-    SmartDashboard.putString(SMART_DASHBOARD_POSITION, positionOfArm.toString());
+    SmartDashboard.putNumber(SMART_DASHBOARD_POSITION, positionOfArm);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_POSITION, targetArmPosition);
     pivotMotor.setControl(motionMagicVoltage); // -- not controled yet
   }

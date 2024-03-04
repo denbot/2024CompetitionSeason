@@ -16,7 +16,6 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.generated.TunerConstants;
 
 public class Shooter extends SubsystemBase {
 
@@ -35,6 +34,7 @@ public class Shooter extends SubsystemBase {
   public CANcoder wristPositionEncoder = new CANcoder(18);
   private double targetArmPosition = 0;
   private static double positionOfArm = 0;
+  public static final double pivotMotorAngleErrorThreashhold = 1.0 / 360.0;
 
   public void shooterInit() {
     SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
@@ -78,7 +78,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean canShoot() {
-    return motorsAtShootingSpeed && Math.abs(pivotMotor.getClosedLoopError().getValue()) <= TunerConstants.pivotMotorAngleErrorThreashhold;
+    return motorsAtShootingSpeed && Math.abs(pivotMotor.getClosedLoopError().getValue()) <= pivotMotorAngleErrorThreashhold;
   }
 
   public void setDefault() {

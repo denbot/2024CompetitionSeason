@@ -14,6 +14,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Constants;
 
 public class TunerConstants {
+    // constants for pivotMotor for shooter
+    public static final double pivotMotorAngleErrorThreashhold = 1.0 / 360.0;
     // Both sets of gains need to be tuned to your individual robot.
 
     // The steer motor uses any SwerveModule.SteerRequestType control request with the

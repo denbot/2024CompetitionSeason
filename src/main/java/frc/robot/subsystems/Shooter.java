@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.generated.TunerConstants;
 
 public class Shooter extends SubsystemBase {
 
@@ -77,7 +78,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean canShoot() {
-    return motorsAtShootingSpeed && Math.abs(pivotMotor.getClosedLoopError()) < 0.01;
+    return motorsAtShootingSpeed && Math.abs(pivotMotor.getClosedLoopError().getValue()) <= TunerConstants.pivotMotorAngleErrorThreashhold;
   }
 
   public void setDefault() {

@@ -11,6 +11,7 @@ public class AmpCommand extends Command {
   
   private final Shooter shooter;
   private double speed = 1; // TODO: Change to amp motor speed (in rotations per second)
+  private final double ampAlignAngle = 36; // TODO: tune relative to shooting from right in front of amp
 
   public AmpCommand(Shooter shooter) {
     this.shooter = shooter;
@@ -20,7 +21,7 @@ public class AmpCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setAngle(36);
+    shooter.setAngle(ampAlignAngle);
     shooter.startMotors(speed);
   }
 

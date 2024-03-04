@@ -53,7 +53,7 @@ public class RobotContainer {
   private double maxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   /* Setting up bindings for necessary control of the swerve drive platform */
-  private final SwerveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
+  private final SwerveSubsystem drivetrain = SwerveTunerConstants.DriveTrain; // My drivetrain
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(maxSpeed * 0.1).withRotationalDeadband(maxAngularRate * 0.1) // Add a 10% deadband

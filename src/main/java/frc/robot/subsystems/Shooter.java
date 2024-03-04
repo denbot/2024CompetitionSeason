@@ -77,7 +77,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean canShoot() {
-    return motorsAtShootingSpeed && !pivotMotor.isAlive();
+    return motorsAtShootingSpeed && Math.abs(pivotMotor.getClosedLoopError()) < 0.01;
   }
 
   public void setDefault() {

@@ -89,8 +89,8 @@ public class Shooter extends SubsystemBase {
     return motorsAtShootingSpeed && Math.abs(pivotMotor.getClosedLoopError().getValue()) <= pivotMotorAngleErrorThreashhold;
   }
 
-  public void setDefault() {
-    setAngle(0);
+  public void readyArmForNewNote() {
+    setAngle(30);
   }
 
   public void stopMotors() {

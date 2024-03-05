@@ -38,7 +38,7 @@ public class ShootCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.stopMotors();
-    shooter.setDefault();
+    shooter.readyArmForNewNote();
     timer.stop();
   }
 

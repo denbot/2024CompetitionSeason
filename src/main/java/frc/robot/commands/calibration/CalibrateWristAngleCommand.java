@@ -19,8 +19,8 @@ public class CalibrateWristAngleCommand extends Command {
 
     public CalibrateWristAngleCommand(Shooter shooter) {
         // this.shooter = shooter;
-        this.pivotMotor = shooter.pivotMotor;
-        this.wristPositionEncoder = shooter.wristPositionEncoder;
+        this.pivotMotor = shooter.getPivotMotor();
+        this.wristPositionEncoder = shooter.getPivotMotorEncoder();
 
         MagnetSensorConfigs sensorConfigs = new MagnetSensorConfigs();
         wristPositionEncoder.getConfigurator().refresh(sensorConfigs);

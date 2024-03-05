@@ -19,7 +19,7 @@ import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
 
-  public final TalonFX pivotMotor = new TalonFX(14, Constants.OperatorConstants.canivoreSerial);
+  private final static TalonFX pivotMotor = new TalonFX(14, Constants.OperatorConstants.canivoreSerial);
   private final TalonFX leftShootMotor = new TalonFX(5, Constants.OperatorConstants.canivoreSerial);
   private final TalonFX rightShootMotor = new TalonFX(13, Constants.OperatorConstants.canivoreSerial); 
   private double targetVelocity = 0;
@@ -31,10 +31,18 @@ public class Shooter extends SubsystemBase {
   private final String SMART_DASHBOARD_POSITION = "Shooter Motor Position";
   private final String SMART_DASHBOARD_TARGET_POSITION = "Shooter Motor Target Position";
 
-  public CANcoder wristPositionEncoder = new CANcoder(18);
+  private final static CANcoder wristPositionEncoder = new CANcoder(18);
   private double targetArmPosition = 0;
   private static double positionOfArm = 0;
   public static final double pivotMotorAngleErrorThreashhold = 1.0 / 360.0;
+
+  public TalonFX getPivotMotor() {
+    return pivotMotor;
+  }
+
+  public CANcoder getPivotMotorEncoder() {
+    return wristPositionEncoder;
+  }
 
   public void shooterInit() {
     SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);

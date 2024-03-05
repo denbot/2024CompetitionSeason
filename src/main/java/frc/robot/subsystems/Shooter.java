@@ -102,11 +102,11 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     motorVelocity = leftShootMotor.getVelocity().getValue();
     motorsAtShootingSpeed = motorVelocity <= targetVelocity + 10 && motorVelocity >= targetVelocity - 10;
-    positionOfArm = pivotMotor.getPosition().getValue() * 360;
+    positionOfArm = wristPositionEncoder.getAbsolutePosition().getValue() * 360;
+
     SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
     SmartDashboard.putNumber(SMART_DASHBOARD_POSITION, positionOfArm);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_POSITION, targetArmPosition);
-    pivotMotor.setControl(motionMagicVoltage); // -- not controled yet
   }
 }

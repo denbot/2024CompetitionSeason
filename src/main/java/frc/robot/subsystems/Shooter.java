@@ -25,7 +25,9 @@ public class Shooter extends SubsystemBase {
   private double targetVelocity = 0;
   private double motorVelocity = 0;
   private boolean motorsAtShootingSpeed = false;
-  private MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0);
+  private MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0)
+      .withOverrideBrakeDurNeutral(true);
+    
   private final String SMART_DASHBOARD_VELOCITY = "Shooter Motor Velocity";
   private final String SMART_DASHBOARD_TARGET_VELOCITY = "Shooter Motor Target Velocity";
   private final String SMART_DASHBOARD_POSITION = "Shooter Motor Position";
@@ -73,9 +75,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setAngle(double angle) {
-    motionMagicVoltage = new MotionMagicVoltage(angle / 360);
-    motionMagicVoltage = motionMagicVoltage.withOverrideBrakeDurNeutral(true);
-    pivotMotor.setControl(motionMagicVoltage);
+    pivotMotor.setControl(motionMagicVoltage.withPosition(angle / 360));
     targetArmPosition = angle;
   }
 

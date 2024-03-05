@@ -70,9 +70,6 @@ public class Shooter extends SubsystemBase {
     stopMotors();
   }
 
-  public void optomizeCan() {
-    TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
-  }
 
   public void setAngle(double angle) {
     pivotMotor.setControl(motionMagicVoltage.withPosition(angle / 360));

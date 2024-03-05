@@ -33,10 +33,10 @@ public class Shooter extends SubsystemBase {
   private final String SMART_DASHBOARD_POSITION = "Shooter Motor Position";
   private final String SMART_DASHBOARD_TARGET_POSITION = "Shooter Motor Target Position";
 
-  private final static CANcoder wristPositionEncoder = new CANcoder(18);
+  private final CANcoder wristPositionEncoder = new CANcoder(18);
   private double targetArmPosition = 0;
-  private static double positionOfArm = 0;
-  public static final double pivotMotorAngleErrorThreashhold = 1.0 / 360.0;
+  private double positionOfArm = 0;
+  public final double pivotMotorAngleErrorThreashhold = 1.0 / 360.0;
 
   public TalonFX getPivotMotor() {
     return pivotMotor;

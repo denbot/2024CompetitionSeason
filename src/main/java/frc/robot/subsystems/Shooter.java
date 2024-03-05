@@ -83,7 +83,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean canShoot() {
-    return motorsAtShootingSpeed && Math.abs(pivotMotor.getClosedLoopError().getValue()) <= pivotMotorAngleErrorThreashhold;
+    return motorsAtShootingSpeed && Math.abs(pivotMotor.getClosedLoopError().getValue()) <= PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID;
   }
 
   public void readyArmForNewNote() {

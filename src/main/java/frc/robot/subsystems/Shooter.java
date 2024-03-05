@@ -36,7 +36,7 @@ public class Shooter extends SubsystemBase {
   private final CANcoder wristPositionEncoder = new CANcoder(18);
   private double targetArmPosition = 0;
   private double positionOfArm = 0;
-  public final double pivotMotorAngleErrorThreashhold = 1.0 / 360.0;
+  public static final double PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID = 1.0 / 360.0;
 
   public TalonFX getPivotMotor() {
     return pivotMotor;

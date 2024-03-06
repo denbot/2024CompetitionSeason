@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.generated.ArmTunerConstants;
 
 public class Shooter extends SubsystemBase {
 
@@ -65,6 +66,9 @@ public class Shooter extends SubsystemBase {
     pivotConfigs.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
     pivotConfigs.RotorToSensorRatio = 45 / 8;
     pivotMotor.getConfigurator().apply(pivotConfigs);
+
+    pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotMotionMagicConfigs);
+    pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotPIDConfigs);
 
     TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
     stopMotors();

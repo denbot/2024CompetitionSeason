@@ -33,7 +33,7 @@ public class Shooter extends SubsystemBase {
   private final String SMART_DASHBOARD_POSITION = "Shooter Motor Position";
   private final String SMART_DASHBOARD_TARGET_POSITION = "Shooter Motor Target Position";
 
-  private final CANcoder wristPositionEncoder = new CANcoder(18);
+  private final CANcoder armPositionEncoder = new CANcoder(18);
   private double targetArmPosition = 0;
   private double positionOfArm = 0;
   public static final double PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID = 1.0 / 360.0;
@@ -43,7 +43,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public CANcoder getPivotMotorEncoder() {
-    return wristPositionEncoder;
+    return armPositionEncoder;
   }
 
   public void shooterInit() {
@@ -58,10 +58,10 @@ public class Shooter extends SubsystemBase {
     wristPositionMagnetConfigs.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
     wristPositionMagnetConfigs.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     wristPositionMagnetConfigs.MagnetOffset = 0;  // TODO Calibrate this with a command
-    wristPositionEncoder.getConfigurator().apply(wristPositionMagnetConfigs);
+    armPositionEncoder.getConfigurator().apply(wristPositionMagnetConfigs);
 
     FeedbackConfigs pivotConfigs = new FeedbackConfigs();
-    pivotConfigs.FeedbackRemoteSensorID = wristPositionEncoder.getDeviceID();
+    pivotConfigs.FeedbackRemoteSensorID = armPositionEncoder.getDeviceID();
     pivotConfigs.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
     pivotConfigs.RotorToSensorRatio = 45 / 8;
     pivotMotor.getConfigurator().apply(pivotConfigs);
@@ -99,7 +99,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     motorVelocity = leftShootMotor.getVelocity().getValue();
     motorsAtShootingSpeed = motorVelocity <= targetVelocity + 10 && motorVelocity >= targetVelocity - 10;
-    positionOfArm = wristPositionEncoder.getAbsolutePosition().getValue() * 360;
+    positionOfArm = armPositionEncoder.getAbsolutePosition().getValue() * 360;
 
     SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);

@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 2.0,
+      "y": 7.09
+    },
+    "rotation": 51.24
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "First Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2nd Note Pickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Second Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3rd Note Pickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3rd Note Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Third Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

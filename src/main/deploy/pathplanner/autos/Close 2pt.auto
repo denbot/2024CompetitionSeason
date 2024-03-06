@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Close First"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Close Index"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Close Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Third Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

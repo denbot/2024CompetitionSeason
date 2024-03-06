@@ -7,10 +7,12 @@ package frc.robot;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -26,6 +28,9 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
 
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.auto.AutoBuilder;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -37,7 +42,8 @@ public class RobotContainer {
   private final Shooter shooterSubsystem = new Shooter();
   private final Intake intakeSubsystem = new Intake();
 
-  
+  private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+
   private final AmpCommand ampCommand = new AmpCommand(shooterSubsystem);
   private final SpeakerCommand speakerCommand = new SpeakerCommand(shooterSubsystem);
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
@@ -62,13 +68,20 @@ public class RobotContainer {
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final Telemetry telemetry = new Telemetry(maxSpeed);
-
+  
   public RobotContainer() {
     configureBindings();
     intakeSubsystem.intakeInit();
     shooterSubsystem.shooterInit();
     intakeSubsystem.optomizeCan();
     drivetrain.optimizeCan();
+    
+    NamedCommands.registerCommand("First Shoot", shootCommand);
+    NamedCommands.registerCommand("Second Shoot", shootCommand);
+    NamedCommands.registerCommand("Third Shoot", shootCommand);
+    NamedCommands.registerCommand("Close First", shootCommand);
+    
+    autoChooser = AutoBuilder.buildAutoChooser("Center 2pt");
   }
 
   /**
@@ -127,6 +140,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autoChooser.getSelected();
   }
 }

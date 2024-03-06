@@ -10,13 +10,15 @@ import frc.robot.subsystems.Shooter;
 public class PrepCommand extends Command {
  
   private final Shooter shooter;
-  double angle = 0;
-  double speed = 0;
+  private double angle = 0;
+  private double speed = 0;
 
   /** Creates a new PrepCommand. */
   public PrepCommand(Shooter shooter, double angle, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooter = shooter;
+    this.angle = angle;
+    this.speed = speed;
   }
 
   // Called when the command is initially scheduled.

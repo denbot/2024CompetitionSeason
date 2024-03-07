@@ -6,15 +6,18 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
-public class Eject extends Command {
+public class ReverseNote extends Command {
   /** Creates a new Eject. */
   Intake intake;
-  private double ejectSpeed;
-  public Eject(Intake intake, double ejectSpeed) {
+  Shooter shooter;
+  private double reverseSpeed;
+  public ReverseNote(Intake intake, Shooter shooter, double ejectSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.ejectSpeed = ejectSpeed;
+    this.reverseSpeed = ejectSpeed;
     this.intake = intake;
+    this.shooter = shooter;
     addRequirements(intake);
   }
 
@@ -25,16 +28,23 @@ public class Eject extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.intake.eject(ejectSpeed);
+    if (intake.noteInIntake()) {
+      intake.eject(reverseSpeed, false);
+    } else {
+      intake.eject(reverseSpeed, true);
+      shooter.intake(reverseSpeed);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    shooter.stopMotors();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return intake.noteInIntake();
   }
 }

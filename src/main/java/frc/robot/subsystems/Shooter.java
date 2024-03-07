@@ -94,6 +94,11 @@ public class Shooter extends SubsystemBase {
     setAngle(30);
   }
 
+  public void intake(double speed) {
+    rightShootMotor.set(speed);
+    leftShootMotor.set(speed);
+  }
+
   public void stopMotors() {
     rightShootMotor.set(0);
     leftShootMotor.set(0);

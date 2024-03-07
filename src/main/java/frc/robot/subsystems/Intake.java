@@ -47,9 +47,11 @@ public class Intake extends SubsystemBase {
         TalonFX.optimizeBusUtilizationForAll(intakeMotor);
     }
 
-    public void eject(double speed) {
+    public void eject(double speed, boolean reverseIntaking) {
         intakeMotor.set(speed);
-        isEjecting = true;
+        if (reverseIntaking == false) {
+            isEjecting = true;
+        }
         switch (currentState) {
             case HOLDING:
                 currentState = IntakeState.IDLE;
@@ -59,6 +61,10 @@ public class Intake extends SubsystemBase {
     public void shoot(double speed) {
         intakeMotor.set(speed);
         currentState = IntakeState.EJECTING;
+    }
+
+    public Boolean noteInIntake() {
+        return (preIntakeSensor.get() || intakeSensor.get() || shooterSensor.get());
     }
 
     @Override
@@ -99,10 +105,10 @@ public class Intake extends SubsystemBase {
                 if (noteAtShooterSensor && ! isEjecting) {
                     timer.stop();
                     intakeMotor.set(0);
-                    currentState = IntakeState.INTAKING;
+                    currentState = IntakeState.HOLDING;
                 }
 
-                if (timer.hasElapsed(0.2)) {
+                if (timer.hasElapsed(0.5)) {
                     currentState = IntakeState.IDLE;
                     timer.stop();
                     timer.reset();
@@ -123,7 +129,7 @@ public class Intake extends SubsystemBase {
             case HOLDING:
                 intakeMotor.stopMotor();
                 break;
-            case EJECTING:;
+            case EJECTING:
                 if (! noteAtShooterSensor) {
                     intakeMotor.stopMotor();
                     currentState = IntakeState.IDLE;

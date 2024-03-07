@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.generated.*;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Eject;
+import frc.robot.commands.ReverseNote;
 import frc.robot.commands.PrepCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.Shooter;
@@ -50,7 +50,7 @@ public class RobotContainer {
   private final PrepCommand closeShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
   private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
   private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
-  private final Eject eject = new Eject(intakeSubsystem, -0.2);
+  private final ReverseNote reverseNote = new ReverseNote(intakeSubsystem, shooterSubsystem, -0.2);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =
@@ -99,7 +99,7 @@ public class RobotContainer {
   private void configureBindings() {
     driverController.a().onTrue(ampShoot);
     driverController.b().onTrue(speakerShoot);
-    driverController.leftTrigger().onTrue(eject);
+    driverController.leftTrigger().onTrue(reverseNote);
     driverController.rightTrigger().onTrue(shootCommand);
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically

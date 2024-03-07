@@ -54,9 +54,11 @@ public class Intake extends SubsystemBase {
         TalonFX.optimizeBusUtilizationForAll(intakeMotor);
     }
 
-    public void eject(double speed) {
+    public void eject(double speed, boolean reverseIntaking) {
         intakeMotor.set(speed);
-        isEjecting = true;
+        if (reverseIntaking == false) {
+            isEjecting = true;
+        }
         switch (currentState) {
             case HOLDING:
                 currentState = IntakeState.IDLE;
@@ -68,6 +70,10 @@ public class Intake extends SubsystemBase {
         RightIntakeServo.setAngle(0); //Angle is subject to cahnge depending on the orientation of the servos.
         intakeMotor.set(speed);
         currentState = IntakeState.EJECTING;
+    }
+
+    public Boolean noteInIntake() {
+        return (preIntakeSensor.get() || intakeSensor.get() || shooterSensor.get());
     }
 
     @Override
@@ -82,7 +88,7 @@ public class Intake extends SubsystemBase {
         boolean noteAtShooterSensor = ! shooterSensor.get();
         switch (currentState) {
             case IDLE:
-                if (noteAtPreIntakeSensor || noteAtIntakeSensor) {
+                if (noteAtPreIntakeSensor) {
                     RightIntakeServo.setAngle(180); //Angle is subject to change depending on the orientation of the servos.
                     LeftIntakeServo.setAngle(0); //Angle is subject to change depending on the orientation of the servos.
                     if (! isEjecting) {
@@ -113,11 +119,11 @@ public class Intake extends SubsystemBase {
                         intakeMotor.set(0);
                         timerTwoElectrickBoogaloo.stop();
                         timerTwoElectrickBoogaloo.reset();
-                        currentState = IntakeState.INTAKING;
+                        currentState = IntakeState.HOLDING;
                     }
                 }
 
-                if (timer.hasElapsed(0.2)) {
+                if (timer.hasElapsed(0.5)) {
                     currentState = IntakeState.IDLE;
                     timer.stop();
                     timer.reset();
@@ -130,7 +136,7 @@ public class Intake extends SubsystemBase {
                 RightIntakeServo.setAngle(60); //Angle is subject to change depending on the orientation of the servos.
                 intakeMotor.stopMotor();
                 break;
-            case EJECTING:;
+            case EJECTING:
                 if (! noteAtShooterSensor) {
                     intakeMotor.stopMotor();
                     currentState = IntakeState.IDLE;

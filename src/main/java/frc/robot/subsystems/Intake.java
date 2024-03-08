@@ -29,7 +29,6 @@ public class Intake extends SubsystemBase {
     private double intakeMotorVelocity = 4;
     private VelocityVoltage velocity = new VelocityVoltage(intakeMotorVelocity);
     private boolean isEjecting = false;
-    private double timeUntilReset = 0.2;
 
     private enum IntakeState {
         IDLE, // No motors are moving, no note is inside the mechanism
@@ -60,7 +59,6 @@ public class Intake extends SubsystemBase {
         if (reverseIntaking == false) {
             isEjecting = true;
         }
-        timeUntilReset = 2;
         switch (currentState) {
             case HOLDING:
                 currentState = IntakeState.IDLE;
@@ -125,13 +123,12 @@ public class Intake extends SubsystemBase {
                     }
                 }
 
-                if (timer.hasElapsed(timeUntilReset)) {
+                if (timer.hasElapsed(0.2)) {
                     currentState = IntakeState.IDLE;
                     timer.stop();
                     timer.reset();
                     intakeMotor.set(0);
                     isEjecting = false;
-                    timeUntilReset = 0.2;
                 }
                 break;
             case HOLDING:

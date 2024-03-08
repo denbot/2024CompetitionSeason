@@ -19,6 +19,7 @@ public class ReverseNote extends Command {
     this.intake = intake;
     this.shooter = shooter;
     addRequirements(intake);
+    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.

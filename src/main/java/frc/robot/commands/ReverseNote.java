@@ -7,21 +7,15 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-<<<<<<< HEAD
 import edu.wpi.first.wpilibj.Timer;
-=======
->>>>>>> 8f95bd9 (Added intake from the shooter (mainly for testing))
 
 public class ReverseNote extends Command {
   /** Creates a new Eject. */
   Intake intake;
   Shooter shooter;
   private double reverseSpeed;
-<<<<<<< HEAD
-  private Timer timer = new Timer();
+  Timer timer = new Timer();
 
-=======
->>>>>>> 8f95bd9 (Added intake from the shooter (mainly for testing))
   public ReverseNote(Intake intake, Shooter shooter, double ejectSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.reverseSpeed = ejectSpeed;
@@ -37,11 +31,6 @@ public class ReverseNote extends Command {
     timer.stop();
     timer.reset();
     timer.start();
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
     if (intake.noteInIntake()) {
       intake.eject(reverseSpeed, false);
     } else {
@@ -50,23 +39,21 @@ public class ReverseNote extends Command {
     }
   }
 
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+  }
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     shooter.stopMotors();
-<<<<<<< HEAD
-    timer.stop();
-=======
->>>>>>> 8f95bd9 (Added intake from the shooter (mainly for testing))
+    timer.stop;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-<<<<<<< HEAD
     return (intake.noteInIntake() || timer.hasElapsed(2.5));
-=======
-    return intake.noteInIntake();
->>>>>>> 8f95bd9 (Added intake from the shooter (mainly for testing))
   }
 }

@@ -61,6 +61,7 @@ public class Intake extends SubsystemBase {
         if (reverseIntaking == false) {
             isEjecting = true;
         }
+
         switch (currentState) {
             case HOLDING:
                 currentState = IntakeState.IDLE;
@@ -121,7 +122,7 @@ public class Intake extends SubsystemBase {
                     }
                 }
 
-                if (timer.hasElapsed(0.5)) {
+                if (timer.hasElapsed(0.2)) {
                     currentState = IntakeState.IDLE;
                     timer.stop();
                     timer.reset();

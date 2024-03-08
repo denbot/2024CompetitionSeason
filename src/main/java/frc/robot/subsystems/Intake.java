@@ -66,7 +66,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Boolean noteInIntake() {
-        return (preIntakeSensor.get() || intakeSensor.get() || shooterSensor.get());
+        return !(preIntakeSensor.get() || intakeSensor.get() || shooterSensor.get());
     }
 
     @Override

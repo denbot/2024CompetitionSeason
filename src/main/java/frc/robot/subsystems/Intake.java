@@ -75,6 +75,10 @@ public class Intake extends SubsystemBase {
         currentState = IntakeState.EJECTING;
     }
 
+    public Boolean noteInIntake() {
+        return !(preIntakeSensor.get() || intakeSensor.get() || shooterSensor.get());
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Motor Functional?", status);

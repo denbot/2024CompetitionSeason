@@ -14,7 +14,7 @@ public class ReverseNote extends Command {
   Intake intake;
   Shooter shooter;
   private double reverseSpeed;
-  private Timer timer = new Timer();
+  Timer timer = new Timer();
 
   public ReverseNote(Intake intake, Shooter shooter, double ejectSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -31,17 +31,17 @@ public class ReverseNote extends Command {
     timer.stop();
     timer.reset();
     timer.start();
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
     if (intake.noteInIntake()) {
       intake.eject(reverseSpeed, false);
     } else {
       intake.eject(reverseSpeed, true);
       shooter.intake(reverseSpeed);
     }
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
   }
 
   // Called once the command ends or is interrupted.

@@ -103,36 +103,49 @@ public class Intake extends SubsystemBase {
                 }
                 break;
             case INTAKING:
-                if (noteAtPreIntakeSensor || noteAtIntakeSensor) {
-                    if(timer.get() != 0) {
-                        timer.stop();
-                        timer.reset();
-                    }
-                } else {
-                    // Our note is no at either intake sensor, start our timer to stop our motors
-                    if(timer.get() == 0) {
-                        timer.start();
-                    }
-                }
-
-                if (noteAtShooterSensor && ! isEjecting) {
-                    timer.stop();
-                    timerTwoElectrickBoogaloo.start();
-                    if (timerTwoElectrickBoogaloo.hasElapsed(0.1)) {
-                        intakeMotor.set(0);
-                        timerTwoElectrickBoogaloo.stop();
-                        timerTwoElectrickBoogaloo.reset();
-                        currentState = IntakeState.HOLDING;
-                    }
-                }
-
-                if (timer.hasElapsed(0.2)) {
+                // if (noteAtPreIntakeSensor || noteAtIntakeSensor) {
+                //     if(timer.get() != 0) {
+                //         timer.stop();
+                //         timer.reset();
+                //     }
+                // } else {
+                //     // Our note is no at either intake sensor, start our timer to stop our motors
+                //     if(timer.get() == 0) {
+                //         timer.start();
+                //     }
+                // }
+                
+                if (!noteAtIntakeSensor && ! noteAtIntakeSensor && !noteAtPreIntakeSensor) {
                     currentState = IntakeState.IDLE;
-                    timer.stop();
-                    timer.reset();
                     intakeMotor.set(0);
                     isEjecting = false;
                 }
+
+                if (noteAtIntakeSensor && isEjecting) {
+                    intakeMotor.set(0);
+                    currentState = IntakeState.HOLDING;
+                    isEjecting = false;
+                } 
+                
+                
+/*                  if (noteAtShooterSensor && ! isEjecting) {
+                     timer.stop();
+                     timerTwoElectrickBoogaloo.start();
+                     if (timerTwoElectrickBoogaloo.hasElapsed(0.2)) {
+                         intakeMotor.set(0);
+                         timerTwoElectrickBoogaloo.stop();
+                         timerTwoElectrickBoogaloo.reset();
+                         currentState = IntakeState.HOLDING;
+                     }
+                 }
+
+                 if (timer.hasElapsed(0.2)) {
+                     currentState = IntakeState.IDLE;
+                     timer.stop();
+                     timer.reset();
+                     intakeMotor.set(0);
+                     isEjecting = false;
+                 } */
                 break;
             case HOLDING:
                 LeftIntakeServo.setAngle(120); //Angle is subject to change depending on the orientation of the servos.

@@ -69,6 +69,7 @@ public class Shooter extends SubsystemBase {
 
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotMotionMagicConfigs);
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotPIDConfigs);
+    pivotMotor.setInverted(true);
 
     TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
     stopMotors();

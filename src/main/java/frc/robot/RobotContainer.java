@@ -48,7 +48,7 @@ public class RobotContainer {
   private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
   private final PrepCommand thirdShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
   private final PrepCommand closeShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
-  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
+  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 60, 10); //TODO Tune for actual angles
   private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
   private final ReverseNote reverseNote = new ReverseNote(intakeSubsystem, shooterSubsystem, -0.2);
 
@@ -84,7 +84,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Third Shoot", thirdShoot);
     NamedCommands.registerCommand("Close First", closeShoot);
     
-    autoChooser = AutoBuilder.buildAutoChooser("Center 2pt");
+    //autoChooser = AutoBuilder.buildAutoChooser("Center 2pt");
   }
 
   /**

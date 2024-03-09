@@ -25,6 +25,7 @@ public class Intake extends SubsystemBase {
     private double intakeMotorVelocity = 4;
     private VelocityVoltage velocity = new VelocityVoltage(intakeMotorVelocity);
     private boolean isEjecting = false;
+    private boolean isNoteReversing = false;
 
     private enum IntakeState {
         IDLE, // No motors are moving, no note is inside the mechanism
@@ -49,6 +50,7 @@ public class Intake extends SubsystemBase {
 
     public void eject(double speed, boolean reverseIntaking) {
         intakeMotor.set(speed);
+        isNoteReversing = true;
         if (reverseIntaking == false) {
             isEjecting = true;
         }
@@ -79,9 +81,9 @@ public class Intake extends SubsystemBase {
         boolean noteAtShooterSensor = ! shooterSensor.get();
         switch (currentState) {
             case IDLE:
-                if (noteAtPreIntakeSensor || noteAtIntakeSensor) {
+                if (noteAtPreIntakeSensor) {
                     //intakeMotor.setControl(velocity.withVelocity(intakeMotorVelocity));
-                    if (! isEjecting) {
+                    if (! (isEjecting || isNoteReversing)) {
                         intakeMotor.set(0.2);
                     }
                     currentState = IntakeState.INTAKING;

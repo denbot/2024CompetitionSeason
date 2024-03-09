@@ -48,7 +48,7 @@ public class ReverseNote extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.stopMotors();
-    timer.stop;
+    timer.stop();
   }
 
   // Returns true when the command should end.

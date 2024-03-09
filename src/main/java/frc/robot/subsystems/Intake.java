@@ -5,9 +5,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.PWM;
 import frc.robot.Constants;
 
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -19,9 +21,11 @@ public class Intake extends SubsystemBase {
     private final DigitalInput shooterSensor = new DigitalInput(9);
 
     private final TalonFX intakeMotor = new TalonFX(4, Constants.OperatorConstants.canivoreSerial);
+    private final Servo RightIntakeServo = new Servo(1); //PWM channel is likely subject to change.
+    private final Servo LeftIntakeServo = new Servo(2); //PWM channel is likely subject to change.
+
 
     private boolean status = intakeMotor.isAlive();
-    // TODO: Change intakeMotorVelocity
     private double intakeMotorVelocity = 4;
     private VelocityVoltage velocity = new VelocityVoltage(intakeMotorVelocity);
     private boolean isEjecting = false;
@@ -33,11 +37,14 @@ public class Intake extends SubsystemBase {
         EJECTING; // Motors are moving, note is being moved into the gears
     }
     private Timer timer = new Timer();
+    private Timer timerTwoElectrickBoogaloo = new Timer();
     
 
     private static IntakeState currentState = IntakeState.IDLE;
 
     public void intakeInit() {
+        timerTwoElectrickBoogaloo.stop();
+        timerTwoElectrickBoogaloo.reset();
         timer.stop();
         timer.reset();
         intakeMotor.setInverted(true);
@@ -57,6 +64,8 @@ public class Intake extends SubsystemBase {
     }
 
     public void shoot(double speed) {
+        LeftIntakeServo.setAngle(0); //Angle is subject to cahnge depending on the orientation of the servos.
+        RightIntakeServo.setAngle(0); //Angle is subject to cahnge depending on the orientation of the servos.
         intakeMotor.set(speed);
         currentState = IntakeState.EJECTING;
     }
@@ -74,7 +83,8 @@ public class Intake extends SubsystemBase {
         switch (currentState) {
             case IDLE:
                 if (noteAtPreIntakeSensor || noteAtIntakeSensor) {
-                    //intakeMotor.setControl(velocity.withVelocity(intakeMotorVelocity));
+                    RightIntakeServo.setAngle(180); //Angle is subject to change depending on the orientation of the servos.
+                    LeftIntakeServo.setAngle(0); //Angle is subject to change depending on the orientation of the servos.
                     if (! isEjecting) {
                         intakeMotor.set(0.2);
                     }
@@ -98,8 +108,13 @@ public class Intake extends SubsystemBase {
 
                 if (noteAtShooterSensor && ! isEjecting) {
                     timer.stop();
-                    intakeMotor.set(0);
-                    currentState = IntakeState.INTAKING;
+                    timerTwoElectrickBoogaloo.start();
+                    if (timerTwoElectrickBoogaloo.hasElapsed(0.1)) {
+                        intakeMotor.set(0);
+                        timerTwoElectrickBoogaloo.stop();
+                        timerTwoElectrickBoogaloo.reset();
+                        currentState = IntakeState.INTAKING;
+                    }
                 }
 
                 if (timer.hasElapsed(0.2)) {
@@ -109,18 +124,10 @@ public class Intake extends SubsystemBase {
                     intakeMotor.set(0);
                     isEjecting = false;
                 }
-                // if (timer.get() == 0 && noteAtPreIntakeSensor){
-                //     timer.start();
-                // }
-                // if (noteAtShooterSensor) {
-                //     timer.reset();
-                //     currentState = IntakeState.HOLDING;
-                // } else if (! noteAtPreIntakeSensor && ! noteAtIntakeSensor && timer.hasElapsed(2)) {
-                //     timer.reset();
-                //     currentState = IntakeState.IDLE;
-                // }
                 break;
             case HOLDING:
+                LeftIntakeServo.setAngle(120); //Angle is subject to change depending on the orientation of the servos.
+                RightIntakeServo.setAngle(60); //Angle is subject to change depending on the orientation of the servos.
                 intakeMotor.stopMotor();
                 break;
             case EJECTING:;

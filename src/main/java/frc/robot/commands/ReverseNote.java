@@ -31,10 +31,10 @@ public class ReverseNote extends Command {
     timer.stop();
     timer.reset();
     timer.start();
-    if (intake.noteInIntake()) {
-      intake.eject(reverseSpeed, false);
-    } else {
-      intake.eject(reverseSpeed, true);
+    if (intake.currentIntakeState() == Intake.IntakeState.HOLDING) { // If the intake has a peice, we want to eject it
+      intake.reverseNote(false);
+    } else { // If the intake does not have a peice, we want to start reverse intaking
+      intake.reverseNote(true);
       shooter.intake(reverseSpeed);
     }
   }
@@ -49,11 +49,12 @@ public class ReverseNote extends Command {
   public void end(boolean interrupted) {
     shooter.stopMotors();
     timer.stop();
+    timer.reset();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (intake.noteInIntake() || timer.hasElapsed(2.5));
+    return (timer.hasElapsed(2)); // If it has been 2 seconds, stop the shooter motors
   }
 }

@@ -9,10 +9,9 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.PWM;
+
 import frc.robot.Constants;
 
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Intake extends SubsystemBase {
@@ -21,139 +20,201 @@ public class Intake extends SubsystemBase {
     private final DigitalInput shooterSensor = new DigitalInput(9);
 
     private final TalonFX intakeMotor = new TalonFX(4, Constants.OperatorConstants.canivoreSerial);
-    private final Servo RightIntakeServo = new Servo(1); //PWM channel is likely subject to change.
-    private final Servo LeftIntakeServo = new Servo(2); //PWM channel is likely subject to change.
-
+    private final Servo RightIntakeServo = new Servo(1); // PWM channel is likely subject to change.
+    private final Servo LeftIntakeServo = new Servo(2); // PWM channel is likely subject to change.
 
     private boolean status = intakeMotor.isAlive();
-    private double intakeMotorVelocity = 4;
-    private VelocityVoltage velocity = new VelocityVoltage(intakeMotorVelocity);
-    private boolean isEjecting = false;
-    private boolean isNoteReversing = false;
 
-    private enum IntakeState {
+    public enum IntakeState {
         IDLE, // No motors are moving, no note is inside the mechanism
         INTAKING, // Motors are moving, note is not yet where we need it to be
         HOLDING, // No motors are moving, note is where it needs to be and is contained in the robot
-        EJECTING; // Motors are moving, note is being moved into the gears
+        SHOOTING, // Motors are moving, note is being moved into the gears
+        EJECTING, // Ejecting the note back out of the intake.
+        REVERSE_INTAKING; // Intaking from the shooter
     }
+
     private Timer timer = new Timer();
-    private Timer timerTwoElectrickBoogaloo = new Timer();
-    
+    private Timer postIntakeTimer = new Timer();
 
     private static IntakeState currentState = IntakeState.IDLE;
 
     public void intakeInit() {
-        timerTwoElectrickBoogaloo.stop();
-        timerTwoElectrickBoogaloo.reset();
+        intakeMotor.setInverted(true);
         timer.stop();
         timer.reset();
-        intakeMotor.setInverted(true);
+        postIntakeTimer.stop();
+        postIntakeTimer.reset();
     }
 
     public void optomizeCan() {
         TalonFX.optimizeBusUtilizationForAll(intakeMotor);
     }
 
-    public void eject(double speed, boolean reverseIntaking) {
-        intakeMotor.set(speed);
-        isNoteReversing = true;
-        if (reverseIntaking == false) {
-            isEjecting = true;
-        }
-
-        switch (currentState) {
-            case HOLDING:
-                currentState = IntakeState.IDLE;
+    public void reverseNote(boolean reverseIntaking) {
+        if (reverseIntaking == true) {
+            currentState = IntakeState.REVERSE_INTAKING;
+        } else {
+            currentState = IntakeState.EJECTING;
         }
     }
 
     public void shoot(double speed) {
         LeftIntakeServo.setAngle(0); //Angle is subject to cahnge depending on the orientation of the servos.
         RightIntakeServo.setAngle(0); //Angle is subject to cahnge depending on the orientation of the servos.
+        currentState = IntakeState.SHOOTING;        
         intakeMotor.set(speed);
-        currentState = IntakeState.EJECTING;
     }
 
-    public Boolean noteInIntake() {
-        return !(preIntakeSensor.get() || intakeSensor.get() || shooterSensor.get());
+    public IntakeState currentIntakeState() {
+        return currentState;
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Motor Functional?", status);
-        SmartDashboard.putNumber("Intake Motor Speed (RPM)", intakeMotorVelocity);
+        SmartDashboard.putNumber("Intake Motor Speed", intakeMotor.get());
         SmartDashboard.putBoolean("Pre Intake Sensor", preIntakeSensor.get());
+        SmartDashboard.putBoolean("Intake Sensor", intakeSensor.get());
+        SmartDashboard.putBoolean("Shooter Sensor", shooterSensor.get());
         SmartDashboard.putString("Intake State", currentState.name());
         SmartDashboard.putNumber("Timer", timer.get());
+        SmartDashboard.putNumber("Post Intake Timer", postIntakeTimer.get());
         boolean noteAtPreIntakeSensor = ! preIntakeSensor.get();
         boolean noteAtIntakeSensor = ! intakeSensor.get();
         boolean noteAtShooterSensor = ! shooterSensor.get();
         switch (currentState) {
             case IDLE:
+
+                if (intakeMotor.get() != 0) {
+                    intakeMotor.set(0);
+                }
+
                 if (noteAtPreIntakeSensor) {
-                    RightIntakeServo.setAngle(180); //Angle is subject to change depending on the orientation of the servos.
-                    LeftIntakeServo.setAngle(0); //Angle is subject to change depending on the orientation of the servos.
-                    if (! (isEjecting || isNoteReversing)) {
-                        intakeMotor.set(0.2);
-                    }
+                    LeftIntakeServo.setAngle(160);
+                    RightIntakeServo.setAngle(0);
+
                     currentState = IntakeState.INTAKING;
                     timer.stop();
                     timer.reset();
+                    postIntakeTimer.stop();
+                    postIntakeTimer.reset();
                 }
+
                 break;
             case INTAKING:
-                if (noteAtPreIntakeSensor || noteAtIntakeSensor) {
-                    if(timer.get() != 0) {
-                        timer.stop();
-                        timer.reset();
-                    }
-                } else {
-                    // Our note is no at either intake sensor, start our timer to stop our motors
-                    if(timer.get() == 0) {
-                        timer.start();
-                    }
-                }
 
-                if (noteAtShooterSensor && ! isEjecting) {
-                    timer.stop();
-                    timerTwoElectrickBoogaloo.start();
-                    if (timerTwoElectrickBoogaloo.hasElapsed(0.1)) {
-                        intakeMotor.set(0);
-                        timerTwoElectrickBoogaloo.stop();
-                        timerTwoElectrickBoogaloo.reset();
-                        currentState = IntakeState.HOLDING;
+                if (noteAtPreIntakeSensor || noteAtIntakeSensor || noteAtShooterSensor) { // If there is a note in the intake subsystem, keep the timer from starting and make sure the motor is moving
+                    if (intakeMotor.get() == 0) {
+                        intakeMotor.set(0.2);
                     }
-                }
-
-                if (timer.hasElapsed(0.2)) {
-                    currentState = IntakeState.IDLE;
                     timer.stop();
                     timer.reset();
-                    intakeMotor.set(0);
-                    isEjecting = false;
+                } else if (timer.get() == 0 && postIntakeTimer.get() != 0) { // If there is not a note in the subsystem, the timer has not started, and the note has not already passed the shooter sensor, start the timer to disable the motor
+                    timer.start();
                 }
+
+                if (noteAtShooterSensor) { // Start the second timer when the note hits the shooter sensor
+                    postIntakeTimer.reset();
+                    postIntakeTimer.start();
+                }
+
+                if (postIntakeTimer.hasElapsed(0.1)) { // If the second timer has reached 0.1 seconds, we are now holding the note
+                    currentState = IntakeState.HOLDING;
+                    intakeMotor.stopMotor();
+                    timer.stop();
+                    timer.reset();
+                    postIntakeTimer.stop();
+                    postIntakeTimer.reset();
+                }
+                
+                if (timer.hasElapsed(0.2)) { // If there has been no note detected inside the intake subsystem for 0.2 seconds, set back to idle and stop the motors
+                    currentState = IntakeState.IDLE;
+                    intakeMotor.stopMotor();
+                    timer.stop();
+                    timer.reset();
+                    postIntakeTimer.stop();
+                    postIntakeTimer.reset();
+                }
+
                 break;
             case HOLDING:
-                LeftIntakeServo.setAngle(120); //Angle is subject to change depending on the orientation of the servos.
-                RightIntakeServo.setAngle(60); //Angle is subject to change depending on the orientation of the servos.
+
+                LeftIntakeServo.setAngle(160);
+                RightIntakeServo.setAngle(0);
                 intakeMotor.stopMotor();
+
+                break;
+            case SHOOTING:
+
+                if (timer.get() == 0) { // If the timer has not started, start the timer and the motor
+                    intakeMotor.set(0.2);                    
+                    timer.start();
+                }
+
+                if (timer.hasElapsed(1)) { // If the intake has been running for 1 second, the note has shot. Reset everything back to idle
+                    currentState = IntakeState.IDLE;
+                    intakeMotor.stopMotor();
+                    timer.stop();
+                    timer.reset();
+                }
+
                 break;
             case EJECTING:
-                if (! noteAtShooterSensor) {
-                    intakeMotor.stopMotor();
-                    currentState = IntakeState.IDLE;
+
+                if (noteAtPreIntakeSensor || noteAtIntakeSensor || noteAtShooterSensor) { // If there is a note in the intake subsystem, keep the timer from starting
+                    if (intakeMotor.get() == 0) {
+                        intakeMotor.set(-0.2);
+                    }
+                    timer.stop();
+                    timer.reset();
+                } else if (timer.get() == 0) { // If there is no note in the intake subsystem and the timer has not started, start the timer. 
+                    timer.start();
                 }
+
+                if (timer.get() == 0.5) { // If there has been no note detected inside the intake subsystem for 0.5 seconds, set back to idle and stop the motors
+                    currentState = IntakeState.IDLE;
+                    intakeMotor.stopMotor();
+                    timer.stop();
+                    timer.reset();
+                }
+
+                break;
+            case REVERSE_INTAKING:
+
+                if (noteAtIntakeSensor || noteAtShooterSensor) { // If there is a note in the intake subsystem, keep the timer from starting
+                    if (intakeMotor.get() == 0) {
+                        intakeMotor.set(-0.2);
+                    }                    
+                    timer.stop();
+                    timer.reset();
+                } else if (timer.get() == 0) { // If there is no note in the top of the intake subsystem and the timer has not started, start the timer. 
+                    timer.start();
+                }
+ 
+                if (noteAtPreIntakeSensor) { // If the note has gone down to the pre-intake sensor, consider it a normal intaking process.
+                    currentState = IntakeState.INTAKING;
+                    intakeMotor.stopMotor();
+                    timer.stop();
+                    timer.reset();
+                }
+
+                if (timer.get() == 2) { // If there has been no note detected inside the intake subsystem for 2 seconds, set back to idle and stop the motors
+                    currentState = IntakeState.IDLE;
+                    intakeMotor.stopMotor();
+                    timer.stop();
+                    timer.reset();
+                }
+                
                 break;
         }
     }
 
-    // Called on by shooter subsystem
-    public void shoot() {
-        currentState = IntakeState.EJECTING;
-    }
-
     public void disable() {
         intakeMotor.stopMotor();
+        timer.stop();
+        timer.reset();
+        postIntakeTimer.stop();
+        postIntakeTimer.reset();
     }
 }

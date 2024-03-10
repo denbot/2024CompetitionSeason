@@ -115,17 +115,24 @@ public class Intake extends SubsystemBase {
                 //     }
                 // }
                 
-                if (!noteAtIntakeSensor && ! noteAtIntakeSensor && !noteAtPreIntakeSensor) {
-                    currentState = IntakeState.IDLE;
+                if (!noteAtIntakeSensor && ! noteAtShooterSensor && !noteAtPreIntakeSensor) {
+                    if (isEjecting && currentState == IntakeState.INTAKING) {
+                        currentState = IntakeState.HOLDING;
+                    }
+
+                    if (!isEjecting && currentState != IntakeState.HOLDING) {
+                        currentState = IntakeState.IDLE;
+                    }
+
                     intakeMotor.set(0);
                     isEjecting = false;
                 }
 
-                if (noteAtIntakeSensor && isEjecting) {
-                    intakeMotor.set(0);
-                    currentState = IntakeState.HOLDING;
-                    isEjecting = false;
-                } 
+                // if (noteAtIntakeSensor && isEjecting) {
+                //     intakeMotor.set(0);
+                //     currentState = IntakeState.HOLDING;
+                //     isEjecting = false;
+                // } 
                 
                 
 /*                  if (noteAtShooterSensor && ! isEjecting) {

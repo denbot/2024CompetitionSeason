@@ -77,8 +77,6 @@ public class RobotContainer {
     configureBindings();
     intakeSubsystem.intakeInit();
     shooterSubsystem.shooterInit();
-    intakeSubsystem.optomizeCan();
-    drivetrain.optimizeCan();
     
     NamedCommands.registerCommand("First Shoot", firstShoot);
     NamedCommands.registerCommand("Second Shoot", secondShoot);
@@ -100,7 +98,7 @@ public class RobotContainer {
   private void configureBindings() {
     //driverController.a().onTrue(ampShoot);
     //driverController.b().onTrue(speakerShoot);
-    //driverController.leftTrigger().onTrue(reverseNote);
+    // driverController.leftTrigger().onTrue(reverseNote);
     //driverController.rightTrigger().onTrue(shootCommand);
 
     //drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically

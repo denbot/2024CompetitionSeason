@@ -23,6 +23,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ReverseNote;
 import frc.robot.commands.PrepCommand;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.calibration.CalibrateWristAngleCommand;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -48,7 +49,7 @@ public class RobotContainer {
   private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
   private final PrepCommand thirdShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
   private final PrepCommand closeShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
-  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
+  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 20, 0); //TODO Tune for actual angles
   private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
   private final ReverseNote reverseNote = new ReverseNote(intakeSubsystem, shooterSubsystem, -0.2);
 
@@ -97,24 +98,25 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    driverController.a().onTrue(ampShoot);
-    driverController.b().onTrue(speakerShoot);
-    driverController.leftTrigger().onTrue(reverseNote);
-    driverController.rightTrigger().onTrue(shootCommand);
+    //driverController.a().onTrue(ampShoot);
+    //driverController.b().onTrue(speakerShoot);
+    //driverController.leftTrigger().onTrue(reverseNote);
+    //driverController.rightTrigger().onTrue(shootCommand);
 
-    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * maxSpeed) // Drive forward with
-                                                                                           // negative Y (forward)
-            .withVelocityY(-driverController.getLeftX() * maxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(-driverController.getRightX() * maxAngularRate) // Drive counterclockwise with negative X (left)
-        ));
+    //drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+    //    drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * maxSpeed) // Drive forward with
+    //                                                                                       // negative Y (forward)
+    //        .withVelocityY(-driverController.getLeftX() * maxSpeed) // Drive left with negative X (left)
+    //        .withRotationalRate(-driverController.getRightX() * maxAngularRate) // Drive counterclockwise with negative X (left)
+    //    ));
+      shooterSubsystem.setDefaultCommand(new CalibrateWristAngleCommand(shooterSubsystem));
 
-    driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
-    driverController.start().whileTrue(drivetrain
-        .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
+    //driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
+    //driverController.start().whileTrue(drivetrain
+    //    .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
 
-    // reset the field-centric heading on left bumper press
-    driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    //// reset the field-centric heading on left bumper press
+    //driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
 
     if (Utils.isSimulation()) {

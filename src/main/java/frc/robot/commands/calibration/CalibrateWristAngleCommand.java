@@ -16,6 +16,8 @@ public class CalibrateWristAngleCommand extends Command {
     private final TalonFX pivotMotor;
     private final CANcoder wristPositionEncoder;
     private double currentProgrammedOffset;
+    
+    private int count = 0;
 
     public CalibrateWristAngleCommand(Shooter shooter) {
         // this.shooter = shooter;
@@ -30,6 +32,7 @@ public class CalibrateWristAngleCommand extends Command {
     }
 
     public void execute() {
+        count++;
         double wristPosition = wristPositionEncoder.getAbsolutePosition().getValue();
         // double motorPosition = pivotMotor.getPosition().getValue();
 
@@ -45,5 +48,9 @@ public class CalibrateWristAngleCommand extends Command {
         double wristOffsetWithCurrentProgrammedOffset = ANGLE_0_TO_1_AT_WRIST_REST - wristPosition;
         double wristEncoderOffsetAtZero = currentProgrammedOffset + wristOffsetWithCurrentProgrammedOffset;
         SmartDashboard.putNumber("New Wrist Zero offset", wristEncoderOffsetAtZero);
+        SmartDashboard.putNumber("calibrate counter", count);
+    }
+    public boolean isFinished() {
+        return false;
     }
 }

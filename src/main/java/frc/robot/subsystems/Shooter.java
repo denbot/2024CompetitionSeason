@@ -64,7 +64,7 @@ public class Shooter extends SubsystemBase {
     FeedbackConfigs pivotConfigs = new FeedbackConfigs();
     pivotConfigs.FeedbackRemoteSensorID = armPositionEncoder.getDeviceID();
     pivotConfigs.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-    pivotConfigs.RotorToSensorRatio = 45 / 8;
+    pivotConfigs.RotorToSensorRatio = 45.0 / 8.0;
     pivotMotor.getConfigurator().apply(pivotConfigs);
 
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotMotionMagicConfigs);

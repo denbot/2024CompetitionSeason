@@ -74,8 +74,6 @@ public class RobotContainer {
     configureBindings();
     intakeSubsystem.intakeInit();
     shooterSubsystem.shooterInit();
-    intakeSubsystem.optomizeCan();
-    drivetrain.optimizeCan();
     
     NamedCommands.registerCommand("First Shoot", firstShoot);
     NamedCommands.registerCommand("Second Shoot", secondShoot);

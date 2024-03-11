@@ -92,7 +92,7 @@ public class Intake extends SubsystemBase {
                         intakeMotor.set(0.2);
                     }
                 } else { // The note is not touching any of the sensors
-                    if (! notePassedShooterSensor) { // If the note has gone not past the last sensor
+                    if (! notePassedShooterSensor) { // If the note has not gone past the last sensor (meaning we haven't actually picked the note up)
                         currentState = IntakeState.IDLE;
                         intakeMotor.stopMotor();
                     }

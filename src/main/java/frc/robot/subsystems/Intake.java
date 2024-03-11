@@ -25,13 +25,11 @@ public class Intake extends SubsystemBase {
 
     private boolean status = intakeMotor.isAlive();
 
-    public enum IntakeState {
+    private enum IntakeState {
         IDLE, // No motors are moving, no note is inside the mechanism
         INTAKING, // Motors are moving, note is not yet where we need it to be
         HOLDING, // No motors are moving, note is where it needs to be and is contained in the robot
         SHOOTING, // Motors are moving, note is being moved into the gears
-        EJECTING, // Ejecting the note back out of the intake.
-        REVERSE_INTAKING; // Intaking from the shooter
     }
 
     private Timer timer = new Timer();
@@ -51,23 +49,11 @@ public class Intake extends SubsystemBase {
         TalonFX.optimizeBusUtilizationForAll(intakeMotor);
     }
 
-    public void reverseNote(boolean reverseIntaking) {
-        if (reverseIntaking == true) {
-            currentState = IntakeState.REVERSE_INTAKING;
-        } else {
-            currentState = IntakeState.EJECTING;
-        }
-    }
-
     public void shoot(double speed) {
         LeftIntakeServo.setAngle(0); //Angle is subject to cahnge depending on the orientation of the servos.
         RightIntakeServo.setAngle(0); //Angle is subject to cahnge depending on the orientation of the servos.
         currentState = IntakeState.SHOOTING;        
         intakeMotor.set(speed);
-    }
-
-    public IntakeState currentIntakeState() {
-        return currentState;
     }
 
     @Override
@@ -159,53 +145,6 @@ public class Intake extends SubsystemBase {
                     timer.reset();
                 }
 
-                break;
-            case EJECTING:
-
-                if (noteAtPreIntakeSensor || noteAtIntakeSensor || noteAtShooterSensor) { // If there is a note in the intake subsystem, keep the timer from starting
-                    if (intakeMotor.get() == 0) {
-                        intakeMotor.set(-0.2);
-                    }
-                    timer.stop();
-                    timer.reset();
-                } else if (timer.get() == 0) { // If there is no note in the intake subsystem and the timer has not started, start the timer. 
-                    timer.start();
-                }
-
-                if (timer.get() == 0.5) { // If there has been no note detected inside the intake subsystem for 0.5 seconds, set back to idle and stop the motors
-                    currentState = IntakeState.IDLE;
-                    intakeMotor.stopMotor();
-                    timer.stop();
-                    timer.reset();
-                }
-
-                break;
-            case REVERSE_INTAKING:
-
-                if (noteAtIntakeSensor || noteAtShooterSensor) { // If there is a note in the intake subsystem, keep the timer from starting
-                    if (intakeMotor.get() == 0) {
-                        intakeMotor.set(-0.2);
-                    }                    
-                    timer.stop();
-                    timer.reset();
-                } else if (timer.get() == 0) { // If there is no note in the top of the intake subsystem and the timer has not started, start the timer. 
-                    timer.start();
-                }
- 
-                if (noteAtPreIntakeSensor) { // If the note has gone down to the pre-intake sensor, consider it a normal intaking process.
-                    currentState = IntakeState.INTAKING;
-                    intakeMotor.stopMotor();
-                    timer.stop();
-                    timer.reset();
-                }
-
-                if (timer.get() == 2) { // If there has been no note detected inside the intake subsystem for 2 seconds, set back to idle and stop the motors
-                    currentState = IntakeState.IDLE;
-                    intakeMotor.stopMotor();
-                    timer.stop();
-                    timer.reset();
-                }
-                
                 break;
         }
     }

@@ -108,8 +108,8 @@ public class RobotContainer {
     driverController.start().whileTrue(drivetrain
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
 
-    // reset the field-centric heading on left bumper press
-    driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    // reset the field-centric heading on start button press
+    driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
 
     if (Utils.isSimulation()) {

@@ -55,6 +55,10 @@ public class Intake extends SubsystemBase {
         intakeMotor.set(speed);
     }
 
+    public boolean intakedNote() {
+        return !intakeSensor.get();
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Motor Functional?", status);

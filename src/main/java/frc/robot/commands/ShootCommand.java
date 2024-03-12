@@ -11,7 +11,7 @@ import frc.robot.subsystems.*;
 public class ShootCommand extends Command {
   private final Shooter shooter;
   private final Intake intake;
-  private double speed = 1; // TODO Change to intake motor speed (in rotations per second)
+  private double speed = 0.2; // TODO Change to intake motor speed (in rotations per second)
   private Timer timer = new Timer();
 
   public ShootCommand(Shooter shooter, Intake intake) {
@@ -22,6 +22,7 @@ public class ShootCommand extends Command {
   }
 
   public void initialize() {
+    timer.stop();
     timer.reset();
   }
 
@@ -29,7 +30,7 @@ public class ShootCommand extends Command {
   @Override
   public void execute() {
     if (timer.get() == 0 && shooter.canShoot()) {
-      intake.shoot(1);
+      intake.shoot(speed);
       timer.start();
     }
   }
@@ -40,6 +41,7 @@ public class ShootCommand extends Command {
     shooter.stopMotors();
     shooter.readyArmForNewNote();
     timer.stop();
+    timer.reset();
   }
 
   // Returns true when the command should end.

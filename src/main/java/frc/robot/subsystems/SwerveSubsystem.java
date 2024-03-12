@@ -10,8 +10,10 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -46,6 +48,12 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
             SwerveModule module = Modules[i];
             TalonFX.optimizeBusUtilizationForAll(module.getDriveMotor(), module.getSteerMotor());
         }
+    }
+
+    @Override
+    public void periodic() {
+        Pose2d pose = m_odometry.getEstimatedPosition();
+        SmartDashboard.putNumberArray("pose estimation", new Double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
     }
     public void zeroGyro() {
         m_pigeon2.setYaw(0);

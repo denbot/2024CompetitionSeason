@@ -89,7 +89,7 @@ public class Intake extends SubsystemBase {
 
                 if (noteAtPreIntakeSensor || noteAtIntakeSensor || noteAtShooterSensor) { // If there is a note in the intake subsystem, make sure the motor is moving
                     if (intakeMotor.get() == 0) { // If the motor is not moving, make it move
-                        intakeMotor.set(0.2);
+                        intakeMotor.set(0.4);
                     }
                 } else { // The note is not touching any of the sensors
                     if (! notePassedShooterSensor) { // If the note has not gone past the last sensor (meaning we haven't actually picked the note up)
@@ -105,7 +105,7 @@ public class Intake extends SubsystemBase {
                     }
                 }
 
-                if (timer.hasElapsed(0.3) && ! noteHitShooter) { // TODO: tune this value. This timer starts when the note hits the last sensor, and this value will make the indexer go backwards for a short period of time to make sure the note is in the right spot.
+                if (timer.hasElapsed(0.175) && ! noteHitShooter) { // TODO: tune this value. This timer starts when the note hits the last sensor, and this value will make the indexer go backwards for a short period of time to make sure the note is in the right spot.
                     noteHitShooter = true;
                     intakeMotor.set(-0.1);
                     timer.stop();
@@ -113,7 +113,7 @@ public class Intake extends SubsystemBase {
                     timer.start();
                 }
 
-                if (timer.hasElapsed(0.1) && noteHitShooter) { // TODO: tune this value. This timer starts when the note hits the shooter wheels, and this value stops the intaking process when the timer reaches this value
+                if (timer.hasElapsed(0.15) && noteHitShooter) { // TODO: tune this value. This timer starts when the note hits the shooter wheels, and this value stops the intaking process when the timer reaches this value
                     currentState = IntakeState.HOLDING;
                     intakeMotor.stopMotor();
                     timer.stop();
@@ -128,7 +128,7 @@ public class Intake extends SubsystemBase {
             case SHOOTING:
 
                 if (timer.get() == 0) { // If the timer has not started, start the timer and the motor
-                    intakeMotor.set(0.2);                    
+                    intakeMotor.set(0.4);                    
                     timer.start();
                 }
 

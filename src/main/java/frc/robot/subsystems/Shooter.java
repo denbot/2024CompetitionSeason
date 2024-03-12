@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -44,10 +43,6 @@ public class Shooter extends SubsystemBase {
   private double positionOfArm = 0;
   public static final double PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID = 1.0 / 360.0;
   private final NeutralOut brake = new NeutralOut();
-
-  public TalonFX getPivotMotor() {
-    return pivotMotor;
-  }
 
   public CANcoder getPivotMotorEncoder() {
     return armPositionEncoder;
@@ -130,8 +125,5 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber(SMART_DASHBOARD_POSITION, positionOfArm);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_POSITION, targetArmPosition);
     SmartDashboard.putNumber("Arm position rotations", armPositionEncoder.getPosition().getValue());
-    ControlRequest request = pivotMotor.getAppliedControl();
-    PositionVoltage voltage = (PositionVoltage) request;
-    SmartDashboard.putNumber("Arm position target", voltage.Position);
   }
 }

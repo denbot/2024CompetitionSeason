@@ -77,12 +77,12 @@ public class RobotContainer {
     configureBindings();
     intakeSubsystem.intakeInit();
     shooterSubsystem.shooterInit();
-    
+
     NamedCommands.registerCommand("First Shoot", firstShoot);
     NamedCommands.registerCommand("Second Shoot", secondShoot);
     NamedCommands.registerCommand("Third Shoot", thirdShoot);
     NamedCommands.registerCommand("Close First", closeShoot);
-    
+
 //    autoChooser = AutoBuilder.buildAutoChooser("Center 2pt");
   }
 
@@ -133,18 +133,6 @@ public class RobotContainer {
     }
 
     driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
-  }
-  public double getJoystickLeftX() {
-    return driverController.getLeftX();
-  }
-  public double getJoystickLeftY() {
-    return driverController.getLeftY();
-  }
-  public double getJoystickRightX() {
-    return driverController.getRightX();
-  }
-  public double getJoystickRightY() {
-    return driverController.getRightY();
   }
 
 

@@ -91,10 +91,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putNumber("ControllerLeftX", m_robotContainer.getJoystickLeftX());
-    SmartDashboard.putNumber("ControllerLeftY", m_robotContainer.getJoystickLeftY());
-    SmartDashboard.putNumber("ControllerRightX", m_robotContainer.getJoystickRightX());
-    SmartDashboard.putNumber("ControllerRightY", m_robotContainer.getJoystickRightY());
   }
 
   @Override

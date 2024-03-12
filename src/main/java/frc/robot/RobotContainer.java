@@ -77,13 +77,14 @@ public class RobotContainer {
     configureBindings();
     intakeSubsystem.intakeInit();
     shooterSubsystem.shooterInit();
+    drivetrain.zeroGyro();
 
     NamedCommands.registerCommand("First Shoot", firstShoot);
     NamedCommands.registerCommand("Second Shoot", secondShoot);
     NamedCommands.registerCommand("Third Shoot", thirdShoot);
     NamedCommands.registerCommand("Close First", closeShoot);
 
-    autoChooser = AutoBuilder.buildAutoChooser("");
+    //autoChooser = AutoBuilder.buildAutoChooser("");
   }
 
   /**
@@ -115,7 +116,7 @@ public class RobotContainer {
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
 
     // reset the field-centric heading on start button press
-    driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.zeroGyro()));
 
 
     if (Utils.isSimulation()) {

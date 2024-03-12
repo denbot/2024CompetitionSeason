@@ -38,6 +38,7 @@ public class Intake extends SubsystemBase {
     private static IntakeState currentState = IntakeState.IDLE;
 
     public void intakeInit() {
+        currentState = IntakeState.IDLE;
         intakeMotor.setInverted(true);
         timer.stop();
         timer.reset();

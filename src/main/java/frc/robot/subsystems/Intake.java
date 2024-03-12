@@ -5,13 +5,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
 
 import frc.robot.Constants;
 
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Intake extends SubsystemBase {
@@ -22,13 +22,14 @@ public class Intake extends SubsystemBase {
     private final TalonFX intakeMotor = new TalonFX(4, Constants.OperatorConstants.canivoreSerial);
 
     private boolean notePassedShooterSensor = false;
+    private boolean noteHitShooter = false;
 
     private boolean status = intakeMotor.isAlive();
 
     private enum IntakeState {
         IDLE, // No motors are moving, no note is inside the mechanism
         INTAKING, // Motors are moving, note is not yet where we need it to be
-        HOLDING, // No motors are moving, note is where it needs to be and is contained in the robot
+        HOLDING, // No motors are moving, note is where it needs to be and is contained in the robot    
         SHOOTING, // Motors are moving, note is being moved into the gears
     }
 
@@ -77,6 +78,7 @@ public class Intake extends SubsystemBase {
                 if (noteAtPreIntakeSensor) { // If there is a note at the intake, start intaking and make sure that the timers are reset and stopped
                     currentState = IntakeState.INTAKING;
                     notePassedShooterSensor = false;
+                    noteHitShooter = false;
                     timer.stop();
                     timer.reset();
                 }
@@ -102,8 +104,16 @@ public class Intake extends SubsystemBase {
                     }
                 }
 
-                if (timer.hasElapsed(0.1)) { // TODO: tune this value. This timer starts when the note hits the last sensor, and this value stops the intaking process when the timer reaches this value
-                    currentState = IntakeState.IDLE;
+                if (timer.hasElapsed(0.3) && ! noteHitShooter) { // TODO: tune this value. This timer starts when the note hits the last sensor, and this value will make the indexer go backwards for a short period of time to make sure the note is in the right spot.
+                    noteHitShooter = true;
+                    intakeMotor.set(-0.1);
+                    timer.stop();
+                    timer.reset();
+                    timer.start();
+                }
+
+                if (timer.hasElapsed(0.1) && noteHitShooter) { // TODO: tune this value. This timer starts when the note hits the shooter wheels, and this value stops the intaking process when the timer reaches this value
+                    currentState = IntakeState.HOLDING;
                     intakeMotor.stopMotor();
                     timer.stop();
                     timer.reset();

@@ -6,12 +6,16 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,7 +40,7 @@ public class Shooter extends SubsystemBase {
   private final String SMART_DASHBOARD_TARGET_POSITION = "Shooter Motor Target Position";
 
   private final CANcoder armPositionEncoder = new CANcoder(18, Constants.OperatorConstants.canivoreSerial);
-  private double targetArmPosition = 0;
+  private double targetArmPosition = 40;
   private double positionOfArm = 0;
   public static final double PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID = 1.0 / 360.0;
   private final NeutralOut brake = new NeutralOut();
@@ -60,7 +64,7 @@ public class Shooter extends SubsystemBase {
     MagnetSensorConfigs wristPositionMagnetConfigs = new MagnetSensorConfigs();
     wristPositionMagnetConfigs.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
     wristPositionMagnetConfigs.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    wristPositionMagnetConfigs.MagnetOffset = -0.6362;  // Calibrate this with CalibrateWristAngleCommand
+    wristPositionMagnetConfigs.MagnetOffset = 0.73933;  // Calibrate this with CalibrateWristAngleCommand
     armPositionEncoder.getConfigurator().apply(wristPositionMagnetConfigs);
 
     FeedbackConfigs pivotConfigs = new FeedbackConfigs();
@@ -72,17 +76,22 @@ public class Shooter extends SubsystemBase {
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotMotionMagicConfigs);
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotPIDConfigs);
 
+    MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
+    outputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+    pivotMotor.getConfigurator().apply(outputConfigs);
 
     armPositionEncoder.getAbsolutePosition().setUpdateFrequency(200);
     leftShootMotor.getVelocity().setUpdateFrequency(50);
     rightShootMotor.getVelocity().setUpdateFrequency(50);
 //    TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
     stopMotors();
+    setAngle(targetArmPosition);
   }
 
 
   public void setAngle(double angle) {
-    pivotMotor.setControl(motionMagicVoltage.withPosition(angle / 360));
+    pivotMotor.setControl(new PositionVoltage(angle / 360.0));
+//    pivotMotor.setControl(motionMagicVoltage.withPosition(angle / 360));
     targetArmPosition = angle;
   }
 
@@ -120,5 +129,9 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
     SmartDashboard.putNumber(SMART_DASHBOARD_POSITION, positionOfArm);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_POSITION, targetArmPosition);
+    SmartDashboard.putNumber("Arm position rotations", armPositionEncoder.getPosition().getValue());
+    ControlRequest request = pivotMotor.getAppliedControl();
+    PositionVoltage voltage = (PositionVoltage) request;
+    SmartDashboard.putNumber("Arm position target", voltage.Position);
   }
 }

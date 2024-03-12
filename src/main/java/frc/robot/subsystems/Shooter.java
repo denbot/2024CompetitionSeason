@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
@@ -34,10 +35,11 @@ public class Shooter extends SubsystemBase {
   private final String SMART_DASHBOARD_POSITION = "Shooter Motor Position";
   private final String SMART_DASHBOARD_TARGET_POSITION = "Shooter Motor Target Position";
 
-  private final CANcoder armPositionEncoder = new CANcoder(18);
+  private final CANcoder armPositionEncoder = new CANcoder(18, Constants.OperatorConstants.canivoreSerial);
   private double targetArmPosition = 0;
   private double positionOfArm = 0;
   public static final double PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID = 1.0 / 360.0;
+  private final NeutralOut brake = new NeutralOut();
 
   public TalonFX getPivotMotor() {
     return pivotMotor;
@@ -70,7 +72,11 @@ public class Shooter extends SubsystemBase {
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotMotionMagicConfigs);
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotPIDConfigs);
 
-    TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
+
+    armPositionEncoder.getAbsolutePosition().setUpdateFrequency(200);
+    leftShootMotor.getVelocity().setUpdateFrequency(50);
+    rightShootMotor.getVelocity().setUpdateFrequency(50);
+//    TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
     stopMotors();
   }
 
@@ -100,8 +106,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void stopMotors() {
-    rightShootMotor.set(0);
-    leftShootMotor.set(0);
+    rightShootMotor.setControl(brake);
+    leftShootMotor.setControl(brake);
   }
 
   @Override

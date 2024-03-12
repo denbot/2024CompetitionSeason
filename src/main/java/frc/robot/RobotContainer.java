@@ -46,12 +46,12 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
-  private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
-  private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
-  private final PrepCommand thirdShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
-  private final PrepCommand closeShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
-  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
-  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 0, 0); //TODO Tune for actual angles
+  private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 30, 0); //TODO Tune for actual angles
+  private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0); //TODO Tune for actual angles
+  private final PrepCommand thirdShoot = new PrepCommand(shooterSubsystem, 30, 0); //TODO Tune for actual angles
+  private final PrepCommand closeShoot = new PrepCommand(shooterSubsystem, 30, 0); //TODO Tune for actual angles
+  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 30, 0); //TODO Tune for actual angles
+  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 30, 0); //TODO Tune for actual angles
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =

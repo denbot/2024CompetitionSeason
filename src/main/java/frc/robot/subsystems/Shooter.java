@@ -70,6 +70,7 @@ public class Shooter extends SubsystemBase {
 
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotMotionMagicConfigs);
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotPIDConfigs);
+    // TODO apply SoftwareLimitSwitchConfigs to pivotMotor to prevent the robot arm from crashing
 
     MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
     outputConfigs.Inverted = InvertedValue.Clockwise_Positive;

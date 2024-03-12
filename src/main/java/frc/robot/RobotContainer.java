@@ -82,7 +82,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Third Shoot", thirdShoot);
     NamedCommands.registerCommand("Close First", closeShoot);
     
-    autoChooser = AutoBuilder.buildAutoChooser("Center 2pt");
+//    autoChooser = AutoBuilder.buildAutoChooser("Center 2pt");
   }
 
   /**
@@ -150,6 +150,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return null;
+//    return autoChooser.getSelected();
   }
 }

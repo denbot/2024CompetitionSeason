@@ -12,6 +12,8 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -117,6 +119,16 @@ public class RobotContainer {
     
     drivetrain.registerTelemetry(telemetry::telemeterize);
     }
+  }
+
+  public void setControllerVibrations() {
+    // if we intake a note, it should only vibrate for less than a second
+    if (shooterSubsystem.canShoot() || intakeSubsystem.intakedNote()) {
+      driverController.getHID().setRumble(RumbleType.kBothRumble, 0.5);
+      return;
+    }
+
+    driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
   }
   public double getJoystickLeftX() {
     return driverController.getLeftX();

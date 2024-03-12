@@ -9,17 +9,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 public class CalibrateWristAngleCommand extends Command {
-    private static double ANGLE_0_TO_360_AT_WRIST_REST = 30.0;
-    private static double ANGLE_0_TO_1_AT_WRIST_REST = ANGLE_0_TO_360_AT_WRIST_REST / 360;
+    private static final double ANGLE_0_TO_360_AT_WRIST_REST = 30.0;
+    private static final double ANGLE_0_TO_1_AT_WRIST_REST = ANGLE_0_TO_360_AT_WRIST_REST / 360;
 
-    // private Shooter shooter;
-    private final TalonFX pivotMotor;
     private final CANcoder wristPositionEncoder;
-    private double currentProgrammedOffset;
+    private final double currentProgrammedOffset;
 
     public CalibrateWristAngleCommand(Shooter shooter) {
-        // this.shooter = shooter;
-        this.pivotMotor = shooter.getPivotMotor();
         this.wristPositionEncoder = shooter.getPivotMotorEncoder();
 
         MagnetSensorConfigs sensorConfigs = new MagnetSensorConfigs();
@@ -31,10 +27,8 @@ public class CalibrateWristAngleCommand extends Command {
 
     public void execute() {
         double wristPosition = wristPositionEncoder.getAbsolutePosition().getValue();
-        // double motorPosition = pivotMotor.getPosition().getValue();
 
         SmartDashboard.putNumber("Wrist Position", wristPosition);
-        // SmartDashboard.putNumber("Motor Position", motorPosition);  // Useful if we do fused encoders, currently not implemented math wise
 
         /*
          * Spot on: ANGLE_0_TO_1_AT_WRIST_REST == wristPosition
@@ -45,5 +39,10 @@ public class CalibrateWristAngleCommand extends Command {
         double wristOffsetWithCurrentProgrammedOffset = ANGLE_0_TO_1_AT_WRIST_REST - wristPosition;
         double wristEncoderOffsetAtZero = currentProgrammedOffset + wristOffsetWithCurrentProgrammedOffset;
         SmartDashboard.putNumber("New Wrist Zero offset", wristEncoderOffsetAtZero);
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 }

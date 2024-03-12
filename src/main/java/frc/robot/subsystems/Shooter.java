@@ -60,7 +60,7 @@ public class Shooter extends SubsystemBase {
     MagnetSensorConfigs wristPositionMagnetConfigs = new MagnetSensorConfigs();
     wristPositionMagnetConfigs.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
     wristPositionMagnetConfigs.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    wristPositionMagnetConfigs.MagnetOffset = 0;  // TODO Calibrate this with a command
+    wristPositionMagnetConfigs.MagnetOffset = -0.6362;  // Calibrate this with CalibrateWristAngleCommand
     armPositionEncoder.getConfigurator().apply(wristPositionMagnetConfigs);
 
     FeedbackConfigs pivotConfigs = new FeedbackConfigs();

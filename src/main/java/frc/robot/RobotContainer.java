@@ -46,12 +46,12 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
-  private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 30, 0); //TODO Tune for actual angles
-  private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0); //TODO Tune for actual angles
-  private final PrepCommand thirdShoot = new PrepCommand(shooterSubsystem, 30, 0); //TODO Tune for actual angles
-  private final PrepCommand closeShoot = new PrepCommand(shooterSubsystem, 30, 0); //TODO Tune for actual angles
-  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 30, 0); //TODO Tune for actual angles
-  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 30, 0); //TODO Tune for actual angles
+  private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
+  private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
+  private final PrepCommand thirdShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
+  private final PrepCommand closeShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
+  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 54.67, 0.5); //TODO Tune for actual angles
+  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 69, 0.75); //TODO Tune for actual angles
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =
@@ -83,7 +83,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Third Shoot", thirdShoot);
     NamedCommands.registerCommand("Close First", closeShoot);
 
-//    autoChooser = AutoBuilder.buildAutoChooser("Center 2pt");
+    autoChooser = AutoBuilder.buildAutoChooser("");
   }
 
   /**
@@ -142,7 +142,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
-//    return autoChooser.getSelected();
+    return autoChooser.getSelected();
   }
 }

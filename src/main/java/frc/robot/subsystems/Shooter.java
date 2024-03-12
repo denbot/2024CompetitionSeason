@@ -56,6 +56,9 @@ public class Shooter extends SubsystemBase {
 
     leftShootMotor.setInverted(true);
 
+    leftShootMotor.set(0);
+    rightShootMotor.set(0);
+
     MagnetSensorConfigs wristPositionMagnetConfigs = new MagnetSensorConfigs();
     wristPositionMagnetConfigs.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
     wristPositionMagnetConfigs.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
@@ -98,7 +101,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean canShoot() {
-    return motorsAtShootingSpeed && Math.abs(pivotMotor.getClosedLoopError().getValue()) <= PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID;
+    return Math.abs(pivotMotor.getClosedLoopError().getValue()) <= PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID;
   }
 
   public void readyArmForNewNote() {

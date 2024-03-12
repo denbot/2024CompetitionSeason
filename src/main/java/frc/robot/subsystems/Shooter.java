@@ -71,9 +71,9 @@ public class Shooter extends SubsystemBase {
 
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotMotionMagicConfigs);
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotPIDConfigs);
-    // TODO apply SoftwareLimitSwitchConfigs to pivotMotor to prevent the robot arm from crashing
+
     SoftwareLimitSwitchConfigs pivotLimits = new SoftwareLimitSwitchConfigs();
-    pivotLimits.ForwardSoftLimitThreshold = 50; // maximum of 90 degrees
+    pivotLimits.ForwardSoftLimitThreshold = 50.0 / 360.0; // maximum of 90 degrees
     pivotLimits.ReverseSoftLimitThreshold = 0;
     pivotLimits.ForwardSoftLimitEnable = true;
     pivotLimits.ReverseSoftLimitEnable = true;

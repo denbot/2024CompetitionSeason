@@ -12,8 +12,8 @@ public class ArmTunerConstants {
     .withMotionMagicCruiseVelocity(1);
 
   public static final Slot0Configs pivotPIDConfigs = new Slot0Configs()
-    .withKP(4.8)
-    .withKD(0.1)
+    .withKP(64)
+    .withKD(0)
     .withGravityType(GravityTypeValue.Arm_Cosine)
-    .withKG(0); // tune later so it hovers horizontal (may need to be negative) 0 has to be straight out
+    .withKG(0.3);
 }

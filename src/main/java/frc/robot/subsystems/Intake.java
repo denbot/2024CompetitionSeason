@@ -20,8 +20,6 @@ public class Intake extends SubsystemBase {
     private final DigitalInput shooterSensor = new DigitalInput(9);
 
     private final TalonFX intakeMotor = new TalonFX(4, Constants.OperatorConstants.canivoreSerial);
-    private final Servo RightIntakeServo = new Servo(1); // PWM channel is likely subject to change.
-    private final Servo LeftIntakeServo = new Servo(2); // PWM channel is likely subject to change.
 
     private boolean notePassedShooterSensor = false;
 
@@ -49,8 +47,6 @@ public class Intake extends SubsystemBase {
     }
 
     public void shoot(double speed) {
-        LeftIntakeServo.setAngle(0); //Angle is subject to cahnge depending on the orientation of the servos.
-        RightIntakeServo.setAngle(0); //Angle is subject to cahnge depending on the orientation of the servos.
         currentState = IntakeState.SHOOTING;        
         intakeMotor.set(speed);
     }
@@ -79,9 +75,6 @@ public class Intake extends SubsystemBase {
                 }
 
                 if (noteAtPreIntakeSensor) { // If there is a note at the intake, start intaking and make sure that the timers are reset and stopped
-                    LeftIntakeServo.setAngle(160);
-                    RightIntakeServo.setAngle(0);
-
                     currentState = IntakeState.INTAKING;
                     notePassedShooterSensor = false;
                     timer.stop();
@@ -118,9 +111,6 @@ public class Intake extends SubsystemBase {
 
                 break;
             case HOLDING:
-
-                LeftIntakeServo.setAngle(160);
-                RightIntakeServo.setAngle(0);
                 intakeMotor.stopMotor();
 
                 break;

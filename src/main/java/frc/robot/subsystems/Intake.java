@@ -105,7 +105,7 @@ public class Intake extends SubsystemBase {
                     }
                 }
 
-                if (timer.hasElapsed(0.175) && ! noteHitShooter) { // TODO: tune this value. This timer starts when the note hits the last sensor, and this value will make the indexer go backwards for a short period of time to make sure the note is in the right spot.
+                if (timer.hasElapsed(0.15) && ! noteHitShooter) { // TODO: tune this value. This timer starts when the note hits the last sensor, and this value will make the indexer go backwards for a short period of time to make sure the note is in the right spot.
                     noteHitShooter = true;
                     intakeMotor.set(-0.1);
                     timer.stop();

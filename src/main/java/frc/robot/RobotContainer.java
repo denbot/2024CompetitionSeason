@@ -50,7 +50,7 @@ public class RobotContainer {
   private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
   private final PrepCommand thirdShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
   private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 1); //TODO Tune for actual angles
-  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 54.67, 0.25); //TODO Tune for actual angles
+  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 59.6, 0.25); //TODO Tune for actual angles
   private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 66, 0.75); //TODO Tune for actual angles
 
   // Replace with CommandPS4Controller or CommandJoystick if needed

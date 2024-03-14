@@ -73,8 +73,8 @@ public class Shooter extends SubsystemBase {
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotPIDConfigs);
 
     SoftwareLimitSwitchConfigs pivotLimits = new SoftwareLimitSwitchConfigs();
-    pivotLimits.ForwardSoftLimitThreshold = 50.0 / 360.0; // maximum of 90 degrees
-    pivotLimits.ReverseSoftLimitThreshold = 0;
+    pivotLimits.ForwardSoftLimitThreshold = 90.0 / 360.0;
+    pivotLimits.ReverseSoftLimitThreshold = 30.0 / 360.0;
     pivotLimits.ForwardSoftLimitEnable = true;
     pivotLimits.ReverseSoftLimitEnable = true;
     pivotMotor.getConfigurator().apply(pivotLimits);

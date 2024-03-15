@@ -59,6 +59,10 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
         }
     }
 
+    public void zeroGyro() {
+        m_pigeon2.setYaw(0);
+    }
+
     private void startSimThread() {
         lastSimTime = Utils.getCurrentTimeSeconds();
 

@@ -48,7 +48,7 @@ public class RobotContainer {
   private final PrepCommand closeShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
   private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 54.67, 0.5); //TODO Tune for actual angles
   private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 69, 0.75); //TODO Tune for actual angles
-
+  private final PrepCommand reset = new PrepCommand(shooterSubsystem, 40, 0);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -77,13 +77,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("First Shoot", firstShoot);
     NamedCommands.registerCommand("Second Shoot", secondShoot);
     NamedCommands.registerCommand("Third Shoot", thirdShoot);
-    NamedCommands.registerCommand("Close First", closeShoot);
+    NamedCommands.registerCommand("Shoot", shootCommand);
+    NamedCommands.registerCommand("Reset", reset);
 
-    drivetrain.configPathPlanner();
-    autoChooser.addOption("Center 2pt", new PathPlannerAuto("Center 2pt"));
-    autoChooser.addOption("Close 2pt", new PathPlannerAuto("Close 2pt"));
-    autoChooser.addOption("Far 2pt", new PathPlannerAuto("Far 2pt"));
-    autoChooser = AutoBuilder.buildAutoChooser();
+    // TODO: tune positions of robot especially with bumpers
+    autoChooser = AutoBuilder.buildAutoChooser("");
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 

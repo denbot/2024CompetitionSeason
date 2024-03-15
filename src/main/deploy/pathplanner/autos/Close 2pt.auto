@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Close First"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Close Return"
@@ -20,7 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Close First"
+            "name": "Shoot"
           }
         },
         {
@@ -30,6 +36,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Third Shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Close Return"
@@ -38,7 +50,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Third Shoot"
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset"
           }
         }
       ]

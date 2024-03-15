@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.36,
-      "y": 5.55
+      "x": 0.71,
+      "y": 4.41
     },
-    "rotation": 0
+    "rotation": -59.98000000000002
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center Return"
+            "pathName": "Close Return"
           }
         },
         {
@@ -32,13 +32,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center Index"
+            "pathName": "Close Index"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Third Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Center Return"
+            "pathName": "Close Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Close Index 2-1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Close 2nd Row Return"
           }
         },
         {
@@ -62,6 +86,6 @@
       ]
     }
   },
-  "folder": "2pt Folder",
+  "folder": "3pt",
   "choreoAuto": false
 }

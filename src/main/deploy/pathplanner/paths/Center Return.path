@@ -12,16 +12,16 @@
         "y": 5.550603828480384
       },
       "isLocked": false,
-      "linkedName": "Center Index End"
+      "linkedName": "Center 1-1 Note"
     },
     {
       "anchor": {
-        "x": 1.9,
-        "y": 5.55
+        "x": 1.878732900322944,
+        "y": 5.550603828480384
       },
       "prevControl": {
-        "x": 1.9093287459302195,
-        "y": 5.55
+        "x": 1.8880616462531639,
+        "y": 5.550603828480384
       },
       "nextControl": null,
       "isLocked": false,

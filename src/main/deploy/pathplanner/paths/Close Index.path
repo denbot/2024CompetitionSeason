@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.9,
+        "x": 2.55,
         "y": 4.1
       },
       "prevControl": {
-        "x": 2.909328745930219,
+        "x": 2.5593287459302188,
         "y": 4.1
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Close Index End"
+      "linkedName": "Close 1-1 Note"
     }
   ],
   "rotationTargets": [
@@ -49,7 +49,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Index",
+  "folder": "Index 2",
   "previewStartingState": {
     "rotation": -60.25511870305779,
     "velocity": 0

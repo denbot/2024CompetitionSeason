@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "First Shoot"
+            "name": "Third Shoot"
           }
         },
         {
@@ -50,6 +50,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "3pt",
   "choreoAuto": false
 }

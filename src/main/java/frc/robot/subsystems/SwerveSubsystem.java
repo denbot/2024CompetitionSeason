@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.lib.util.FieldUtil;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements subsystem
@@ -47,6 +48,12 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
         if (Utils.isSimulation()) {
             startSimThread();
         }
+    }
+
+    @Override
+    public void periodic() {
+        Pose2d pose = m_odometry.getEstimatedPosition();
+        SmartDashboard.putNumberArray("pose estimation", new Double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {

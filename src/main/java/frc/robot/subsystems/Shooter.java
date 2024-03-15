@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -26,13 +27,13 @@ public class Shooter extends SubsystemBase {
 
   private final TalonFX pivotMotor = new TalonFX(14, Constants.OperatorConstants.canivoreSerial);
   private final TalonFX leftShootMotor = new TalonFX(5, Constants.OperatorConstants.canivoreSerial);
-  private final TalonFX rightShootMotor = new TalonFX(13, Constants.OperatorConstants.canivoreSerial); 
+  private final TalonFX rightShootMotor = new TalonFX(13, Constants.OperatorConstants.canivoreSerial);
   private double targetVelocity = 0;
   private double motorVelocity = 0;
   private boolean motorsAtShootingSpeed = false;
   private MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0)
       .withOverrideBrakeDurNeutral(true);
-    
+
   private final String SMART_DASHBOARD_VELOCITY = "Shooter Motor Velocity";
   private final String SMART_DASHBOARD_TARGET_VELOCITY = "Shooter Motor Target Velocity";
   private final String SMART_DASHBOARD_POSITION = "Shooter Motor Position";
@@ -73,7 +74,13 @@ public class Shooter extends SubsystemBase {
 
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotMotionMagicConfigs);
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotPIDConfigs);
-    // TODO apply SoftwareLimitSwitchConfigs to pivotMotor to prevent the robot arm from crashing
+
+    SoftwareLimitSwitchConfigs pivotLimits = new SoftwareLimitSwitchConfigs();
+    pivotLimits.ForwardSoftLimitThreshold = 90.0 / 360.0;
+    pivotLimits.ReverseSoftLimitThreshold = 30.0 / 360.0;
+    pivotLimits.ForwardSoftLimitEnable = true;
+    pivotLimits.ReverseSoftLimitEnable = true;
+    pivotMotor.getConfigurator().apply(pivotLimits);
 
     MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
     outputConfigs.Inverted = InvertedValue.Clockwise_Positive;

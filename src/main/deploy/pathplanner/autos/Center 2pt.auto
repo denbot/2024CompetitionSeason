@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Center Return"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "First Shoot"

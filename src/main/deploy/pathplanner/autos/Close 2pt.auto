@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Close Return"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Close First"
@@ -26,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Close Shoot"
+            "pathName": "Close Return"
           }
         },
         {

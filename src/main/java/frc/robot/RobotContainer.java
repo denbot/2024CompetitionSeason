@@ -48,7 +48,7 @@ public class RobotContainer {
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
   private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
   private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
-  private final PrepCommand thirdShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
+  private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Tune for actual angles
   private final PrepCommand closeShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
   private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 54.67, 0.5); //TODO Tune for actual angles
   private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 69, 0.75); //TODO Tune for actual angles
@@ -80,10 +80,10 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("First Shoot", firstShoot);
     NamedCommands.registerCommand("Second Shoot", secondShoot);
-    NamedCommands.registerCommand("Third Shoot", thirdShoot);
+    NamedCommands.registerCommand("Third Shoot", stageSpeakerShoot);
     NamedCommands.registerCommand("Close First", closeShoot);
 
-    autoChooser = AutoBuilder.buildAutoChooser("");
+    // autoChooser = AutoBuilder.buildAutoChooser("");
   }
 
   /**
@@ -101,6 +101,7 @@ public class RobotContainer {
 
     driverController.a().onTrue(ampShoot);
     driverController.b().onTrue(speakerShoot);
+    driverController.y().onTrue(stageSpeakerShoot);
     driverController.rightTrigger().onTrue(shootCommand);
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically

@@ -75,7 +75,7 @@ public class Intake extends SubsystemBase {
                     intakeMotor.set(0);
                 }
 
-                if (noteAtPreIntakeSensor) { // If there is a note at the intake, start intaking and make sure that the timers are reset and stopped
+                if (noteAtPreIntakeSensor || noteAtIntakeSensor) { // If thhere is a note at the intake, start intaking and make sure that the timers are reset and stopped
                     currentState = IntakeState.INTAKING;
                     notePassedShooterSensor = false;
                     noteHitShooter = false;

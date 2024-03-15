@@ -5,32 +5,28 @@
 package frc.robot;
 
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.calibration.CalibrateWristAngleCommand;
-import frc.robot.generated.*;
-
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.PrepCommand;
 import frc.robot.commands.ShootCommand;
-import frc.robot.subsystems.Shooter;
+import frc.robot.generated.SwerveTunerConstants;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
-
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.auto.AutoBuilder;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -83,7 +79,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("Third Shoot", thirdShoot);
     NamedCommands.registerCommand("Close First", closeShoot);
 
-    autoChooser = AutoBuilder.buildAutoChooser("");
+    drivetrain.configPathPlanner();
+    autoChooser.addOption("Center 2pt", new PathPlannerAuto("Center 2pt"));
+    autoChooser.addOption("Close 2pt", new PathPlannerAuto("Close 2pt"));
+    autoChooser.addOption("Far 2pt", new PathPlannerAuto("Far 2pt"));
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -144,4 +145,5 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
+
 }

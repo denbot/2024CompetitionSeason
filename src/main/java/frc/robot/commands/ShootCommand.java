@@ -31,8 +31,8 @@ public class ShootCommand extends Command {
   public void execute() {
     if (timer.get() == 0 && shooter.canShoot()) {
       intake.shoot(speed);
-      timer.start();
-    }
+    } 
+    timer.start();
   }
 
   // Called once the command ends or is interrupted.

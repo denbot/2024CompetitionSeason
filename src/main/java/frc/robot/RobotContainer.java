@@ -46,12 +46,12 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
-  private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
-  private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
-  private final PrepCommand thirdShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
-  private final PrepCommand closeShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
-  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 54.67, 0.5); //TODO Tune for actual angles
-  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 69, 0.75); //TODO Tune for actual angles
+  private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Change angle if necessary
+  private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Change angle if necessary
+  private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Change angle if necessary
+  private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 1); //TODO Change angle if necessary
+  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 56, 0.25); //TODO Change angle if necessary
+  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 66, 0.75); //TODO Change angle if necessary
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =
@@ -80,10 +80,10 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("First Shoot", firstShoot);
     NamedCommands.registerCommand("Second Shoot", secondShoot);
-    NamedCommands.registerCommand("Third Shoot", thirdShoot);
-    NamedCommands.registerCommand("Close First", closeShoot);
+    NamedCommands.registerCommand("Stage Speaker Shoot", stageSpeakerShoot);
+    NamedCommands.registerCommand("Trap Shoot", trapShoot);
 
-    autoChooser = AutoBuilder.buildAutoChooser("");
+    //autoChooser = AutoBuilder.buildAutoChooser("");
   }
 
   /**
@@ -99,8 +99,10 @@ public class RobotContainer {
     // Uncomment this to calibrate the wrist angle
     // shooterSubsystem.setDefaultCommand(new CalibrateWristAngleCommand(shooterSubsystem));
 
-    driverController.a().onTrue(ampShoot);
-    driverController.b().onTrue(speakerShoot);
+    driverController.leftBumper().onTrue(ampShoot);
+    driverController.rightBumper().onTrue(speakerShoot);
+    driverController.x().onTrue(trapShoot);
+    driverController.y().onTrue(stageSpeakerShoot);
     driverController.rightTrigger().onTrue(shootCommand);
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -115,7 +117,7 @@ public class RobotContainer {
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
 
     // reset the field-centric heading on start button press
-    driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    driverController.leftTrigger().onTrue(drivetrain.runOnce(() -> drivetrain.zeroGyro()));
 
 
     if (Utils.isSimulation()) {

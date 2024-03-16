@@ -11,6 +11,7 @@ import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
@@ -44,6 +45,9 @@ public class Shooter extends SubsystemBase {
   private double positionOfArm = 0;
   public static final double PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID = 1.0 / 360.0;
   private final NeutralOut brake = new NeutralOut();
+
+  private VelocityVoltage shooterControl = new VelocityVoltage(0, 0, false, 0, 0, false, false, false);
+
 
   public CANcoder getPivotMotorEncoder() {
     return armPositionEncoder;
@@ -85,6 +89,8 @@ public class Shooter extends SubsystemBase {
     MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
     outputConfigs.Inverted = InvertedValue.Clockwise_Positive;
     pivotMotor.getConfigurator().apply(outputConfigs);
+    leftShootMotor.getConfigurator().apply(ArmTunerConstants.shooterPIDConfigs);
+    rightShootMotor.getConfigurator().apply(ArmTunerConstants.shooterPIDConfigs);
 
     armPositionEncoder.getAbsolutePosition().setUpdateFrequency(200);
     leftShootMotor.getVelocity().setUpdateFrequency(50);
@@ -102,9 +108,10 @@ public class Shooter extends SubsystemBase {
   }
 
   public void startMotors(double speed) {
+    VelocityVoltage vspeed = shooterControl.withVelocity(speed / 60);
     targetVelocity = speed;
-    rightShootMotor.set(targetVelocity);
-    leftShootMotor.set(targetVelocity);
+    rightShootMotor.setControl(vspeed);
+    leftShootMotor.setControl(vspeed);
   }
 
   public boolean canShoot() {

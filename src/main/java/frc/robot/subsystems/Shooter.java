@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
@@ -56,8 +57,8 @@ public class Shooter extends SubsystemBase {
 
     leftShootMotor.setInverted(true);
 
-    leftShootMotor.set(0);
-    rightShootMotor.set(0);
+    leftShootMotor.setVoltage(0);
+    rightShootMotor.setVoltage(0);
 
     MagnetSensorConfigs wristPositionMagnetConfigs = new MagnetSensorConfigs();
     wristPositionMagnetConfigs.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
@@ -96,8 +97,8 @@ public class Shooter extends SubsystemBase {
 
   public void startMotors(double speed) {
     targetVelocity = speed;
-    rightShootMotor.set(targetVelocity);
-    leftShootMotor.set(targetVelocity);
+    rightShootMotor.setVoltage(targetVelocity);
+    leftShootMotor.setVoltage(targetVelocity);
   }
 
   public boolean canShoot() {
@@ -109,14 +110,19 @@ public class Shooter extends SubsystemBase {
   }
 
   public void intake(double speed) {
-    rightShootMotor.set(speed);
-    leftShootMotor.set(speed);
+    rightShootMotor.setVoltage(speed);
+    leftShootMotor.setVoltage(speed);
   }
 
   public void stopMotors() {
     rightShootMotor.setControl(brake);
     leftShootMotor.setControl(brake);
   }
+
+  public void setVolts(double volts) (
+    rightShootMotor.setControl(new VoltageOut(volts));
+    leftShootMotor.setControl(new VoltageOut(volts));
+  )
 
   @Override
   public void periodic() {

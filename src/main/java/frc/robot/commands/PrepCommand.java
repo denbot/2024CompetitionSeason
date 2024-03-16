@@ -17,7 +17,6 @@ public class PrepCommand extends Command {
   public PrepCommand(Shooter shooter, double angle, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
-
     this.shooter = shooter;
     this.angle = angle;
     this.speed = speed;

@@ -39,7 +39,8 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
 
     private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
 
-    public SwerveSubsystem(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
+    public SwerveSubsystem(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
+            SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         configPathPlanner();
 
@@ -47,6 +48,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
             startSimThread();
         }
     }
+
     public SwerveSubsystem(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         if (Utils.isSimulation()) {
@@ -59,7 +61,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
     }
 
     public void optimizeCan() {
-        for (int i = 0; i < Modules.length; i ++) {
+        for (int i = 0; i < Modules.length; i++) {
             SwerveModule module = Modules[i];
             TalonFX.optimizeBusUtilizationForAll(module.getDriveMotor(), module.getSteerMotor());
         }
@@ -67,8 +69,10 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
 
     @Override
     public void periodic() {
+        m_odometry.update(getGyroYaw(), m_modulePositions);
         Pose2d pose = m_odometry.getEstimatedPosition();
-        SmartDashboard.putNumberArray("pose estimation", new Double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
+        SmartDashboard.putNumberArray("pose estimation",
+                new Double[] { pose.getX(), pose.getY(), pose.getRotation().getDegrees() });
     }
 
     public void zeroGyro() {
@@ -143,38 +147,37 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
         setControl(autoRequest.withSpeeds(speeds));
     }
 
+    public void setAngleoffLimelight() {
 
-  public void setAngleoffLimelight() {
-
-  }
-
-  public Rotation2d getGyroYaw() {
-    double rawYaw = m_pigeon2.getYaw().getValue();
-    double yawWithRollover = rawYaw > 0 ? rawYaw % 360 : 360 - Math.abs(rawYaw % 360);
-
-    return Rotation2d.fromDegrees(yawWithRollover);
-  }
-
-  public void updateVision() {
-    if (LimelightHelpers.getBotPose2d_wpiBlue("").getX() < 0.1) {
-      return;
     }
 
-    double tagDistance = LimelightHelpers.getTargetPose3d_CameraSpace(VisionConstants.limelightName)
-            .getTranslation().getNorm(); // Find direct distance to target for std dev calculation
-    if (tagDistance < VisionConstants.maxUsableDistance) {
+    public Rotation2d getGyroYaw() {
+        double rawYaw = m_pigeon2.getYaw().getValue();
+        double yawWithRollover = rawYaw > 0 ? rawYaw % 360 : 360 - Math.abs(rawYaw % 360);
 
-        double xyStdDev2 = VisionConstants.calcStdDev(tagDistance);
-
-        Pose2d poseFromVision = LimelightHelpers.getBotPose2d_wpiBlue(VisionConstants.limelightName);
-        double poseFromVisionTimestamp = Timer.getFPGATimestamp()
-                - (LimelightHelpers.getLatency_Capture(VisionConstants.limelightName)
-                        + LimelightHelpers.getLatency_Pipeline(VisionConstants.limelightName)) / 1000;
-
-        Pose2d withGyroData = new Pose2d(poseFromVision.getTranslation(), getGyroYaw());
-
-        addVisionMeasurement(withGyroData, poseFromVisionTimestamp,
-                VecBuilder.fill(xyStdDev2, xyStdDev2, 0));
+        return Rotation2d.fromDegrees(yawWithRollover);
     }
-}
+
+    public void updateVision() {
+        if (LimelightHelpers.getBotPose2d_wpiBlue("").getX() < 0.1) {
+            return;
+        }
+
+        double tagDistance = LimelightHelpers.getTargetPose3d_CameraSpace(VisionConstants.limelightName)
+                .getTranslation().getNorm(); // Find direct distance to target for std dev calculation
+        if (tagDistance < VisionConstants.maxUsableDistance) {
+
+            double xyStdDev2 = VisionConstants.calcStdDev(tagDistance);
+
+            Pose2d poseFromVision = LimelightHelpers.getBotPose2d_wpiBlue(VisionConstants.limelightName);
+            double poseFromVisionTimestamp = Timer.getFPGATimestamp()
+                    - (LimelightHelpers.getLatency_Capture(VisionConstants.limelightName)
+                            + LimelightHelpers.getLatency_Pipeline(VisionConstants.limelightName)) / 1000;
+
+            Pose2d withGyroData = new Pose2d(poseFromVision.getTranslation(), getGyroYaw());
+
+            addVisionMeasurement(withGyroData, poseFromVisionTimestamp,
+                    VecBuilder.fill(xyStdDev2, xyStdDev2, 0));
+        }
+    }
 }

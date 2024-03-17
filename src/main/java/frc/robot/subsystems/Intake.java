@@ -29,11 +29,12 @@ public class Intake extends SubsystemBase {
     private enum IntakeState {
         IDLE, // No motors are moving, no note is inside the mechanism
         INTAKING, // Motors are moving, note is not yet where we need it to be
-        HOLDING, // No motors are moving, note is where it needs to be and is contained in the robot    
+        HOLDING, // No motors are moving, note is where it needs to be and is contained in the robot
         SHOOTING, // Motors are moving, note is being moved into the gears
     }
 
     private Timer timer = new Timer();
+    private boolean ignoreBeam;
 
     private static IntakeState currentState = IntakeState.IDLE;
 
@@ -48,8 +49,25 @@ public class Intake extends SubsystemBase {
     }
 
     public void shoot(double speed) {
-        currentState = IntakeState.SHOOTING;        
+        currentState = IntakeState.SHOOTING;
         intakeMotor.set(speed);
+    }
+
+    /*** @param volts volts to apply to intakemotor (should be positive)
+     ***/
+    public void eject(double volts) {
+        intakeMotor.setVoltage(-volts);
+        currentState = IntakeState.IDLE;
+        ignoreBeam = true;
+    }
+
+    public void stopEject() {
+        intakeMotor.setVoltage(0);
+        ignoreBeam = false;
+    }
+
+    public boolean noteInIntake() {
+        return !preIntakeSensor.get() || !intakeSensor.get() || !shooterSensor.get();
     }
 
     public boolean intakedNote() {
@@ -75,7 +93,7 @@ public class Intake extends SubsystemBase {
                     intakeMotor.set(0);
                 }
 
-                if (noteAtPreIntakeSensor) { // If there is a note at the intake, start intaking and make sure that the timers are reset and stopped
+                if (noteAtPreIntakeSensor && !ignoreBeam) { // If there is a note at the intake, start intaking and make sure that the timers are reset and stopped
                     currentState = IntakeState.INTAKING;
                     notePassedShooterSensor = false;
                     noteHitShooter = false;
@@ -127,7 +145,7 @@ public class Intake extends SubsystemBase {
             case SHOOTING:
 
                 if (timer.get() == 0) { // If the timer has not started, start the timer and the motor
-                    intakeMotor.set(0.2);                    
+                    intakeMotor.set(0.2);
                     timer.start();
                 }
 

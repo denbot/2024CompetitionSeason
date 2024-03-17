@@ -75,6 +75,10 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
                 new Double[] { pose.getX(), pose.getY(), pose.getRotation().getDegrees() });
     }
 
+    public Pose2d getPose() {
+        return this.m_odometry.getEstimatedPosition();
+    }
+
     public void zeroGyro() {
         m_pigeon2.setYaw(0);
     }
@@ -145,10 +149,6 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
      */
     public void setChassisSpeedsAuto(ChassisSpeeds speeds) {
         setControl(autoRequest.withSpeeds(speeds));
-    }
-
-    public void setAngleoffLimelight() {
-
     }
 
     public Rotation2d getGyroYaw() {

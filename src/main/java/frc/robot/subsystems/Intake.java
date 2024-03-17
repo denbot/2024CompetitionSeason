@@ -24,6 +24,7 @@ public class Intake extends SubsystemBase {
 
     private boolean notePassedShooterSensor = false;
     private boolean noteHitShooter = false;
+    public boolean noteReady = false;
 
     private boolean status = intakeMotor.isAlive();
 
@@ -127,6 +128,7 @@ public class Intake extends SubsystemBase {
                 break;
             case HOLDING:
                 intakeMotor.stopMotor();
+                noteReady = true;
 
                 break;
             case SHOOTING:

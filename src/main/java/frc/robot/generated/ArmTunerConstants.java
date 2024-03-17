@@ -19,7 +19,6 @@ public class ArmTunerConstants {
 
   // tune later for shooter motors to reach target speeds
   public static final Slot0Configs shooterPIDConfigs = new Slot0Configs()
-    .withKP(0)
-    .withKI(0)
-    .withKD(0);
+  .withKS(0.3)
+  .withKV(0.12);
 }

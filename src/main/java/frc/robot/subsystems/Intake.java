@@ -56,8 +56,11 @@ public class Intake extends SubsystemBase {
     /*** @param volts volts to apply to intakemotor (should be positive)
      ***/
     public void eject(double volts) {
+        if (!noteInIntake() || currentState != IntakeState.HOLDING) {
+            return;
+        }
+
         intakeMotor.setVoltage(-volts);
-        currentState = IntakeState.IDLE;
         ignoreBeam = true;
     }
 

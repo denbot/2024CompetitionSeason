@@ -9,8 +9,9 @@
     "Return"
   ],
   "autoFolders": [
+    "2pt Folder",
     "3pt",
-    "2pt Folder"
+    "Move Forward"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

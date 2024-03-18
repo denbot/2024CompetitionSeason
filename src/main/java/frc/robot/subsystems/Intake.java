@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Intake extends SubsystemBase {
@@ -23,6 +24,7 @@ public class Intake extends SubsystemBase {
 
     private boolean notePassedShooterSensor = false;
     private boolean noteHitShooter = false;
+    public boolean noteReady = false;
 
     private boolean status = intakeMotor.isAlive();
 
@@ -35,11 +37,13 @@ public class Intake extends SubsystemBase {
 
     private Timer timer = new Timer();
 
+
     public void intakeInit() {
         intakeMotor.setInverted(true);
         timer.stop();
         timer.reset();
     }
+
 
     public void optomizeCan() {
         TalonFX.optimizeBusUtilizationForAll(intakeMotor);

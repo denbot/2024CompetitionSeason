@@ -50,9 +50,11 @@ public class RobotContainer {
   private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Change angle if necessary
   private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Change angle if necessary
   private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Change angle if necessary
-  private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 1); //TODO Change angle if necessary
+  private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 50); //TODO Change angle if necessary
   private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 56, 0.25); //TODO Change angle if necessary
-  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 66, 0.75); //TODO Change angle if necessary
+  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 65, 60); //TODO Change angle if necessary
+  private final PrepCommand longShot = new PrepCommand(shooterSubsystem, 43.5, 120); //TODO Change angle if necessary
+  private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =
@@ -104,7 +106,9 @@ public class RobotContainer {
     driverController.rightBumper().onTrue(speakerShoot);
     driverController.x().onTrue(trapShoot);
     driverController.y().onTrue(stageSpeakerShoot);
+    driverController.b().onTrue(longShot);
     driverController.rightTrigger().onTrue(shootCommand);
+    driverController.leftTrigger().onTrue(stopShoot);
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * maxSpeed) // Drive forward with
@@ -127,17 +131,6 @@ public class RobotContainer {
     drivetrain.registerTelemetry(telemetry::telemeterize);
     }
   }
-
-  public void setControllerVibrations() {
-    // if we intake a note, it should only vibrate for less than a second
-    if (shooterSubsystem.canShoot() || intakeSubsystem.intakedNote()) {
-      driverController.getHID().setRumble(RumbleType.kBothRumble, 0.5);
-      return;
-    }
-
-    driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
-  }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -23,6 +23,7 @@ import frc.robot.commands.calibration.CalibrateWristAngleCommand;
 import frc.robot.generated.*;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.EjectCommand;
 import frc.robot.commands.PrepCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.Shooter;
@@ -52,6 +53,7 @@ public class RobotContainer {
   private final PrepCommand closeShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
   private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 54.67, 0.5); //TODO Tune for actual angles
   private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 69, 0.75); //TODO Tune for actual angles
+  private final EjectCommand ejectCommand = new EjectCommand(intakeSubsystem);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =
@@ -100,7 +102,7 @@ public class RobotContainer {
     // shooterSubsystem.setDefaultCommand(new CalibrateWristAngleCommand(shooterSubsystem));
 
     driverController.a().onTrue(ampShoot);
-    driverController.b().onTrue(speakerShoot);
+    driverController.b().onTrue(ejectCommand);
     driverController.rightTrigger().onTrue(shootCommand);
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically

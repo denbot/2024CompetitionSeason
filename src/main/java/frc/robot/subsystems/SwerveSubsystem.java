@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
@@ -89,7 +90,14 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
 
     public void configPathPlanner() {
         AutoBuilder.configureHolonomic(
-                () -> getState().Pose, // Robot pose supplier
+                () -> {
+                    Pose2d curPose = getState().Pose;
+                    if (!FieldUtil.isAllianceBlue()) {
+                       curPose =  new Pose2d(curPose.getTranslation(), curPose.getRotation().plus(Rotation2d.fromDegrees(180)));
+                    }
+
+                    return curPose;
+                }, // Robot pose supplier
                 this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getCurrentRobotChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::setChassisSpeedsAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
@@ -137,6 +145,12 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
      * @param speeds
      */
     public void setChassisSpeedsAuto(ChassisSpeeds speeds) {
-        setControl(autoRequest.withSpeeds(speeds));
+        ChassisSpeeds newChassisSpeeds;
+        if (FieldUtil.isAllianceBlue()) {
+            newChassisSpeeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
+        } else {
+            newChassisSpeeds = new ChassisSpeeds(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
+        }
+        setControl(autoRequest.withSpeeds(newChassisSpeeds));
     }
 }

@@ -58,7 +58,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
 
   private double maxSpeed = 6; // 6 meters per second desired top speed
-  private double maxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+  private double maxAngularRate = 7.33478344093933; // 2 * Math.PI?
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveSubsystem drivetrain = SwerveTunerConstants.DriveTrain; // My drivetrain

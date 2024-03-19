@@ -42,13 +42,18 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
-  private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
-  private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
+
+  
+  private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Change angle if necessary
+  private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Change angle if necessary
   private final PrepCommand thirdShoot = new PrepCommand(shooterSubsystem, 65, 60); //TODO Tune for actual angles
-  private final PrepCommand closeShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
-  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 54.67, 0.5); //TODO Tune for actual angles
-  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 69, 0.75); //TODO Tune for actual angles
-  private final PrepCommand reset = new PrepCommand(shooterSubsystem, 40, 0);
+  private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Change angle if necessary
+  private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 50); //TODO Change angle if necessary
+  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 56, 0.25); //TODO Change angle if necessary
+  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 65, 60); //TODO Change angle if necessary
+  private final PrepCommand longShot = new PrepCommand(shooterSubsystem, 43.5, 120); //TODO Change angle if necessary
+  private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -79,10 +84,13 @@ public class RobotContainer {
     NamedCommands.registerCommand("Third Shoot", thirdShoot);
     NamedCommands.registerCommand("Shoot", shootCommand);
     NamedCommands.registerCommand("Reset", reset);
+    NamedCommands.registerCommand("Stage Speaker Shoot", stageSpeakerShoot);
+    NamedCommands.registerCommand("Trap Shoot", trapShoot);
 
     // TODO: tune positions of robot especially with bumpers
     autoChooser = AutoBuilder.buildAutoChooser("");
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
   }
 
   /**
@@ -98,9 +106,13 @@ public class RobotContainer {
     // Uncomment this to calibrate the wrist angle
     // shooterSubsystem.setDefaultCommand(new CalibrateWristAngleCommand(shooterSubsystem));
 
-    driverController.a().onTrue(ampShoot);
-    driverController.b().onTrue(speakerShoot);
+    driverController.leftBumper().onTrue(ampShoot);
+    driverController.rightBumper().onTrue(speakerShoot);
+    driverController.x().onTrue(trapShoot);
+    driverController.y().onTrue(stageSpeakerShoot);
+    driverController.b().onTrue(longShot);
     driverController.rightTrigger().onTrue(shootCommand);
+    driverController.leftTrigger().onTrue(stopShoot);
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * maxSpeed) // Drive forward with
@@ -114,7 +126,7 @@ public class RobotContainer {
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
 
     // reset the field-centric heading on start button press
-    driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    driverController.leftTrigger().onTrue(drivetrain.runOnce(() -> drivetrain.zeroGyro()));
 
 
     if (Utils.isSimulation()) {
@@ -123,17 +135,6 @@ public class RobotContainer {
     drivetrain.registerTelemetry(telemetry::telemeterize);
     }
   }
-
-  public void setControllerVibrations() {
-    // if we intake a note, it should only vibrate for less than a second
-    if (shooterSubsystem.canShoot() || intakeSubsystem.intakedNote()) {
-      driverController.getHID().setRumble(RumbleType.kBothRumble, 0.5);
-      return;
-    }
-
-    driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
-  }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

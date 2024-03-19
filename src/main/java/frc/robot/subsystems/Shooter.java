@@ -4,12 +4,18 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
+
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
@@ -26,13 +32,13 @@ public class Shooter extends SubsystemBase {
 
   private final TalonFX pivotMotor = new TalonFX(14, Constants.OperatorConstants.canivoreSerial);
   private final TalonFX leftShootMotor = new TalonFX(5, Constants.OperatorConstants.canivoreSerial);
-  private final TalonFX rightShootMotor = new TalonFX(13, Constants.OperatorConstants.canivoreSerial); 
+  private final TalonFX rightShootMotor = new TalonFX(13, Constants.OperatorConstants.canivoreSerial);
   private double targetVelocity = 0;
   private double motorVelocity = 0;
   private boolean motorsAtShootingSpeed = false;
   private MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0)
       .withOverrideBrakeDurNeutral(true);
-    
+
   private final String SMART_DASHBOARD_VELOCITY = "Shooter Motor Velocity";
   private final String SMART_DASHBOARD_TARGET_VELOCITY = "Shooter Motor Target Velocity";
   private final String SMART_DASHBOARD_POSITION = "Shooter Motor Position";
@@ -43,6 +49,9 @@ public class Shooter extends SubsystemBase {
   private double positionOfArm = 0;
   public static final double PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID = 1.0 / 360.0;
   private final NeutralOut brake = new NeutralOut();
+
+  private VelocityVoltage shooterControl = new VelocityVoltage(0).withEnableFOC(true);
+
 
   public CANcoder getPivotMotorEncoder() {
     return armPositionEncoder;
@@ -55,9 +64,6 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_POSITION, targetArmPosition);
 
     leftShootMotor.setInverted(true);
-
-    leftShootMotor.set(0);
-    rightShootMotor.set(0);
 
     MagnetSensorConfigs wristPositionMagnetConfigs = new MagnetSensorConfigs();
     wristPositionMagnetConfigs.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
@@ -73,11 +79,19 @@ public class Shooter extends SubsystemBase {
 
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotMotionMagicConfigs);
     pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotPIDConfigs);
-    // TODO apply SoftwareLimitSwitchConfigs to pivotMotor to prevent the robot arm from crashing
+
+    SoftwareLimitSwitchConfigs pivotLimits = new SoftwareLimitSwitchConfigs();
+    pivotLimits.ForwardSoftLimitThreshold = 90.0 / 360.0;
+    pivotLimits.ReverseSoftLimitThreshold = 30.0 / 360.0;
+    pivotLimits.ForwardSoftLimitEnable = true;
+    pivotLimits.ReverseSoftLimitEnable = true;
+    pivotMotor.getConfigurator().apply(pivotLimits);
 
     MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
     outputConfigs.Inverted = InvertedValue.Clockwise_Positive;
     pivotMotor.getConfigurator().apply(outputConfigs);
+    leftShootMotor.getConfigurator().apply(ArmTunerConstants.shooterPIDConfigs);
+    rightShootMotor.getConfigurator().apply(ArmTunerConstants.shooterPIDConfigs);
 
     armPositionEncoder.getAbsolutePosition().setUpdateFrequency(200);
     leftShootMotor.getVelocity().setUpdateFrequency(50);
@@ -94,10 +108,13 @@ public class Shooter extends SubsystemBase {
     targetArmPosition = angle;
   }
 
-  public void startMotors(double speed) {
-    targetVelocity = speed;
-    rightShootMotor.set(targetVelocity);
-    leftShootMotor.set(targetVelocity);
+  public void startMotors(double rotationsPerSecond) {
+    VelocityVoltage vspeed = shooterControl.withVelocity(rotationsPerSecond);
+    targetVelocity = rotationsPerSecond;
+
+    rightShootMotor.setControl(vspeed);
+    leftShootMotor.setControl(vspeed);
+
   }
 
   public boolean canShoot() {
@@ -109,13 +126,18 @@ public class Shooter extends SubsystemBase {
   }
 
   public void intake(double speed) {
-    rightShootMotor.set(speed);
-    leftShootMotor.set(speed);
+    rightShootMotor.setVoltage(speed);
+    leftShootMotor.setVoltage(speed);
   }
 
   public void stopMotors() {
     rightShootMotor.setControl(brake);
     leftShootMotor.setControl(brake);
+  }
+
+  public void setVolts(double volts) {
+    rightShootMotor.setControl(new VoltageOut(volts));
+    leftShootMotor.setControl(new VoltageOut(volts));
   }
 
   @Override

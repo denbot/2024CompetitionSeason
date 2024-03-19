@@ -16,4 +16,9 @@ public class ArmTunerConstants {
     .withKD(0)
     .withGravityType(GravityTypeValue.Arm_Cosine)
     .withKG(0.3);
+
+  // tune later for shooter motors to reach target speeds
+  public static final Slot0Configs shooterPIDConfigs = new Slot0Configs()
+  .withKS(0.3)
+  .withKV(0.12);
 }

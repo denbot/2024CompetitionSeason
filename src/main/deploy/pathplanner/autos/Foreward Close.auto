@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Third Shoot"
+            "name": "Speaker Shoot"
           }
         },
         {
@@ -27,12 +27,6 @@
           "type": "path",
           "data": {
             "pathName": "Forward Close"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Reset"
           }
         }
       ]

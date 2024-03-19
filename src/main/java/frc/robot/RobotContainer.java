@@ -44,16 +44,12 @@ public class RobotContainer {
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
 
 
-  private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Change angle if necessary
-  private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Change angle if necessary
-  private final PrepCommand thirdShoot = new PrepCommand(shooterSubsystem, 65, 60); //TODO Tune for actual angles
   private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Change angle if necessary
   private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 50); //TODO Change angle if necessary
   private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 56, 0.25); //TODO Change angle if necessary
   private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 65, 60); //TODO Change angle if necessary
   private final PrepCommand longShot = new PrepCommand(shooterSubsystem, 43.5, 120); //TODO Change angle if necessary
   private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
-  private final PrepCommand reset = new PrepCommand(shooterSubsystem, 0, 0);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =
@@ -80,11 +76,8 @@ public class RobotContainer {
     intakeSubsystem.intakeInit();
     shooterSubsystem.shooterInit();
 
-    NamedCommands.registerCommand("First Shoot", firstShoot);
-    NamedCommands.registerCommand("Second Shoot", secondShoot);
-    NamedCommands.registerCommand("Third Shoot", thirdShoot);
+    NamedCommands.registerCommand("Speaker Shoot", speakerShoot);
     NamedCommands.registerCommand("Shoot", shootCommand);
-    NamedCommands.registerCommand("Reset", reset);
     NamedCommands.registerCommand("Stage Speaker Shoot", stageSpeakerShoot);
     NamedCommands.registerCommand("Trap Shoot", trapShoot);
 

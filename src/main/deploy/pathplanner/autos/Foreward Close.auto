@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.36,
-      "y": 5.55
+      "x": 0.7,
+      "y": 4.41
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -26,25 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center Index"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Third Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center Return"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
+            "pathName": "Forward Close"
           }
         },
         {
@@ -56,6 +38,6 @@
       ]
     }
   },
-  "folder": "2pt Folder",
+  "folder": "Move Forward",
   "choreoAuto": false
 }

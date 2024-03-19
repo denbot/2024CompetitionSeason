@@ -26,36 +26,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Far Index"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Third Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Far Return"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Reset"
+            "pathName": "Forward Far"
           }
         }
       ]
     }
   },
-  "folder": "2pt Folder",
+  "folder": "Move Forward",
   "choreoAuto": false
 }

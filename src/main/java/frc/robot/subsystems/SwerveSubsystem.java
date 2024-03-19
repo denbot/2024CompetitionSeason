@@ -68,12 +68,6 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
         }
     }
 
-    @Override
-    public void periodic() {
-        Pose2d pose = m_odometry.getEstimatedPosition();
-        SmartDashboard.putNumberArray("pose estimation", new Double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
-    }
-
     public void zeroGyro() {
         m_pigeon2.setYaw(0);
     }

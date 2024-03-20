@@ -14,13 +14,25 @@
         {
           "type": "named",
           "data": {
-            "name": "First Shoot"
+            "name": "Speaker Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Center Index"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Speaker Shoot"
           }
         },
         {
@@ -32,12 +44,12 @@
         {
           "type": "named",
           "data": {
-            "name": "Third Shoot"
+            "name": "Shoot"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "2pt Folder",
   "choreoAuto": false
 }

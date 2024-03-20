@@ -12,20 +12,20 @@
         "y": 5.550603828480384
       },
       "isLocked": false,
-      "linkedName": "Center Index End"
+      "linkedName": "Center 1-1 Note"
     },
     {
       "anchor": {
-        "x": 1.8893943242431936,
+        "x": 1.36,
         "y": 5.550603828480384
       },
       "prevControl": {
-        "x": 1.898723070173413,
+        "x": 1.36932874593022,
         "y": 5.550603828480384
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Center Return"
     }
   ],
   "rotationTargets": [],
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Return",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

@@ -12,6 +12,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -24,6 +25,7 @@ import frc.robot.generated.*;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.PrepCommand;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Intake;
@@ -59,7 +61,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
+  private final RumbleCommand rumbleCommand = new RumbleCommand(driverController.getHID(), 1.0, 1);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
 
   private double maxSpeed = 6; // 6 meters per second desired top speed
@@ -78,6 +80,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+    configureRumble();
     intakeSubsystem.intakeInit();
     shooterSubsystem.shooterInit();
 
@@ -130,6 +133,17 @@ public class RobotContainer {
 
     drivetrain.registerTelemetry(telemetry::telemeterize);
     }
+  }
+
+  private void configureRumble() {
+    new Trigger(() -> intakeSubsystem.intakedNote())
+        .onTrue(rumbleCommand);
+    new Trigger(() -> {
+      return DriverStation.isTeleopEnabled()
+          && DriverStation.getMatchTime() > 0.0
+          && DriverStation.getMatchTime() <= Math.round(20);
+    })
+        .onTrue(rumbleCommand);
   }
 
   /**

@@ -21,6 +21,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -96,6 +97,8 @@ public class Shooter extends SubsystemBase {
     armPositionEncoder.getAbsolutePosition().setUpdateFrequency(200);
     leftShootMotor.getVelocity().setUpdateFrequency(50);
     rightShootMotor.getVelocity().setUpdateFrequency(50);
+    leftShootMotor.setNeutralMode(NeutralModeValue.Brake);
+    rightShootMotor.setNeutralMode(NeutralModeValue.Brake);
 //    TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
     stopMotors();
     setAngle(targetArmPosition);

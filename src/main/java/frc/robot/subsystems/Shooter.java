@@ -21,6 +21,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,6 +39,7 @@ public class Shooter extends SubsystemBase {
   private boolean motorsAtShootingSpeed = false;
   private MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0)
       .withOverrideBrakeDurNeutral(true);
+  
 
   private final String SMART_DASHBOARD_VELOCITY = "Shooter Motor Velocity";
   private final String SMART_DASHBOARD_TARGET_VELOCITY = "Shooter Motor Target Velocity";
@@ -62,6 +64,9 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
     SmartDashboard.putNumber(SMART_DASHBOARD_POSITION, positionOfArm);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_POSITION, targetArmPosition);
+
+    leftShootMotor.setNeutralMode(NeutralModeValue.Brake);
+    rightShootMotor.setNeutralMode(NeutralModeValue.Brake);
 
     leftShootMotor.setInverted(true);
 
@@ -145,11 +150,13 @@ public class Shooter extends SubsystemBase {
     motorVelocity = leftShootMotor.getVelocity().getValue();
     motorsAtShootingSpeed = motorVelocity <= targetVelocity + 10 && motorVelocity >= targetVelocity - 10;
     positionOfArm = armPositionEncoder.getAbsolutePosition().getValue() * 360;
+    double pivotError = pivotMotor.getClosedLoopError().getValue() * 360;
 
     SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
     SmartDashboard.putNumber(SMART_DASHBOARD_POSITION, positionOfArm);
     SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_POSITION, targetArmPosition);
     SmartDashboard.putNumber("Arm position rotations", armPositionEncoder.getPosition().getValue());
+    SmartDashboard.putNumber("Wrist Error", pivotError);
   }
 }

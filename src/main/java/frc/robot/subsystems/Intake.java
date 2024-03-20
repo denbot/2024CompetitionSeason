@@ -118,7 +118,7 @@ public class Intake extends SubsystemBase {
                     timer.start();
                 }
 
-                if (timer.hasElapsed(0.05) && noteHitShooter) { // TODO: tune this value. This timer starts when the note hits the shooter wheels, and this value stops the intaking process when the timer reaches this value
+                if (timer.hasElapsed(0.1) && noteHitShooter) { // TODO: tune this value. This timer starts when the note hits the shooter wheels, and this value stops the intaking process when the timer reaches this value
                     currentState = IntakeState.HOLDING;
                     intakeMotor.stopMotor();
                     timer.stop();

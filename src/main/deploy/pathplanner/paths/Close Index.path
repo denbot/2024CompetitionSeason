@@ -16,19 +16,25 @@
     },
     {
       "anchor": {
-        "x": 2.4211328422656844,
-        "y": 4.113976955226638
+        "x": 2.55,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 2.4304615881959033,
-        "y": 4.113976955226638
+        "x": 2.5593287459302188,
+        "y": 4.1
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Close Index End"
+      "linkedName": "Close 1-1 Note"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -43,7 +49,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Index 2",
   "previewStartingState": {
     "rotation": -60.25511870305779,
     "velocity": 0

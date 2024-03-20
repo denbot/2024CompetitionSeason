@@ -5,32 +5,28 @@
 package frc.robot;
 
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.calibration.CalibrateWristAngleCommand;
-import frc.robot.generated.*;
-
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.PrepCommand;
 import frc.robot.commands.ShootCommand;
-import frc.robot.subsystems.Shooter;
+import frc.robot.generated.SwerveTunerConstants;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
-
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.auto.AutoBuilder;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -46,12 +42,14 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
-  private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
-  private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
-  private final PrepCommand thirdShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
-  private final PrepCommand closeShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Tune for actual angles
-  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 54.67, 0.5); //TODO Tune for actual angles
-  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 69, 0.75); //TODO Tune for actual angles
+
+
+  private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Change angle if necessary
+  private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 50); //TODO Change angle if necessary
+  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 56, 0.25); //TODO Change angle if necessary
+  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 65, 60); //TODO Change angle if necessary
+  private final PrepCommand longShot = new PrepCommand(shooterSubsystem, 43.5, 120); //TODO Change angle if necessary
+  private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =
@@ -78,12 +76,15 @@ public class RobotContainer {
     intakeSubsystem.intakeInit();
     shooterSubsystem.shooterInit();
 
-    NamedCommands.registerCommand("First Shoot", firstShoot);
-    NamedCommands.registerCommand("Second Shoot", secondShoot);
-    NamedCommands.registerCommand("Third Shoot", thirdShoot);
-    NamedCommands.registerCommand("Close First", closeShoot);
+    NamedCommands.registerCommand("Speaker Shoot", speakerShoot);
+    NamedCommands.registerCommand("Shoot", shootCommand);
+    NamedCommands.registerCommand("Stage Speaker Shoot", stageSpeakerShoot);
+    NamedCommands.registerCommand("Trap Shoot", trapShoot);
 
-    //autoChooser = AutoBuilder.buildAutoChooser("");
+    // TODO: tune positions of robot especially with bumpers
+    autoChooser = AutoBuilder.buildAutoChooser("");
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+
   }
 
   /**
@@ -99,9 +100,13 @@ public class RobotContainer {
     // Uncomment this to calibrate the wrist angle
     // shooterSubsystem.setDefaultCommand(new CalibrateWristAngleCommand(shooterSubsystem));
 
-    driverController.a().onTrue(ampShoot);
-    driverController.b().onTrue(speakerShoot);
+    driverController.leftBumper().onTrue(ampShoot);
+    driverController.rightBumper().onTrue(speakerShoot);
+    driverController.x().onTrue(trapShoot);
+    driverController.y().onTrue(stageSpeakerShoot);
+    driverController.b().onTrue(longShot);
     driverController.rightTrigger().onTrue(shootCommand);
+    driverController.leftTrigger().onTrue(stopShoot);
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * maxSpeed) // Drive forward with
@@ -115,7 +120,7 @@ public class RobotContainer {
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
 
     // reset the field-centric heading on start button press
-    driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.zeroGyro()));
+    driverController.leftTrigger().onTrue(drivetrain.runOnce(() -> drivetrain.zeroGyro()));
 
 
     if (Utils.isSimulation()) {
@@ -125,17 +130,6 @@ public class RobotContainer {
     }
   }
 
-  public void setControllerVibrations() {
-    // if we intake a note, it should only vibrate for less than a second
-    if (shooterSubsystem.canShoot() || intakeSubsystem.intakedNote()) {
-      driverController.getHID().setRumble(RumbleType.kBothRumble, 0.5);
-      return;
-    }
-
-    driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
-  }
-
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -144,4 +138,5 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
+
 }

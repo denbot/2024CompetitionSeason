@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -31,7 +33,7 @@ public class Intake extends SubsystemBase {
     private enum IntakeState {
         IDLE, // No motors are moving, no note is inside the mechanism
         INTAKING, // Motors are moving, note is not yet where we need it to be
-        HOLDING, // No motors are moving, note is where it needs to be and is contained in the robot    
+        HOLDING, // No motors are moving, note is where it needs to be and is contained in the robot
         SHOOTING, // Motors are moving, note is being moved into the gears
     }
 
@@ -52,9 +54,28 @@ public class Intake extends SubsystemBase {
         TalonFX.optimizeBusUtilizationForAll(intakeMotor);
     }
 
+
     public void shoot(double volts) {
         currentState = IntakeState.SHOOTING;        
         intakeMotor.setVoltage(volts);
+    }
+
+    /*** @param volts volts to apply to intakemotor (should be positive)
+     ***/
+    public Command eject(double volts) {
+        // if (!noteInIntake() || currentState != IntakeState.HOLDING) {
+        //     return;
+        // }
+
+        return Commands.run(() -> intakeMotor.setVoltage(-volts));
+    }
+
+    public void stopEject() {
+        intakeMotor.setVoltage(0);
+    }
+
+    public boolean noteInIntake() {
+        return !preIntakeSensor.get() || !intakeSensor.get() || !shooterSensor.get();
     }
 
     public boolean intakedNote() {
@@ -79,6 +100,7 @@ public class Intake extends SubsystemBase {
                 if (intakeMotor.get() != 0) { // If the intake motor is moving, stop it
                     intakeMotor.setVoltage(0);
                 }
+
 
                 if (noteAtPreIntakeSensor || noteAtIntakeSensor) { // If there is a note at the intake, start intaking and make sure that the timers are reset and stopped
                     currentState = IntakeState.INTAKING;
@@ -135,6 +157,7 @@ public class Intake extends SubsystemBase {
 
                 if (timer.get() == 0) { // If the timer has not started, start the timer and the motor
                     intakeMotor.setVoltage(2.4);                    
+
                     timer.start();
                 }
 

@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.EjectCommand;
 import frc.robot.commands.PrepCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.generated.SwerveTunerConstants;
@@ -42,7 +43,6 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
-
 
   private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Change angle if necessary
   private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 50); //TODO Change angle if necessary
@@ -100,10 +100,12 @@ public class RobotContainer {
     // Uncomment this to calibrate the wrist angle
     // shooterSubsystem.setDefaultCommand(new CalibrateWristAngleCommand(shooterSubsystem));
 
+
     driverController.leftBumper().onTrue(ampShoot);
     driverController.rightBumper().onTrue(speakerShoot);
     driverController.x().onTrue(trapShoot);
     driverController.y().onTrue(stageSpeakerShoot);
+    driverController.a().onTrue(intakeSubsystem.eject(2)).onFalse(intakeSubsystem.eject(0));
     driverController.b().onTrue(longShot);
     driverController.rightTrigger().onTrue(shootCommand);
     driverController.leftTrigger().onTrue(stopShoot);
@@ -121,6 +123,7 @@ public class RobotContainer {
 
     // reset the field-centric heading on start button press
     driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.zeroGyro()));
+
 
 
     if (Utils.isSimulation()) {

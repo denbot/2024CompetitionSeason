@@ -5,32 +5,28 @@
 package frc.robot;
 
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.calibration.CalibrateWristAngleCommand;
-import frc.robot.generated.*;
-
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.PrepCommand;
 import frc.robot.commands.ShootCommand;
-import frc.robot.subsystems.Shooter;
+import frc.robot.generated.SwerveTunerConstants;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
-
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.auto.AutoBuilder;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -46,9 +42,8 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
-  
-  private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Change angle if necessary
-  private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Change angle if necessary
+
+
   private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Change angle if necessary
   private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 50); //TODO Change angle if necessary
   private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 56, 0.25); //TODO Change angle if necessary
@@ -81,12 +76,15 @@ public class RobotContainer {
     intakeSubsystem.intakeInit();
     shooterSubsystem.shooterInit();
 
-    NamedCommands.registerCommand("First Shoot", firstShoot);
-    NamedCommands.registerCommand("Second Shoot", secondShoot);
+    NamedCommands.registerCommand("Speaker Shoot", speakerShoot);
+    NamedCommands.registerCommand("Shoot", shootCommand);
     NamedCommands.registerCommand("Stage Speaker Shoot", stageSpeakerShoot);
     NamedCommands.registerCommand("Trap Shoot", trapShoot);
 
-    //autoChooser = AutoBuilder.buildAutoChooser("");
+    // TODO: tune positions of robot especially with bumpers
+    autoChooser = AutoBuilder.buildAutoChooser("");
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+
   }
 
   /**
@@ -140,4 +138,5 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
+
 }

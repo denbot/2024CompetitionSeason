@@ -47,7 +47,7 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
-  
+
   private final PrepCommand firstShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Change angle if necessary
   private final PrepCommand secondShoot = new PrepCommand(shooterSubsystem, 30, 0.3); //TODO Change angle if necessary
   private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Change angle if necessary
@@ -107,7 +107,7 @@ public class RobotContainer {
     driverController.rightBumper().onTrue(speakerShoot);
     driverController.x().onTrue(trapShoot);
     driverController.y().onTrue(stageSpeakerShoot);
-    driverController.b().onTrue(ejectCommand);
+    driverController.a().onTrue(intakeSubsystem.eject(2)).onFalse(intakeSubsystem.eject(0));
     driverController.rightTrigger().onTrue(shootCommand);
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -123,6 +123,7 @@ public class RobotContainer {
 
     // reset the field-centric heading on start button press
     driverController.leftTrigger().onTrue(drivetrain.runOnce(() -> drivetrain.zeroGyro()));
+
 
 
     if (Utils.isSimulation()) {

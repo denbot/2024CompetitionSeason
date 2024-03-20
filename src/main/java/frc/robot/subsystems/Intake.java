@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -54,12 +56,12 @@ public class Intake extends SubsystemBase {
 
     /*** @param volts volts to apply to intakemotor (should be positive)
      ***/
-    public void eject(double volts) {
-        if (!noteInIntake() || currentState != IntakeState.HOLDING) {
-            return;
-        }
+    public Command eject(double volts) {
+        // if (!noteInIntake() || currentState != IntakeState.HOLDING) {
+        //     return;
+        // }
 
-        intakeMotor.setVoltage(-volts);
+        return Commands.run(() -> intakeMotor.setVoltage(-volts));
     }
 
     public void stopEject() {
@@ -146,7 +148,7 @@ public class Intake extends SubsystemBase {
             case SHOOTING:
 
                 if (timer.get() == 0) { // If the timer has not started, start the timer and the motor
-                    intakeMotor.set(0.4);    
+                    intakeMotor.set(0.4);
                     timer.start();
                 }
 

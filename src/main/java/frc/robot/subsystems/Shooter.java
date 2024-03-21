@@ -116,14 +116,14 @@ public class Shooter extends SubsystemBase {
   public void startMotors(double rotationsPerSecond) {
     VelocityVoltage vspeed = shooterControl.withVelocity(rotationsPerSecond);
     targetVelocity = rotationsPerSecond;
-
+    motorsAtShootingSpeed = true;
     rightShootMotor.setControl(vspeed);
     leftShootMotor.setControl(vspeed);
 
   }
 
   public boolean canShoot() {
-    return Math.abs(pivotMotor.getClosedLoopError().getValue()) <= PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID;
+    return ((Math.abs(pivotMotor.getClosedLoopError().getValue()) <= PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID) && motorsAtShootingSpeed);
   }
 
   public void readyArmForNewNote() {
@@ -136,6 +136,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void stopMotors() {
+    motorsAtShootingSpeed = false;
     rightShootMotor.setControl(brake);
     leftShootMotor.setControl(brake);
   }
@@ -148,7 +149,6 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     motorVelocity = leftShootMotor.getVelocity().getValue();
-    motorsAtShootingSpeed = motorVelocity <= targetVelocity + 10 && motorVelocity >= targetVelocity - 10;
     positionOfArm = armPositionEncoder.getAbsolutePosition().getValue() * 360;
     double pivotError = pivotMotor.getClosedLoopError().getValue() * 360;
 

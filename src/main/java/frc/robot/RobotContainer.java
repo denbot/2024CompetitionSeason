@@ -59,7 +59,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  private final RumbleCommand rumbleCommand = new RumbleCommand(driverController.getHID(), 1.0, 1);
+  //private final RumbleCommand rumbleCommand = new RumbleCommand(driverController.getHID(), 1.0, 1);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
 
   private double maxSpeed = 6; // 6 meters per second desired top speed
@@ -78,7 +78,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
-    configureRumble();
+    //configureRumble();
     intakeSubsystem.intakeInit();
     shooterSubsystem.shooterInit();
 
@@ -139,7 +139,7 @@ public class RobotContainer {
     }
   }
 
-  private void configureRumble() {
+/*   private void configureRumble() {
     new Trigger(() -> intakeSubsystem.intakedNote())
         .onTrue(rumbleCommand);
     new Trigger(() -> {
@@ -149,7 +149,7 @@ public class RobotContainer {
     })
         .onTrue(rumbleCommand);
   }
-
+ */
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

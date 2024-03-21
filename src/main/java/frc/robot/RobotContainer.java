@@ -117,10 +117,16 @@ public class RobotContainer {
     driverController.leftTrigger().onTrue(stopShoot);
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * maxSpeed) // Drive forward with
+        drivetrain.applyRequest(() -> {
+              double originalX = -driverController.getLeftY();
+    double originalY = -driverController.getLeftX();
+    double newX = originalX * Math.sqrt(1 - ((originalY * originalY) / 2));
+    double newY = originalY * Math.sqrt(1 - ((originalX * originalX) / 2));
+          return drive.withVelocityX(newX * maxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
-            .withVelocityY(-driverController.getLeftX() * maxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(-driverController.getRightX() * maxAngularRate) // Drive counterclockwise with negative X (left)
+            .withVelocityY(newY * maxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-driverController.getRightX() * maxAngularRate); // Drive counterclockwise with negative X (left)
+        }
         ));
 
     driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));

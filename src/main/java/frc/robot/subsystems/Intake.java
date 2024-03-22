@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-import frc.robot.commands.intake.*;
 
 public class Intake extends SubsystemBase {
     private final DigitalInput preIntakeSensor = new DigitalInput(7);
@@ -22,29 +21,9 @@ public class Intake extends SubsystemBase {
 
     private final TalonFX intakeMotor = new TalonFX(4, Constants.OperatorConstants.canivoreSerial);
 
-
     public void intakeInit() {
         intakeMotor.setInverted(true);
     }
-
-
-    public void shoot(double volts) {
-        intakeMotor.setVoltage(volts);
-    }
-
-    /*** @param double volts to apply to intakemotor (should be positive)
-     ***/
-//    public Command eject(double volts) {
-//        // if (!noteInIntake() || currentState != IntakeState.HOLDING) {
-//        //     return;
-//        // }
-//
-//        return Commands.run(() -> intakeMotor.setVoltage(-volts));
-//    }
-//
-//    public void stopEject() {
-//        intakeMotor.setVoltage(0);
-//    }
 
     public StatusCode setMotorControl(ControlRequest request) {
         return intakeMotor.setControl(request);

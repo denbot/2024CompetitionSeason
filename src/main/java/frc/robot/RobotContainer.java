@@ -118,14 +118,16 @@ public class RobotContainer {
         intakeSubsystem.setDefaultCommand(commands.waitForIntakeCommand());
 
         driverController.a().toggleOnTrue(ejectCommand);  // Allow ejecting a note to be stopped on a second a press
-        driverController.b().onTrue(longShot);
-        driverController.x().onTrue(trapShoot);
-        driverController.y().onTrue(stageSpeakerShoot);
+        driverController.b().and(shooterSubsystem::isNoteInShooter).onTrue(longShot);
+        driverController.x().and(shooterSubsystem::isNoteInShooter).onTrue(trapShoot);
+        driverController.y().and(shooterSubsystem::isNoteInShooter).onTrue(stageSpeakerShoot);
 
-        driverController.leftBumper().onTrue(ampShoot);
-        driverController.rightBumper().onTrue(speakerShoot);
-        driverController.rightTrigger().onTrue(shootCommand);
-        driverController.leftTrigger().onTrue(stopShoot);
+        driverController.leftBumper().and(shooterSubsystem::isNoteInShooter).onTrue(ampShoot);
+        driverController.rightBumper().and(shooterSubsystem::isNoteInShooter).onTrue(speakerShoot);
+        driverController.rightTrigger()
+                .and(shooterSubsystem::canShoot)  // Don't allow shooting unless the shooter is ready
+                .onTrue(shootCommand);
+        driverController.leftTrigger().and(shooterSubsystem::isNoteInShooter).onTrue(stopShoot);
 
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> {

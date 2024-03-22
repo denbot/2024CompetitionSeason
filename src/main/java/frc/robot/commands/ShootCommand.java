@@ -11,8 +11,8 @@ import frc.robot.subsystems.*;
 public class ShootCommand extends Command {
     private final Shooter shooter;
     private final Intake intake;
-    private double speed = 0.4; // Intake motor speed (in percentage of power)
-    private Timer timer = new Timer();
+    private final double speed = 0.4; // Intake motor speed (in percentage of power)
+    private final Timer timer = new Timer();
 
     public ShootCommand(Shooter shooter, Intake intake) {
         this.shooter = shooter;

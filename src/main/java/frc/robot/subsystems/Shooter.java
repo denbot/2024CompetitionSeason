@@ -139,8 +139,8 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Wrist Error", pivotError);
     }
 
-    public void noteIsInShooter() {
-        noteIsInShooter = true;
+    public void setNoteInShooter(boolean noteInShooter) {
+        noteIsInShooter = noteInShooter;
     }
 
     public boolean isNoteInShooter() {

@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.CommandHolder;
 import frc.robot.commands.PrepCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.intake.EjectCommand;
@@ -43,6 +44,8 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final Shooter shooterSubsystem = new Shooter();
     private final Intake intakeSubsystem = new Intake();
+
+    private final CommandHolder commands;
 
     private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
@@ -79,8 +82,12 @@ public class RobotContainer {
     private final Telemetry telemetry = new Telemetry(maxSpeed);
 
     public RobotContainer() {
+        commands = new CommandHolder(
+                intakeSubsystem,
+                shooterSubsystem,
+                driverController.getHID()
+        );
         configureBindings();
-        //configureRumble();
         intakeSubsystem.intakeInit();
         shooterSubsystem.shooterInit();
 
@@ -108,7 +115,7 @@ public class RobotContainer {
         // Uncomment this to calibrate the wrist angle
         // shooterSubsystem.setDefaultCommand(new CalibrateWristAngleCommand(shooterSubsystem));
 
-        intakeSubsystem.setDefaultCommand(intakeSubsystem.commands.waitForIntake);
+        intakeSubsystem.setDefaultCommand(commands.waitForIntakeCommand());
 
         driverController.a().toggleOnTrue(ejectCommand);  // Allow ejecting a note to be stopped on a second a press
         driverController.b().onTrue(longShot);
@@ -147,18 +154,6 @@ public class RobotContainer {
             drivetrain.registerTelemetry(telemetry::telemeterize);
         }
     }
-
-/*   private void configureRumble() {
-    new Trigger(() -> intakeSubsystem.intakedNote())
-        .onTrue(rumbleCommand);
-    new Trigger(() -> {
-      return DriverStation.isTeleopEnabled()
-          && DriverStation.getMatchTime() > 0.0
-          && DriverStation.getMatchTime() <= Math.round(20);
-    })
-        .onTrue(rumbleCommand);
-  }
- */
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

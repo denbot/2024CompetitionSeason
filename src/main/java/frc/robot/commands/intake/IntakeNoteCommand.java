@@ -4,18 +4,24 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.CommandHolder;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.subsystems.Intake;
 
 import java.util.function.Supplier;
 
 public class IntakeNoteCommand extends Command {
+    private final CommandHolder commands;
     private final Intake intake;
 
     private final VoltageOut voltageOut = new VoltageOut(0.0);
     private final NeutralOut brake = new NeutralOut();
 
     public IntakeNoteCommand(
-            Intake intake) {
+            CommandHolder commands,
+            Intake intake
+    ) {
+        this.commands = commands;
         this.intake = intake;
         addRequirements(intake);
     }
@@ -37,7 +43,8 @@ public class IntakeNoteCommand extends Command {
             intake.setMotorControl(brake);
             this.cancel();
         } else if (noteAtShooterSensor) {  // Now we know when the note hits the shooter sensor
-            intake.commands.moveNoteToHolding.schedule();
+            commands.moveNoteToHoldingCommand().schedule();
+            commands.rumbleCommand(RumbleCommand.Power.LOW, RumbleCommand.Time.FAST).schedule();
         }
     }
 

@@ -142,11 +142,6 @@ public class Shooter extends SubsystemBase {
         leftShootMotor.setControl(brake);
     }
 
-    public void setVolts(double volts) {
-        rightShootMotor.setControl(new VoltageOut(volts));
-        leftShootMotor.setControl(new VoltageOut(volts));
-    }
-
     @Override
     public void periodic() {
         motorVelocity = leftShootMotor.getVelocity().getValue();

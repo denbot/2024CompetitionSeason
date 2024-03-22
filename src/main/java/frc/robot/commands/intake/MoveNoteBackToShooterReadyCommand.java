@@ -4,9 +4,12 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.CommandHolder;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.subsystems.Intake;
 
 public class MoveNoteBackToShooterReadyCommand extends Command {
+    private final CommandHolder commands;
     private final Intake intake;
 
     private final Timer timer = new Timer();
@@ -15,7 +18,10 @@ public class MoveNoteBackToShooterReadyCommand extends Command {
     private final NeutralOut brake = new NeutralOut();
 
     public MoveNoteBackToShooterReadyCommand(
-            Intake intake) {
+            CommandHolder commands,
+            Intake intake
+    ) {
+        this.commands = commands;
         this.intake = intake;
         addRequirements(intake);
     }
@@ -29,7 +35,8 @@ public class MoveNoteBackToShooterReadyCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         intake.setMotorControl(brake);
-        intake.commands.hold.schedule();
+        commands.holdCommand().schedule();
+        commands.rumbleCommand(RumbleCommand.Power.LOW, RumbleCommand.Time.FAST).schedule();
     }
 
     @Override

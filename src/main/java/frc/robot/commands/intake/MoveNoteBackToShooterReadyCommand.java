@@ -39,7 +39,7 @@ public class MoveNoteBackToShooterReadyCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         intake.setMotorControl(brake);
-        shooter.noteIsInShooter();
+        shooter.setNoteInShooter(true);
         commands.holdCommand().schedule();
         commands.rumbleCommand(RumbleCommand.Power.LOW, RumbleCommand.Time.FAST).schedule();
     }

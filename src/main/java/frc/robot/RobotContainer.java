@@ -124,10 +124,11 @@ public class RobotContainer {
 
         driverController.leftBumper().and(shooterSubsystem::isNoteInShooter).onTrue(ampShoot);
         driverController.rightBumper().and(shooterSubsystem::isNoteInShooter).onTrue(speakerShoot);
+        driverController.leftTrigger().and(shooterSubsystem::isNoteInShooter).onTrue(stopShoot);
+
         driverController.rightTrigger()
                 .and(shooterSubsystem::canShoot)  // Don't allow shooting unless the shooter is ready
                 .onTrue(shootCommand);
-        driverController.leftTrigger().and(shooterSubsystem::isNoteInShooter).onTrue(stopShoot);
 
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> {

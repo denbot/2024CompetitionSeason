@@ -108,13 +108,13 @@ public class RobotContainer {
         // Uncomment this to calibrate the wrist angle
         // shooterSubsystem.setDefaultCommand(new CalibrateWristAngleCommand(shooterSubsystem));
 
+        driverController.a().onTrue(intakeSubsystem.eject(2)).onFalse(intakeSubsystem.eject(0));
+        driverController.b().onTrue(longShot);
+        driverController.x().onTrue(trapShoot);
+        driverController.y().onTrue(stageSpeakerShoot);
 
         driverController.leftBumper().onTrue(ampShoot);
         driverController.rightBumper().onTrue(speakerShoot);
-        driverController.x().onTrue(trapShoot);
-        driverController.y().onTrue(stageSpeakerShoot);
-        driverController.a().onTrue(intakeSubsystem.eject(2)).onFalse(intakeSubsystem.eject(0));
-        driverController.b().onTrue(longShot);
         driverController.rightTrigger().onTrue(shootCommand);
         driverController.leftTrigger().onTrue(stopShoot);
 
@@ -136,7 +136,7 @@ public class RobotContainer {
                 .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
 
         // reset the field-centric heading on start button press
-        driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.zeroGyro()));
+        driverController.start().onTrue(drivetrain.runOnce(drivetrain::zeroGyro));
 
 
         if (Utils.isSimulation()) {

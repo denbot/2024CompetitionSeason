@@ -15,7 +15,6 @@ public class CommandHolder {
     private MoveNoteToHoldingCommand moveNoteToHoldingCommand = null;
     private MoveNoteBackToShooterReadyCommand moveNoteBackToShooterReadyCommand = null;
     private HoldCommand holdCommand = null;
-    private PassToShooterCommand passToShooterCommand = null;
 
     public CommandHolder(
             Intake intake,
@@ -43,14 +42,14 @@ public class CommandHolder {
 
     public MoveNoteToHoldingCommand moveNoteToHoldingCommand() {
         if (moveNoteToHoldingCommand == null) {
-            moveNoteToHoldingCommand = new MoveNoteToHoldingCommand(this, intake);
+            moveNoteToHoldingCommand = new MoveNoteToHoldingCommand(this, intake, shooter);
         }
         return moveNoteToHoldingCommand;
     }
 
     public MoveNoteBackToShooterReadyCommand moveNoteBackToShooterReadyCommand() {
         if (moveNoteBackToShooterReadyCommand == null) {
-            moveNoteBackToShooterReadyCommand = new MoveNoteBackToShooterReadyCommand(this, intake);
+            moveNoteBackToShooterReadyCommand = new MoveNoteBackToShooterReadyCommand(this, intake, shooter);
         }
         return moveNoteBackToShooterReadyCommand;
     }
@@ -60,13 +59,6 @@ public class CommandHolder {
             holdCommand = new HoldCommand(intake);
         }
         return holdCommand;
-    }
-
-    public PassToShooterCommand passToShooterCommand() {
-        if (passToShooterCommand == null) {
-            passToShooterCommand = new PassToShooterCommand(intake);
-        }
-        return passToShooterCommand;
     }
 
     public RumbleCommand rumbleCommand(RumbleCommand.Power power, RumbleCommand.Time time) {

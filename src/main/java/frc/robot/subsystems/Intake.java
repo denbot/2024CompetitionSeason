@@ -52,12 +52,16 @@ public class Intake extends SubsystemBase {
         return intakeMotor.setControl(request);
     }
 
-    public boolean noteInIntake() {
-        return !preIntakeSensor.get() || !intakeSensor.get() || !shooterSensor.get();
+    public boolean noteAtPreIntakeSensor() {
+        return ! preIntakeSensor.get();
     }
 
-    public boolean intakedNote() {
-        return !intakeSensor.get();
+    public boolean noteAtIntakeSensor() {
+        return ! intakeSensor.get();
+    }
+
+    public boolean noteAtShooterSensor() {
+        return ! shooterSensor.get();
     }
 
     @Override
@@ -75,36 +79,17 @@ public class Intake extends SubsystemBase {
     public Commands commands = new Commands();
 
     public class Commands {
-        Supplier<Boolean> noteAtPreIntakeSensor = () -> !preIntakeSensor.get();
-        Supplier<Boolean> noteAtIntakeSensor = () -> !intakeSensor.get();
-        Supplier<Boolean> noteAtShooterSensor = () -> !shooterSensor.get();
+        public final WaitForIntakeCommand waitForIntake = new WaitForIntakeCommand(Intake.this);
 
-        public final WaitForIntakeCommand waitForIntake = new WaitForIntakeCommand(
-                Intake.this,
-                noteAtPreIntakeSensor,
-                noteAtIntakeSensor
-        );
+        public final IntakeNoteCommand intakeNote = new IntakeNoteCommand(Intake.this);
 
-        public final IntakeNoteCommand intakeNote = new IntakeNoteCommand(
-                Intake.this,
-                noteAtPreIntakeSensor,
-                noteAtIntakeSensor,
-                noteAtShooterSensor
-        );
+        public final MoveNoteToHoldingCommand moveNoteToHolding = new MoveNoteToHoldingCommand(Intake.this);
 
-        public final MoveNoteToHoldingCommand moveNoteToHolding = new MoveNoteToHoldingCommand(
-                Intake.this,
-                noteAtShooterSensor
-        );
-
-        public final MoveNoteBackToShooterReadyCommand moveNoteBackToShooterReady = new MoveNoteBackToShooterReadyCommand(
-                Intake.this
-        );
+        public final MoveNoteBackToShooterReadyCommand moveNoteBackToShooterReady =
+                new MoveNoteBackToShooterReadyCommand(Intake.this);
 
         public final HoldCommand hold = new HoldCommand(Intake.this);
 
-        public final PassToShooterCommand passToShooter = new PassToShooterCommand(
-                Intake.this
-        );
+        public final PassToShooterCommand passToShooter = new PassToShooterCommand(Intake.this);
     }
 }

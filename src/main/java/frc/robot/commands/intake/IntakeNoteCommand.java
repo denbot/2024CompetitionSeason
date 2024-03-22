@@ -10,24 +10,14 @@ import java.util.function.Supplier;
 
 public class IntakeNoteCommand extends Command {
     private final Intake intake;
-    private final Supplier<Boolean> noteAtPreIntakeSensor;
-    private final Supplier<Boolean> noteAtIntakeSensor;
-    private final Supplier<Boolean> noteAtShooterSensor;
 
     private final VoltageOut voltageOut = new VoltageOut(0.0);
     private final NeutralOut brake = new NeutralOut();
 
     public IntakeNoteCommand(
-            Intake intake,
-            Supplier<Boolean> noteAtPreIntakeSensor,
-            Supplier<Boolean> noteAtIntakeSensor,
-            Supplier<Boolean> noteAtShooterSensor) {
+            Intake intake) {
         this.intake = intake;
         addRequirements(intake);
-
-        this.noteAtPreIntakeSensor = noteAtPreIntakeSensor;
-        this.noteAtIntakeSensor = noteAtIntakeSensor;
-        this.noteAtShooterSensor = noteAtShooterSensor;
     }
 
     @Override
@@ -37,9 +27,9 @@ public class IntakeNoteCommand extends Command {
 
     @Override
     public void execute() {
-        boolean noteAtPreIntakeSensor = this.noteAtPreIntakeSensor.get();
-        boolean noteAtIntakeSensor = this.noteAtIntakeSensor.get();
-        boolean noteAtShooterSensor = this.noteAtShooterSensor.get();
+        boolean noteAtPreIntakeSensor = intake.noteAtPreIntakeSensor();
+        boolean noteAtIntakeSensor = intake.noteAtIntakeSensor();
+        boolean noteAtShooterSensor = intake.noteAtShooterSensor();
         boolean noteAtAnySensor = noteAtPreIntakeSensor || noteAtIntakeSensor || noteAtShooterSensor;
 
         // If none of our sensors are tripped, stop our intake motor. We lost the note

@@ -149,7 +149,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
         if (FieldUtil.isAllianceBlue()) {
             newChassisSpeeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
         } else {
-            newChassisSpeeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
+            newChassisSpeeds = new ChassisSpeeds(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
         }
         setControl(autoRequest.withSpeeds(newChassisSpeeds));
     }

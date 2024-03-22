@@ -77,21 +77,4 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putBoolean("Intake Sensor", intakeSensor.get());
         SmartDashboard.putBoolean("Shooter Sensor", shooterSensor.get());
     }
-
-    public Commands commands = new Commands();
-
-    public class Commands {
-        public final WaitForIntakeCommand waitForIntake = new WaitForIntakeCommand(Intake.this);
-
-        public final IntakeNoteCommand intakeNote = new IntakeNoteCommand(Intake.this);
-
-        public final MoveNoteToHoldingCommand moveNoteToHolding = new MoveNoteToHoldingCommand(Intake.this);
-
-        public final MoveNoteBackToShooterReadyCommand moveNoteBackToShooterReady =
-                new MoveNoteBackToShooterReadyCommand(Intake.this);
-
-        public final HoldCommand hold = new HoldCommand(Intake.this);
-
-        public final PassToShooterCommand passToShooter = new PassToShooterCommand(Intake.this);
-    }
 }

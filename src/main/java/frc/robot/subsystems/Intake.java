@@ -15,8 +15,6 @@ import frc.robot.Constants;
 import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.commands.intake.*;
 
-import java.util.function.Supplier;
-
 public class Intake extends SubsystemBase {
     private final DigitalInput preIntakeSensor = new DigitalInput(7);
     private final DigitalInput intakeSensor = new DigitalInput(8);
@@ -64,16 +62,20 @@ public class Intake extends SubsystemBase {
         return ! shooterSensor.get();
     }
 
+    /**
+     *
+     * @return Is the note tripping any of our sensors. Might return false if the note is in the shooter.
+     */
+    public boolean noteSensedInIntake() {
+        return noteAtPreIntakeSensor() || noteAtIntakeSensor() || noteAtShooterSensor();
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Intake Motor Speed", intakeMotor.get());
         SmartDashboard.putBoolean("Pre Intake Sensor", preIntakeSensor.get());
         SmartDashboard.putBoolean("Intake Sensor", intakeSensor.get());
         SmartDashboard.putBoolean("Shooter Sensor", shooterSensor.get());
-    }
-
-    public void disable() {
-        intakeMotor.stopMotor();
     }
 
     public Commands commands = new Commands();

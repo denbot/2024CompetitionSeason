@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.PrepCommand;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.intake.EjectCommand;
 import frc.robot.generated.SwerveTunerConstants;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -53,6 +54,7 @@ public class RobotContainer {
     private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 65, 67); //TODO Change angle if necessary
     private final PrepCommand longShot = new PrepCommand(shooterSubsystem, 43.5, 120); //TODO Change angle if necessary
     private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
+    private final EjectCommand ejectCommand = new EjectCommand(intakeSubsystem);
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     public final CommandXboxController driverController =
@@ -108,7 +110,7 @@ public class RobotContainer {
 
         intakeSubsystem.setDefaultCommand(intakeSubsystem.commands.waitForIntake);
 
-//        driverController.a().onTrue(intakeSubsystem.eject(2)).onFalse(intakeSubsystem.eject(0));
+        driverController.a().toggleOnTrue(ejectCommand);  // Allow ejecting a note to be stopped on a second a press
         driverController.b().onTrue(longShot);
         driverController.x().onTrue(trapShoot);
         driverController.y().onTrue(stageSpeakerShoot);

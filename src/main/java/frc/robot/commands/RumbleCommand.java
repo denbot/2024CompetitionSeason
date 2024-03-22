@@ -14,42 +14,45 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.Intake;
 
 public class RumbleCommand extends Command {
-  /** Creates a new Rumble. */
+    /**
+     * Creates a new Rumble.
+     */
 
-  private GenericHID controller;
-  private double power;
-  private double time;
-  private Timer timer;
+    private GenericHID controller;
+    private double power;
+    private double time;
+    private Timer timer;
 
-  public RumbleCommand(GenericHID controller, double power, double time) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.controller = controller;
-    this.time = time;
-    this.power = power;
-  }
+    public RumbleCommand(GenericHID controller, double power, double time) {
+        // Use addRequirements() here to declare subsystem dependencies.
+        this.controller = controller;
+        this.time = time;
+        this.power = power;
+    }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    controller.setRumble(RumbleType.kBothRumble, power);
-    timer.reset();
-    timer.start();
-  }
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+        controller.setRumble(RumbleType.kBothRumble, power);
+        timer.reset();
+        timer.start();
+    }
 
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    controller.setRumble(RumbleType.kBothRumble, 0);
-  }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        controller.setRumble(RumbleType.kBothRumble, 0);
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return timer.hasElapsed(time);
-  }
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return timer.hasElapsed(time);
+    }
 }

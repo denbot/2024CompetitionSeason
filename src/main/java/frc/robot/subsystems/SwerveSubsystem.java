@@ -44,6 +44,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
             startSimThread();
         }
     }
+
     public SwerveSubsystem(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         configPathPlanner();
@@ -55,7 +56,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
     @Override
     public void periodic() {
         Pose2d pose = m_odometry.getEstimatedPosition();
-        SmartDashboard.putNumberArray("pose estimation", new Double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
+        SmartDashboard.putNumberArray("pose estimation", new Double[]{pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
@@ -63,7 +64,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
     }
 
     public void optimizeCan() {
-        for (int i = 0; i < Modules.length; i ++) {
+        for (int i = 0; i < Modules.length; i++) {
             SwerveModule module = Modules[i];
             TalonFX.optimizeBusUtilizationForAll(module.getDriveMotor(), module.getSteerMotor());
         }
@@ -93,7 +94,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
                 () -> {
                     Pose2d curPose = getState().Pose;
                     if (!FieldUtil.isAllianceBlue()) {
-                       curPose =  new Pose2d(curPose.getTranslation(), curPose.getRotation().plus(Rotation2d.fromDegrees(180)));
+                        curPose = new Pose2d(curPose.getTranslation(), curPose.getRotation().plus(Rotation2d.fromDegrees(180)));
                     }
 
                     return curPose;

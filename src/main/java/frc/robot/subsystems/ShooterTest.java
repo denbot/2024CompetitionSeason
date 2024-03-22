@@ -9,12 +9,15 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ShooterTest extends SubsystemBase {
-  /** Creates a new ShooterTest. */
-  private double shooterSpeed = 0.0;
-  private VelocityVoltage velocity = new VelocityVoltage(shooterSpeed);
-  private TalonFX happyMotor2 = new TalonFX(0);
-  @Override
-  public void periodic() {
-    happyMotor2.setControl(velocity.withVelocity(shooterSpeed));
-  }
+    /**
+     * Creates a new ShooterTest.
+     */
+    private double shooterSpeed = 0.0;
+    private VelocityVoltage velocity = new VelocityVoltage(shooterSpeed);
+    private TalonFX happyMotor2 = new TalonFX(0);
+
+    @Override
+    public void periodic() {
+        happyMotor2.setControl(velocity.withVelocity(shooterSpeed));
+    }
 }

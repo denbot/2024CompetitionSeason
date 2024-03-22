@@ -41,7 +41,6 @@ public class Intake extends SubsystemBase {
 
     private static IntakeState currentState = IntakeState.IDLE;
 
-    
 
     public void intakeInit() {
         intakeMotor.setInverted(true);
@@ -56,7 +55,7 @@ public class Intake extends SubsystemBase {
 
 
     public void shoot(double volts) {
-        currentState = IntakeState.SHOOTING;        
+        currentState = IntakeState.SHOOTING;
         intakeMotor.setVoltage(volts);
     }
 
@@ -91,9 +90,9 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putBoolean("Shooter Sensor", shooterSensor.get());
         SmartDashboard.putString("Intake State", currentState.name());
         SmartDashboard.putNumber("Timer", timer.get());
-        boolean noteAtPreIntakeSensor = ! preIntakeSensor.get();
-        boolean noteAtIntakeSensor = ! intakeSensor.get();
-        boolean noteAtShooterSensor = ! shooterSensor.get();
+        boolean noteAtPreIntakeSensor = !preIntakeSensor.get();
+        boolean noteAtIntakeSensor = !intakeSensor.get();
+        boolean noteAtShooterSensor = !shooterSensor.get();
         switch (currentState) {
             case IDLE:
 
@@ -119,20 +118,20 @@ public class Intake extends SubsystemBase {
                         intakeMotor.setVoltage(2.4);
                     }
                 } else { // The note is not touching any of the sensors
-                    if (! notePassedShooterSensor) { // If the note has not gone past the last sensor (meaning we haven't actually picked the note up)
+                    if (!notePassedShooterSensor) { // If the note has not gone past the last sensor (meaning we haven't actually picked the note up)
                         currentState = IntakeState.IDLE;
                         intakeMotor.stopMotor();
                     }
                 }
 
                 if (noteAtShooterSensor) { // Now we know when the note hits the shooter sensor
-                    if (! notePassedShooterSensor) {
+                    if (!notePassedShooterSensor) {
                         notePassedShooterSensor = true;
                         timer.start();
                     }
                 }
 
-                if (notePassedShooterSensor && ! noteAtShooterSensor && ! noteHitShooter) { // TODO: tune this value. This timer starts when the note hits the last sensor, and this value will make the indexer go backwards for a short period of time to make sure the note is in the right spot.
+                if (notePassedShooterSensor && !noteAtShooterSensor && !noteHitShooter) { // TODO: tune this value. This timer starts when the note hits the last sensor, and this value will make the indexer go backwards for a short period of time to make sure the note is in the right spot.
                     noteHitShooter = true;
                     intakeMotor.setVoltage(-1.2);
                     timer.stop();
@@ -156,7 +155,7 @@ public class Intake extends SubsystemBase {
             case SHOOTING:
 
                 if (timer.get() == 0) { // If the timer has not started, start the timer and the motor
-                    intakeMotor.setVoltage(2.4);                    
+                    intakeMotor.setVoltage(2.4);
 
                     timer.start();
                 }

@@ -39,7 +39,7 @@ public class Shooter extends SubsystemBase {
   private boolean motorsAtShootingSpeed = false;
   private MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0)
       .withOverrideBrakeDurNeutral(true);
-  
+
 
   private final String SMART_DASHBOARD_VELOCITY = "Shooter Motor Velocity";
   private final String SMART_DASHBOARD_TARGET_VELOCITY = "Shooter Motor Target Velocity";
@@ -123,7 +123,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean canShoot() {
-    return ((Math.abs(pivotMotor.getClosedLoopError().getValue()) <= PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID) && motorsAtShootingSpeed);
+    // return ((Math.abs(pivotMotor.getClosedLoopError().getValue()) <= PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID) && motorsAtShootingSpeed);
+    return true;
   }
 
   public void readyArmForNewNote() {

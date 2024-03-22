@@ -51,15 +51,15 @@ public class RobotContainer {
 
   private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Change angle if necessary
   private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 50); //TODO Change angle if necessary
-  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 60, 23); //TODO Change angle if necessary
-  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 65, 60); //TODO Change angle if necessary
+  private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 64, 23); //TODO Change angle if necessary
+  private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 65, 67); //TODO Change angle if necessary
   private final PrepCommand longShot = new PrepCommand(shooterSubsystem, 43.5, 120); //TODO Change angle if necessary
   private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  private final RumbleCommand rumbleCommand = new RumbleCommand(driverController.getHID(), 1.0, 1);
+  //private final RumbleCommand rumbleCommand = new RumbleCommand(driverController.getHID(), 1.0, 1);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
 
   private double maxSpeed = 6; // 6 meters per second desired top speed
@@ -78,7 +78,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
-    configureRumble();
+    //configureRumble();
     intakeSubsystem.intakeInit();
     shooterSubsystem.shooterInit();
 
@@ -117,10 +117,16 @@ public class RobotContainer {
     driverController.leftTrigger().onTrue(stopShoot);
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * maxSpeed) // Drive forward with
+        drivetrain.applyRequest(() -> {
+              double originalX = -driverController.getLeftY();
+    double originalY = -driverController.getLeftX();
+    double newX = originalX * Math.sqrt(1 - ((originalY * originalY) / 2));
+    double newY = originalY * Math.sqrt(1 - ((originalX * originalX) / 2));
+          return drive.withVelocityX(newX * maxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
-            .withVelocityY(-driverController.getLeftX() * maxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(-driverController.getRightX() * maxAngularRate) // Drive counterclockwise with negative X (left)
+            .withVelocityY(newY * maxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-driverController.getRightX() * maxAngularRate); // Drive counterclockwise with negative X (left)
+        }
         ));
 
     driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
@@ -139,7 +145,7 @@ public class RobotContainer {
     }
   }
 
-  private void configureRumble() {
+/*   private void configureRumble() {
     new Trigger(() -> intakeSubsystem.intakedNote())
         .onTrue(rumbleCommand);
     new Trigger(() -> {
@@ -149,7 +155,7 @@ public class RobotContainer {
     })
         .onTrue(rumbleCommand);
   }
-
+ */
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

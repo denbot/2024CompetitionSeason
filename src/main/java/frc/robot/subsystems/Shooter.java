@@ -32,7 +32,7 @@ public class Shooter extends SubsystemBase {
     private final CANcoder armPositionEncoder = new CANcoder(18, Constants.OperatorConstants.canivoreSerial);
 
     public static final double PIVOT_MOTOR_ANGLE_ERROR_THRESHOLD_ID = 1.0 / 360.0;
-    public static final double SHOOTER_MOTOR_VELOCITY_ERROR_THRESHOLD_ID = 2;
+    public static final double SHOOTER_MOTOR_VELOCITY_ERROR_THRESHOLD_ID = 4;
 
     private double targetArmPosition = 30;
     private double targetVelocity = 0;

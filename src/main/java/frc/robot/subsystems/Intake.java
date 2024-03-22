@@ -49,11 +49,6 @@ public class Intake extends SubsystemBase {
     }
 
 
-    public void optomizeCan() {
-        TalonFX.optimizeBusUtilizationForAll(intakeMotor);
-    }
-
-
     public void shoot(double volts) {
         currentState = IntakeState.SHOOTING;
         intakeMotor.setVoltage(volts);
@@ -90,6 +85,7 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putBoolean("Shooter Sensor", shooterSensor.get());
         SmartDashboard.putString("Intake State", currentState.name());
         SmartDashboard.putNumber("Timer", timer.get());
+
         boolean noteAtPreIntakeSensor = !preIntakeSensor.get();
         boolean noteAtIntakeSensor = !intakeSensor.get();
         boolean noteAtShooterSensor = !shooterSensor.get();

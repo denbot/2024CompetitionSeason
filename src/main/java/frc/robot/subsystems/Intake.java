@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.controls.ControlRequest;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,6 +48,10 @@ public class Intake extends SubsystemBase {
 //        intakeMotor.setVoltage(0);
 //    }
 
+    public StatusCode setMotorControl(ControlRequest request) {
+        return intakeMotor.setControl(request);
+    }
+
     public boolean noteInIntake() {
         return !preIntakeSensor.get() || !intakeSensor.get() || !shooterSensor.get();
     }
@@ -75,14 +81,12 @@ public class Intake extends SubsystemBase {
 
         public final WaitForIntakeCommand waitForIntake = new WaitForIntakeCommand(
                 Intake.this,
-                intakeMotor,
                 noteAtPreIntakeSensor,
                 noteAtIntakeSensor
         );
 
         public final IntakeNoteCommand intakeNote = new IntakeNoteCommand(
                 Intake.this,
-                intakeMotor,
                 noteAtPreIntakeSensor,
                 noteAtIntakeSensor,
                 noteAtShooterSensor
@@ -94,15 +98,13 @@ public class Intake extends SubsystemBase {
         );
 
         public final MoveNoteBackToShooterReadyCommand moveNoteBackToShooterReady = new MoveNoteBackToShooterReadyCommand(
-                Intake.this,
-                intakeMotor
+                Intake.this
         );
 
         public final HoldCommand hold = new HoldCommand(Intake.this);
 
         public final PassToShooterCommand passToShooter = new PassToShooterCommand(
-                Intake.this,
-                intakeMotor
+                Intake.this
         );
     }
 }

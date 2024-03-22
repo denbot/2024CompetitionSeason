@@ -12,6 +12,7 @@ public class CommandHolder {
 
     private WaitForIntakeCommand waitForIntakeCommand = null;
     private IntakeNoteCommand intakeNoteCommand = null;
+    private IntakeNoteCommand intakeNoteAndKeepRunningCommand = null;
     private MoveNoteToHoldingCommand moveNoteToHoldingCommand = null;
     private MoveNoteBackToShooterReadyCommand moveNoteBackToShooterReadyCommand = null;
     private HoldCommand holdCommand = null;
@@ -35,9 +36,16 @@ public class CommandHolder {
 
     public IntakeNoteCommand intakeNoteCommand() {
         if (intakeNoteCommand == null) {
-            intakeNoteCommand = new IntakeNoteCommand(this, intake);
+            intakeNoteCommand = new IntakeNoteCommand(this, intake, false);
         }
         return intakeNoteCommand;
+    }
+
+    public IntakeNoteCommand intakeNoteAndKeepRunningCommand() {
+        if (intakeNoteAndKeepRunningCommand == null) {
+            intakeNoteAndKeepRunningCommand = new IntakeNoteCommand(this, intake, true);
+        }
+        return intakeNoteAndKeepRunningCommand;
     }
 
     public MoveNoteToHoldingCommand moveNoteToHoldingCommand() {

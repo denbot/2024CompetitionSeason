@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -47,6 +48,9 @@ public class RumbleCommand extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        if(DriverStation.isAutonomous()) {
+            return;
+        }
         controller.setRumble(RumbleType.kBothRumble, power.powerValue);
         timer.restart();
     }
@@ -60,6 +64,6 @@ public class RumbleCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(time.timeInSeconds);
+        return timer.hasElapsed(time.timeInSeconds) || DriverStation.isAutonomous();
     }
 }

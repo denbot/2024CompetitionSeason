@@ -33,6 +33,7 @@ public class PrepCommand extends Command {
     public void execute() {
         shooter.setAngle(angle);
         shooter.startMotors(speed);
+        shooter.setNoteReadyToFire(true);
     }
 
     // Called once the command ends or is interrupted.

@@ -13,16 +13,19 @@ import java.util.function.Supplier;
 public class IntakeNoteCommand extends Command {
     private final CommandHolder commands;
     private final Intake intake;
+    private final boolean keepRunning;
 
     private final VoltageOut voltageOut = new VoltageOut(0.0);
     private final NeutralOut brake = new NeutralOut();
 
     public IntakeNoteCommand(
             CommandHolder commands,
-            Intake intake
+            Intake intake,
+            boolean keepRunning
     ) {
         this.commands = commands;
         this.intake = intake;
+        this.keepRunning = keepRunning;
         addRequirements(intake);
     }
 
@@ -39,7 +42,7 @@ public class IntakeNoteCommand extends Command {
         boolean noteAtAnySensor = noteAtPreIntakeSensor || noteAtIntakeSensor || noteAtShooterSensor;
 
         // If none of our sensors are tripped, stop our intake motor. We lost the note
-        if(! noteAtAnySensor) {
+        if(! noteAtAnySensor && ! keepRunning) {
             intake.setMotorControl(brake);
             this.cancel();
         } else if (noteAtShooterSensor) {  // Now we know when the note hits the shooter sensor

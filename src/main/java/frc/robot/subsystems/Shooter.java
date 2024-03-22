@@ -40,6 +40,7 @@ public class Shooter extends SubsystemBase {
     private final VelocityVoltage shooterVelocityControl = new VelocityVoltage(0).withEnableFOC(true);
     private final NeutralOut brake = new NeutralOut();
     private boolean noteIsInShooter = false;
+    private boolean readyToFire = false;
 
 
     public CANcoder getPivotMotorEncoder() {
@@ -145,5 +146,13 @@ public class Shooter extends SubsystemBase {
 
     public boolean isNoteInShooter() {
         return noteIsInShooter;
+    }
+
+    public void setNoteReadyToFire(boolean readyToFire) {
+        this.readyToFire = readyToFire;
+    }
+
+    public boolean isNoteReadyToFire() {
+        return readyToFire;
     }
 }

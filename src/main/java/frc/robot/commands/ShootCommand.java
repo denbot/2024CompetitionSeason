@@ -37,6 +37,7 @@ public class ShootCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         shooter.setNoteInShooter(false);
+        shooter.setNoteReadyToFire(false);
         shooter.stopMotors();
         shooter.readyArmForNewNote();
         intake.setMotorControl(brake);

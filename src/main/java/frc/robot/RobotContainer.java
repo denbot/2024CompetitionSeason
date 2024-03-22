@@ -9,16 +9,11 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.XboxController;
-
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -54,7 +49,7 @@ public class RobotContainer {
     private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Change angle if necessary
     private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 50); //TODO Change angle if necessary
     private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 64, 23); //TODO Change angle if necessary
-    private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 65, 67); //TODO Change angle if necessary
+    private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 65, 80); //TODO Change angle if necessary
     private final PrepCommand longShot = new PrepCommand(shooterSubsystem, 43.5, 120); //TODO Change angle if necessary
     private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
     private final EjectCommand ejectCommand = new EjectCommand(intakeSubsystem);
@@ -118,7 +113,7 @@ public class RobotContainer {
         intakeSubsystem.setDefaultCommand(commands.waitForIntakeCommand());
 
         driverController.a().toggleOnTrue(ejectCommand);  // Allow ejecting a note to be stopped on a second a press
-        driverController.b().and(shooterSubsystem::isNoteInShooter).onTrue(longShot);
+        driverController.b().toggleOnTrue(commands.intakeNoteAndKeepRunningCommand());
         driverController.x().and(shooterSubsystem::isNoteInShooter).onTrue(trapShoot);
         driverController.y().and(shooterSubsystem::isNoteInShooter).onTrue(stageSpeakerShoot);
 
@@ -128,6 +123,7 @@ public class RobotContainer {
 
         driverController.rightTrigger()
                 .and(shooterSubsystem::canShoot)  // Don't allow shooting unless the shooter is ready
+                .and(shooterSubsystem::isNoteReadyToFire)
                 .onTrue(shootCommand);
 
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically

@@ -108,7 +108,9 @@ public class RobotContainer {
         // Uncomment this to calibrate the wrist angle
         // shooterSubsystem.setDefaultCommand(new CalibrateWristAngleCommand(shooterSubsystem));
 
-        driverController.a().onTrue(intakeSubsystem.eject(2)).onFalse(intakeSubsystem.eject(0));
+        intakeSubsystem.setDefaultCommand(intakeSubsystem.commands.waitForIntake);
+
+//        driverController.a().onTrue(intakeSubsystem.eject(2)).onFalse(intakeSubsystem.eject(0));
         driverController.b().onTrue(longShot);
         driverController.x().onTrue(trapShoot);
         driverController.y().onTrue(stageSpeakerShoot);

@@ -34,4 +34,9 @@ public final class Constants {
                 // here
         );
     }
+
+    public static class MechanicalConstants {
+        // tune constants later: base/pivot of arm from center of robot
+        public static final double armBaseOffsetZ = 0;
+    }
 }

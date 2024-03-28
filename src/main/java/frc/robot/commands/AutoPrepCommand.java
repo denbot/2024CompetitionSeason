@@ -71,11 +71,11 @@ public class AutoPrepCommand extends Command {
          */
         // 2d target triangle x/y vals
         Translation2d targetTriangle = new Translation2d(
-                (target.getY() - robotPosition.getY()) / heading.getCos(),
+                (target.getX() - robotPosition.getX()) / heading.getCos(),
                 target.getZ() - Constants.MechanicalConstants.armBaseOffsetZ);
         // diagnol distance from target to robot
         double dist = Math.sqrt(
-                Math.pow(targetTriangle.getX() - Constants.MechanicalConstants.armBaseOffsetX, 2)
+                Math.pow(Math.abs(targetTriangle.getX()) - Constants.MechanicalConstants.armBaseOffsetX, 2)
                 + Math.pow(targetTriangle.getY(), 2));
         // length of tangent line from target
         double r = Math.sqrt(Math.pow(dist, 2) - Math.pow(MechanicalConstants.armRotationRadius, 2));

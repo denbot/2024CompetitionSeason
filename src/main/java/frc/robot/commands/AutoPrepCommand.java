@@ -62,6 +62,10 @@ public class AutoPrepCommand extends Command {
          * with a circle with r=length of perpendicular line from center of rotation to
          * arm base
          * with the intersection point, we find the angle
+         *
+         *
+         * formula for intersection:
+         * https://paulbourke.net/geometry/circlesphere
          */
         // 2d target triangle x/y vals
         Translation2d targetTriangle = new Translation2d(

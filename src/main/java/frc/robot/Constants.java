@@ -8,6 +8,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -37,8 +39,8 @@ public final class Constants {
 
     public static class MechanicalConstants {
         // tune constants later: base/pivot of arm from center of robot (in m)
-        public static final double armBaseOffsetZ = 12.864 * (2.54 * 0.01);
-        public static final double armBaseOffsetX = 3.49 * (2.54 * 0.01);
-        public static final double armRotationRadius = 3 * (2.54 * 0.01);
+        public static final double armBaseOffsetZ = Units.inchesToMeters(12.864);
+        public static final double armBaseOffsetX = Units.inchesToMeters(3.49);
+        public static final double armRotationRadius = Units.inchesToMeters(3.0);
     }
 }

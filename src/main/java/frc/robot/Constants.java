@@ -36,9 +36,9 @@ public final class Constants {
     }
 
     public static class MechanicalConstants {
-        // tune constants later: base/pivot of arm from center of robot
-        public static final double armBaseOffsetZ = 0;
-        public static final double armBaseOffsetX = 0;
-        public static final double armRotationRadius = 1;
+        // tune constants later: base/pivot of arm from center of robot (in m)
+        public static final double armBaseOffsetZ = 12.864 * (2.54 * 0.01);
+        public static final double armBaseOffsetX = 3.49 * (2.54 * 0.01);
+        public static final double armRotationRadius = 3 * (2.54 * 0.01);
     }
 }

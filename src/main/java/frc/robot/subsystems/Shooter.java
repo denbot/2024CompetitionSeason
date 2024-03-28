@@ -20,7 +20,6 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
 import frc.robot.generated.ArmTunerConstants;
 
@@ -93,16 +92,6 @@ public class Shooter extends SubsystemBase {
 //    TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
     stopMotors();
     setAngle(targetArmPosition);
-  }
-
-  public void setAngleoffLimelight() {
-
-  }
-
-  public void updateVision() {
-    if (LimelightHelpers.getBotPose2d_wpiBlue("").getX() < 0.1) {
-      return;
-    }
   }
 
   public void setAngle(double angle) {

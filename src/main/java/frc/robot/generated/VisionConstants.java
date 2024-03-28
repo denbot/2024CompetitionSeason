@@ -24,6 +24,4 @@ public class VisionConstants {
   public static final Translation3d limelightOffset = new Translation3d(
       Units.inchesToMeters(-11.384098),
       Units.inchesToMeters(-8.607840), Units.inchesToMeters(14.617002));
-
-  // Limelight rotation: Pitch:10
 }

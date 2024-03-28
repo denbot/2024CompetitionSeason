@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.lib.util.FieldUtil;
 import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
-import frc.robot.generated.VisionConstants;
+import frc.robot.Constants.VisionConstants;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements subsystem

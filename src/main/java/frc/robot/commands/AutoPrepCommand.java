@@ -73,11 +73,8 @@ public class AutoPrepCommand extends Command {
                 target.getZ() - Constants.MechanicalConstants.armBaseOffsetZ);
         // diagnol distance from target to robot
         double dist = Math.sqrt(
-                Math.pow(targetTriangle.getX() +
-                        (FieldUtil.isAllianceBlue() ? -Constants.MechanicalConstants.armBaseOffsetX
-                                : Constants.MechanicalConstants.armBaseOffsetX),
-                        2)
-                        + Math.pow(targetTriangle.getY(), 2));
+                Math.pow(targetTriangle.getX() - Constants.MechanicalConstants.armBaseOffsetX, 2)
+                + Math.pow(targetTriangle.getY(), 2));
         // length of tangent line from target
         double r = Math.sqrt(Math.pow(dist, 2) - Math.pow(MechanicalConstants.armRotationRadius, 2));
         double a = (Math.pow(Constants.MechanicalConstants.armRotationRadius, 2) - Math.pow(r, 2) + Math.pow(dist, 2))

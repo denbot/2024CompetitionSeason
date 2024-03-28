@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +28,7 @@ public class AutoPrepCommand extends Command {
         Translation3d target = FieldUtil.getCenterOfAllianceSpeakerOpening();
 
         // TODO: uncomment and tune when pid for swerve is completed
+        Rotation2d robotAngle = swerve.getGyroYaw();
         // Supplier<Rotation2d> robotAngle = () -> Rotation2d.fromRadians( // Find the
         // angle to turn the robot to
         // Math.atan((PoseEstimation.getEstimatedPose().getY() - target.getY())
@@ -35,7 +36,7 @@ public class AutoPrepCommand extends Command {
 
         // maybe should do shooter regression instead if we have time
         try {
-            double targetAngle = calculateArmAngleFromRotationCenter(target, swerve.getPose());
+            double targetAngle = calculateArmAngleFromRotationCenter(target, swerve.getPose().getTranslation(), robotAngle);
 
             shooter.setAngle(targetAngle);
             shooter.startMotors(speed);
@@ -51,10 +52,11 @@ public class AutoPrepCommand extends Command {
      * assumes that the robot is already rotated correctly
      *
      * @param target 3d location of target
-     * @param pose   pose of robot
+     * @param robotPosition x,y position of robot
+     * @param heading desired heading robot should be oriented in
      * @return angle (degrees)
      */
-    public double calculateArmAngleFromRotationCenter(Translation3d target, Pose2d pose) throws Error {
+    public double calculateArmAngleFromRotationCenter(Translation3d target, Translation2d robotPosition, Rotation2d heading) throws Error {
         /*
          * the following is a lot of math
          * we first find the length of a tangent line from the target
@@ -69,7 +71,7 @@ public class AutoPrepCommand extends Command {
          */
         // 2d target triangle x/y vals
         Translation2d targetTriangle = new Translation2d(
-                (target.getY() - pose.getY()) / pose.getRotation().getCos(),
+                (target.getY() - robotPosition.getY()) / heading.getCos(),
                 target.getZ() - Constants.MechanicalConstants.armBaseOffsetZ);
         // diagnol distance from target to robot
         double dist = Math.sqrt(

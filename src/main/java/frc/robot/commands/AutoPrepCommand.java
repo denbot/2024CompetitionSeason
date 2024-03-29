@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.util.FieldUtil;
 import frc.robot.Constants;
 import frc.robot.Constants.MechanicalConstants;
-import frc.robot.generated.ArmTunerConstants;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
 

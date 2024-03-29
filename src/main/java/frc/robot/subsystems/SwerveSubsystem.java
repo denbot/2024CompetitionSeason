@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
@@ -28,7 +27,6 @@ import frc.lib.util.FieldUtil;
 import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements subsystem
@@ -78,7 +76,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
     public Pose2d getPose() {
         return this.m_odometry.getEstimatedPosition();
     }
-  
+
     public void zeroGyro() {
         m_pigeon2.setYaw(0);
     }

@@ -9,25 +9,18 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.XboxController;
-
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.EjectCommand;
+import frc.robot.commands.AutoPrepCommand;
 import frc.robot.commands.PrepCommand;
-import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.generated.SwerveTunerConstants;
 import frc.robot.subsystems.Intake;
@@ -78,6 +71,8 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     private final Telemetry telemetry = new Telemetry(maxSpeed);
 
+    private final AutoPrepCommand autoSpeakerShoot = new AutoPrepCommand(shooterSubsystem, drivetrain, 120);
+
     public RobotContainer() {
         configureBindings();
         //configureRumble();
@@ -88,6 +83,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot", shootCommand);
         NamedCommands.registerCommand("Stage Speaker Shoot", stageSpeakerShoot);
         NamedCommands.registerCommand("Trap Shoot", trapShoot);
+        NamedCommands.registerCommand("Auto Speaker", autoSpeakerShoot);
 
         // TODO: tune positions of robot especially with bumpers
         autoChooser = AutoBuilder.buildAutoChooser("");
@@ -114,7 +110,7 @@ public class RobotContainer {
         driverController.x().onTrue(trapShoot);
         driverController.y().onTrue(stageSpeakerShoot);
         driverController.a().onTrue(intakeSubsystem.eject(2)).onFalse(intakeSubsystem.eject(0));
-        driverController.b().onTrue(longShot);
+        driverController.b().onTrue(autoSpeakerShoot);
         driverController.rightTrigger().onTrue(shootCommand);
         driverController.leftTrigger().onTrue(stopShoot);
 

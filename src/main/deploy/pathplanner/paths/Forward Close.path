@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.695314845175145,
-        "y": 6.698039577897338
+        "x": 0.9991654269022829,
+        "y": 4.383177909212962
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.898723070173413,
-        "y": 6.99655944766435
+        "x": 1.424289705722269,
+        "y": 4.265902246090207
       },
       "isLocked": false,
-      "linkedName": "Far Start"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.8968988847068604,
-        "y": 7.0
+        "x": 2.4797706738270624,
+        "y": 4.089988751406074
       },
       "prevControl": {
-        "x": 1.8968988847068604,
-        "y": 7.0
+        "x": 2.157262600239487,
+        "y": 4.0606698356253865
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Far 1-1 Note"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -49,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Index 2",
+  "folder": null,
   "previewStartingState": {
-    "rotation": 59.82647997035568,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

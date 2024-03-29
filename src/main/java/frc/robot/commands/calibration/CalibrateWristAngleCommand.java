@@ -21,7 +21,7 @@ public class CalibrateWristAngleCommand extends Command {
         MagnetSensorConfigs sensorConfigs = new MagnetSensorConfigs();
         wristPositionEncoder.getConfigurator().refresh(sensorConfigs);
         currentProgrammedOffset = sensorConfigs.MagnetOffset;
-        
+
         addRequirements(shooter);
     }
 

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.0,
-      "y": 7.09
+      "x": 0.71,
+      "y": 4.41
     },
-    "rotation": 51.24
+    "rotation": -59.98000000000002
   },
   "command": {
     "type": "sequential",
@@ -18,33 +18,57 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "2nd Note Pickup"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Second Shoot"
+            "name": "Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3rd Note Pickup"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3rd Note Shoot"
+            "pathName": "Close Index"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Speaker Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Close Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Close Index 2-1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Speaker Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Close 2nd Row Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]

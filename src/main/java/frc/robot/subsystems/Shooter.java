@@ -27,6 +27,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.MechanicalConstants;
 import frc.robot.generated.ArmTunerConstants;
 
 public class Shooter extends SubsystemBase {
@@ -86,8 +87,8 @@ public class Shooter extends SubsystemBase {
         pivotMotor.getConfigurator().apply(ArmTunerConstants.pivotPIDConfigs);
 
         SoftwareLimitSwitchConfigs pivotLimits = new SoftwareLimitSwitchConfigs();
-        pivotLimits.ForwardSoftLimitThreshold = 90.0 / 360.0;
-        pivotLimits.ReverseSoftLimitThreshold = 30.0 / 360.0;
+        pivotLimits.ForwardSoftLimitThreshold = MechanicalConstants.maxArmAngle / 360.0;
+        pivotLimits.ReverseSoftLimitThreshold = MechanicalConstants.minArmAngle / 360.0;
         pivotLimits.ForwardSoftLimitEnable = true;
         pivotLimits.ReverseSoftLimitEnable = true;
         pivotMotor.getConfigurator().apply(pivotLimits);

@@ -47,6 +47,9 @@ public final class Constants {
         public static final double armBaseOffsetZ = Units.inchesToMeters(12.864);
         public static final double armBaseOffsetX = Units.inchesToMeters(3.49);
         public static final double armRotationRadius = Units.inchesToMeters(3.0);
+
+        public static final double maxArmAngle = 90.0;
+        public static final double minArmAngle = 30.0;
     }
 
     public static final class VisionConstants {

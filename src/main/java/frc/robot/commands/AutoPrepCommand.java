@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.util.FieldUtil;
 import frc.robot.Constants;
 import frc.robot.Constants.MechanicalConstants;
+import frc.robot.generated.ArmTunerConstants;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -87,12 +88,12 @@ public class AutoPrepCommand extends Command {
         double intersectionX = x2 + h * (targetTriangle.getY()) / dist;
         double intersectionY = y2 - h * (targetTriangle.getX()) / dist;
 
-        double angle = Math.toDegrees(Math.atan(intersectionY / intersectionX));
-        if (angle > 0 || angle < 90) {
-            throw new Error("auto angle should be within 0 and 90 degrees");
+        double angle = Math.toDegrees(Math.atan(intersectionY / intersectionX)) + 90;
+        if (angle <= MechanicalConstants.minArmAngle || angle >= MechanicalConstants.maxArmAngle) {
+            throw new Error("auto arm angle should be within mechanical limits: trying to angle to:" + angle);
         }
 
-        return angle + 90;
+        return angle;
     }
 
     @Override

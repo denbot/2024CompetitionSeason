@@ -121,7 +121,7 @@ public class RobotContainer {
 
         driverController.leftBumper().and(shooterSubsystem::isNoteInShooter).onTrue(ampShoot);
         driverController.rightBumper().and(shooterSubsystem::isNoteInShooter).onTrue(speakerShoot);
-        driverController.leftTrigger().and(shooterSubsystem::isNoteInShooter).onTrue(stopShoot);
+        driverController.leftTrigger().onTrue(stopShoot);
 
         driverController.rightTrigger()
                 .and(shooterSubsystem::canShoot)  // Don't allow shooting unless the shooter is ready

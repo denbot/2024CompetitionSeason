@@ -1,22 +1,29 @@
 package frc.robot.commands.calibration;
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 public class CalibrateWristAngleCommand extends Command {
-    private static final double ANGLE_0_TO_360_AT_WRIST_REST = 30.0;
+    private static final double ANGLE_0_TO_360_AT_WRIST_REST = 29.6;
     private static final double ANGLE_0_TO_1_AT_WRIST_REST = ANGLE_0_TO_360_AT_WRIST_REST / 360;
 
+    private final Shooter shooter;
     private final CANcoder wristPositionEncoder;
-    private final double currentProgrammedOffset;
+    private final TalonFX pivotMotor;
+    private double currentProgrammedOffset;
+    private double wristEncoderOffsetAtZero;
 
     public CalibrateWristAngleCommand(Shooter shooter) {
+        this.shooter = shooter;
         this.wristPositionEncoder = shooter.getPivotMotorEncoder();
+        this.pivotMotor = shooter.getPivotMotor();
 
         MagnetSensorConfigs sensorConfigs = new MagnetSensorConfigs();
         wristPositionEncoder.getConfigurator().refresh(sensorConfigs);
@@ -28,7 +35,7 @@ public class CalibrateWristAngleCommand extends Command {
     public void execute() {
         double wristPosition = wristPositionEncoder.getAbsolutePosition().getValue();
 
-        SmartDashboard.putNumber("Wrist Position", wristPosition);
+        SmartDashboard.putNumber("Wrist Position", wristPosition * 360);
 
         /*
          * Spot on: ANGLE_0_TO_1_AT_WRIST_REST == wristPosition
@@ -37,8 +44,14 @@ public class CalibrateWristAngleCommand extends Command {
          */
 
         double wristOffsetWithCurrentProgrammedOffset = ANGLE_0_TO_1_AT_WRIST_REST - wristPosition;
-        double wristEncoderOffsetAtZero = currentProgrammedOffset + wristOffsetWithCurrentProgrammedOffset;
+        wristEncoderOffsetAtZero = currentProgrammedOffset + wristOffsetWithCurrentProgrammedOffset;
         SmartDashboard.putNumber("New Wrist Zero offset", wristEncoderOffsetAtZero);
+    }
+
+    public void recalibrate() {
+        MagnetSensorConfigs sensorConfigs = new MagnetSensorConfigs();
+        currentProgrammedOffset = sensorConfigs.MagnetOffset = wristEncoderOffsetAtZero;
+        wristPositionEncoder.getConfigurator().refresh(sensorConfigs);
     }
 
     @Override

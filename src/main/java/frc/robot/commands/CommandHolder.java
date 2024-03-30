@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import frc.robot.commands.calibration.CalibrateWristAngleCommand;
 import frc.robot.commands.intake.*;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -10,12 +11,13 @@ public class CommandHolder {
     private final Shooter shooter;
     private final GenericHID controller;
 
-    private WaitForIntakeCommand waitForIntakeCommand = null;
-    private IntakeNoteCommand intakeNoteCommand = null;
-    private IntakeNoteCommand intakeNoteAndKeepRunningCommand = null;
-    private MoveNoteToHoldingCommand moveNoteToHoldingCommand = null;
-    private MoveNoteBackToShooterReadyCommand moveNoteBackToShooterReadyCommand = null;
-    private HoldCommand holdCommand = null;
+    private WaitForIntakeCommand waitForIntakeCommand;
+    private IntakeNoteCommand intakeNoteCommand;
+    private IntakeNoteCommand intakeNoteAndKeepRunningCommand;
+    private MoveNoteToHoldingCommand moveNoteToHoldingCommand;
+    private MoveNoteBackToShooterReadyCommand moveNoteBackToShooterReadyCommand;
+    private HoldCommand holdCommand;
+    private CalibrateWristAngleCommand calibrateWristAngleCommand;
 
     public CommandHolder(
             Intake intake,
@@ -71,5 +73,13 @@ public class CommandHolder {
 
     public RumbleCommand rumbleCommand(RumbleCommand.Power power, RumbleCommand.Time time) {
         return new RumbleCommand(controller, power, time);
+    }
+
+    public CalibrateWristAngleCommand calibrateWristAngleCommand() {
+        if(calibrateWristAngleCommand == null) {
+            calibrateWristAngleCommand = new CalibrateWristAngleCommand(shooter);
+        }
+
+        return calibrateWristAngleCommand;
     }
 }

@@ -34,7 +34,7 @@ public class Shooter extends SubsystemBase {
     public static final double PIVOT_MOTOR_ANGLE_ERROR_THRESHOLD_ID = 1.0 / 360.0;
     public static final double SHOOTER_MOTOR_VELOCITY_ERROR_THRESHOLD_ID = 4;
 
-    private double targetArmPosition = 30;
+    private double targetArmPosition = 31;
     private double targetVelocity = 0;
 
     private final VelocityVoltage shooterVelocityControl = new VelocityVoltage(0).withEnableFOC(true);
@@ -47,6 +47,10 @@ public class Shooter extends SubsystemBase {
         return armPositionEncoder;
     }
 
+    public TalonFX getPivotMotor() {
+        return pivotMotor;
+    }
+
     public void shooterInit() {
         leftShootMotor.setNeutralMode(NeutralModeValue.Brake);
         rightShootMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -56,7 +60,7 @@ public class Shooter extends SubsystemBase {
         MagnetSensorConfigs wristPositionMagnetConfigs = new MagnetSensorConfigs();
         wristPositionMagnetConfigs.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
         wristPositionMagnetConfigs.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        wristPositionMagnetConfigs.MagnetOffset = 0.7273763;  // Calibrate this with CalibrateWristAngleCommand
+        wristPositionMagnetConfigs.MagnetOffset = 0.585;  // Calibrate this with CalibrateWristAngleCommand
         armPositionEncoder.getConfigurator().apply(wristPositionMagnetConfigs);
 
         FeedbackConfigs pivotConfigs = new FeedbackConfigs();
@@ -77,6 +81,7 @@ public class Shooter extends SubsystemBase {
 
         MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
         outputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+        outputConfigs.NeutralMode = NeutralModeValue.Coast;
         pivotMotor.getConfigurator().apply(outputConfigs);
         leftShootMotor.getConfigurator().apply(ArmTunerConstants.shooterPIDConfigs);
         rightShootMotor.getConfigurator().apply(ArmTunerConstants.shooterPIDConfigs);
@@ -86,7 +91,7 @@ public class Shooter extends SubsystemBase {
         rightShootMotor.getVelocity().setUpdateFrequency(50);
 //    TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
         stopMotors();
-        readyArmForNewNote();
+//        readyArmForNewNote();
     }
 
 
@@ -114,7 +119,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void readyArmForNewNote() {
-        setAngle(30);
+        setAngle(31);
     }
 
     public void stopMotors() {

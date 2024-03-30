@@ -110,7 +110,7 @@ public class RobotContainer {
      */
     private void configureBindings() {
         // Uncomment this to calibrate the wrist angle
-        shooterSubsystem.setDefaultCommand(new CalibrateWristAngleCommand(shooterSubsystem));
+        shooterSubsystem.setDefaultCommand(commands.calibrateWristAngleCommand());
 
         intakeSubsystem.setDefaultCommand(commands.waitForIntakeCommand());
 
@@ -141,7 +141,7 @@ public class RobotContainer {
                         }
                 ));
 
-        driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
+        driverController.back().onTrue(Commands.runOnce(() -> commands.calibrateWristAngleCommand().recalibrate()));
         driverController.start().whileTrue(drivetrain
                 .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
 

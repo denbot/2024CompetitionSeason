@@ -8,12 +8,10 @@ import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 
 import com.ctre.phoenix6.controls.VelocityVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
@@ -29,41 +27,32 @@ import frc.robot.Constants.MechanicalConstants;
 import frc.robot.generated.ArmTunerConstants;
 
 public class Shooter extends SubsystemBase {
-
     private final TalonFX pivotMotor = new TalonFX(14, Constants.OperatorConstants.canivoreSerial);
     private final TalonFX leftShootMotor = new TalonFX(5, Constants.OperatorConstants.canivoreSerial);
     private final TalonFX rightShootMotor = new TalonFX(13, Constants.OperatorConstants.canivoreSerial);
-    private double targetVelocity = 0;
-    private double motorVelocity = 0;
-    private boolean motorsAtShootingSpeed = false;
-    private MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0)
-            .withOverrideBrakeDurNeutral(true);
-
-
-    private final String SMART_DASHBOARD_VELOCITY = "Shooter Motor Velocity";
-    private final String SMART_DASHBOARD_TARGET_VELOCITY = "Shooter Motor Target Velocity";
-    private final String SMART_DASHBOARD_POSITION = "Shooter Motor Position";
-    private final String SMART_DASHBOARD_TARGET_POSITION = "Shooter Motor Target Position";
-
     private final CANcoder armPositionEncoder = new CANcoder(18, Constants.OperatorConstants.canivoreSerial);
-    private double targetArmPosition = 40;
-    private double positionOfArm = 0;
-    public static final double PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID = 1.0 / 360.0;
-    private final NeutralOut brake = new NeutralOut();
 
-    private VelocityVoltage shooterControl = new VelocityVoltage(0).withEnableFOC(true);
+    public static final double PIVOT_MOTOR_ANGLE_ERROR_THRESHOLD_ID = 1.0 / 360.0;
+    public static final double SHOOTER_MOTOR_VELOCITY_ERROR_THRESHOLD_ID = 4;
+
+    private double targetArmPosition = 31;
+    private double targetVelocity = 0;
+
+    private final VelocityVoltage shooterVelocityControl = new VelocityVoltage(0).withEnableFOC(true);
+    private final NeutralOut brake = new NeutralOut();
+    private boolean noteIsInShooter = false;
+    private boolean readyToFire = false;
 
 
     public CANcoder getPivotMotorEncoder() {
         return armPositionEncoder;
     }
 
-    public void shooterInit() {
-        SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
-        SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
-        SmartDashboard.putNumber(SMART_DASHBOARD_POSITION, positionOfArm);
-        SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_POSITION, targetArmPosition);
+    public TalonFX getPivotMotor() {
+        return pivotMotor;
+    }
 
+    public void shooterInit() {
         leftShootMotor.setNeutralMode(NeutralModeValue.Brake);
         rightShootMotor.setNeutralMode(NeutralModeValue.Brake);
 
@@ -72,7 +61,7 @@ public class Shooter extends SubsystemBase {
         MagnetSensorConfigs wristPositionMagnetConfigs = new MagnetSensorConfigs();
         wristPositionMagnetConfigs.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
         wristPositionMagnetConfigs.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        wristPositionMagnetConfigs.MagnetOffset = 0.73933;  // Calibrate this with CalibrateWristAngleCommand
+        wristPositionMagnetConfigs.MagnetOffset = 0.585;  // Calibrate this with CalibrateWristAngleCommand
         armPositionEncoder.getConfigurator().apply(wristPositionMagnetConfigs);
 
         FeedbackConfigs pivotConfigs = new FeedbackConfigs();
@@ -93,6 +82,7 @@ public class Shooter extends SubsystemBase {
 
         MotorOutputConfigs outputConfigs = new MotorOutputConfigs();
         outputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+        outputConfigs.NeutralMode = NeutralModeValue.Coast;
         pivotMotor.getConfigurator().apply(outputConfigs);
         leftShootMotor.getConfigurator().apply(ArmTunerConstants.shooterPIDConfigs);
         rightShootMotor.getConfigurator().apply(ArmTunerConstants.shooterPIDConfigs);
@@ -102,7 +92,7 @@ public class Shooter extends SubsystemBase {
         rightShootMotor.getVelocity().setUpdateFrequency(50);
 //    TalonFX.optimizeBusUtilizationForAll(pivotMotor, leftShootMotor, rightShootMotor);
         stopMotors();
-        setAngle(targetArmPosition);
+//        readyArmForNewNote();
     }
 
     public void setAngle(double angle) {
@@ -112,50 +102,62 @@ public class Shooter extends SubsystemBase {
     }
 
     public void startMotors(double rotationsPerSecond) {
-        VelocityVoltage vspeed = shooterControl.withVelocity(rotationsPerSecond);
+        VelocityVoltage vspeed = shooterVelocityControl.withVelocity(rotationsPerSecond);
         targetVelocity = rotationsPerSecond;
-        motorsAtShootingSpeed = true;
         rightShootMotor.setControl(vspeed);
         leftShootMotor.setControl(vspeed);
 
     }
 
     public boolean canShoot() {
-        // return ((Math.abs(pivotMotor.getClosedLoopError().getValue()) <= PIVOT_MOTOR_ANGLE_ERROR_THREASHOLD_ID) && motorsAtShootingSpeed);
-        return true;
+        boolean armInCorrectPosition = Math.abs(pivotMotor.getClosedLoopError().getValue()) <= PIVOT_MOTOR_ANGLE_ERROR_THRESHOLD_ID;
+        boolean leftMotorAtSpeed = Math.abs(leftShootMotor.getClosedLoopError().getValue()) <= SHOOTER_MOTOR_VELOCITY_ERROR_THRESHOLD_ID;
+        boolean rightMotorAtSpeed = Math.abs(rightShootMotor.getClosedLoopError().getValue()) <= SHOOTER_MOTOR_VELOCITY_ERROR_THRESHOLD_ID;
+        boolean motorsAtShootingSpeed = leftMotorAtSpeed && rightMotorAtSpeed;
+        return armInCorrectPosition && motorsAtShootingSpeed;
+//        return true;
     }
 
     public void readyArmForNewNote() {
-        setAngle(30);
-    }
-
-    public void intake(double speed) {
-        rightShootMotor.setVoltage(speed);
-        leftShootMotor.setVoltage(speed);
+        setAngle(31);
     }
 
     public void stopMotors() {
-        motorsAtShootingSpeed = false;
         rightShootMotor.setControl(brake);
         leftShootMotor.setControl(brake);
     }
 
-    public void setVolts(double volts) {
-        rightShootMotor.setControl(new VoltageOut(volts));
-        leftShootMotor.setControl(new VoltageOut(volts));
-    }
-
     @Override
     public void periodic() {
-        motorVelocity = leftShootMotor.getVelocity().getValue();
-        positionOfArm = armPositionEncoder.getAbsolutePosition().getValue() * 360;
+        double motorVelocity = leftShootMotor.getVelocity().getValue();
+        double positionOfArm = armPositionEncoder.getAbsolutePosition().getValue() * 360;
         double pivotError = pivotMotor.getClosedLoopError().getValue() * 360;
 
+        String SMART_DASHBOARD_VELOCITY = "Shooter Motor Velocity";
         SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
+        String SMART_DASHBOARD_TARGET_VELOCITY = "Shooter Motor Target Velocity";
         SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_VELOCITY, targetVelocity);
+        String SMART_DASHBOARD_POSITION = "Shooter Motor Position";
         SmartDashboard.putNumber(SMART_DASHBOARD_POSITION, positionOfArm);
+        String SMART_DASHBOARD_TARGET_POSITION = "Shooter Motor Target Position";
         SmartDashboard.putNumber(SMART_DASHBOARD_TARGET_POSITION, targetArmPosition);
         SmartDashboard.putNumber("Arm position rotations", armPositionEncoder.getPosition().getValue());
         SmartDashboard.putNumber("Wrist Error", pivotError);
+    }
+
+    public void setNoteInShooter(boolean noteInShooter) {
+        noteIsInShooter = noteInShooter;
+    }
+
+    public boolean isNoteInShooter() {
+        return noteIsInShooter;
+    }
+
+    public void setNoteReadyToFire(boolean readyToFire) {
+        this.readyToFire = readyToFire;
+    }
+
+    public boolean isNoteReadyToFire() {
+        return readyToFire;
     }
 }

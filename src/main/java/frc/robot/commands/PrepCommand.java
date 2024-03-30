@@ -4,20 +4,21 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
+/**
+ * Prepare the shooter for a specific angle and speed
+ */
 public class PrepCommand extends Command {
+    public static PrepCommand currentPrepCommand = null;
 
     private final Shooter shooter;
-    private double angle = 0;
-    private double speed = 0;
+    private double angle;
+    private double speed;
 
-    /**
-     * Creates a new PrepCommand.
-     */
     public PrepCommand(Shooter shooter, double angle, double speed) {
-        // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(shooter);
         this.shooter = shooter;
         this.angle = angle;
@@ -27,6 +28,7 @@ public class PrepCommand extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        currentPrepCommand = this;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -34,16 +36,34 @@ public class PrepCommand extends Command {
     public void execute() {
         shooter.setAngle(angle);
         shooter.startMotors(speed);
+        shooter.setNoteReadyToFire(true);
+
+        if(currentPrepCommand == this) {
+            SmartDashboard.putNumber("Prep command Angle", angle);
+            SmartDashboard.putNumber("Prep command Speed", speed);
+        }
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        // initialize of the other command should happen after the end of this one, but just in case we compare instances
+        if(currentPrepCommand == this) {
+            currentPrepCommand = null;
+        }
+    }
+
+    public void changeAngle(double angleDelta) {
+        angle += angleDelta;
+    }
+
+    public void changeSpeed(double speedDelta) {
+        this.speed += speedDelta;
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

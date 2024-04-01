@@ -27,23 +27,21 @@ public class AutoPrepCommand extends Command {
         swerve.updateVision();
         Translation3d target = FieldUtil.getCenterOfAllianceSpeakerOpening();
 
-        // TODO: uncomment and tune when pid for swerve is completed
-        Rotation2d robotAngle = swerve.getGyroYaw();
+        // TODO: have a way to rotate the robot before using this value
+        Rotation2d robotAngle = new Rotation2d(
+                Math.atan((swerve.getPose().getY() - target.getY()) / (swerve.getPose().getX() - target.getX()))
+        );
+
         // Supplier<Rotation2d> robotAngle = () -> Rotation2d.fromRadians( // Find the
         // angle to turn the robot to
         // Math.atan((PoseEstimation.getEstimatedPose().getY() - target.getY())
         // / (PoseEstimation.getEstimatedPose().getX() - target.getX())));
 
         // maybe should do shooter regression instead if we have time
-        try {
-            double targetAngle = calculateArmAngleFromRotationCenter(target, swerve.getPose().getTranslation(), robotAngle);
+        double targetAngle = calculateArmAngleFromRotationCenter(target, swerve.getPose().getTranslation());
 
-            shooter.setAngle(targetAngle);
-            shooter.startMotors(speed);
-        } catch (Error e) {
-            this.cancel();
-        }
-
+        shooter.setAngle(targetAngle);
+        shooter.startMotors(speed);
     }
 
     /***
@@ -53,10 +51,9 @@ public class AutoPrepCommand extends Command {
      *
      * @param target 3d location of target
      * @param robotPosition x,y position of robot
-     * @param heading desired heading robot should be oriented in
      * @return angle (degrees)
      */
-    public double calculateArmAngleFromRotationCenter(Translation3d target, Translation2d robotPosition, Rotation2d heading) throws Error {
+    public double calculateArmAngleFromRotationCenter(Translation3d target, Translation2d robotPosition) {
         /*
          * the following is a lot of math
          * we first find the length of a tangent line from the target
@@ -71,26 +68,27 @@ public class AutoPrepCommand extends Command {
          */
         // 2d target triangle x/y vals
         Translation2d targetTriangle = new Translation2d(
-                (target.getX() - robotPosition.getX()) / heading.getCos(),
+                Math.sqrt(Math.pow(target.getX() - robotPosition.getX(), 2) + Math.pow(target.getY() - robotPosition.getY(), 2)),
                 target.getZ() - Constants.MechanicalConstants.armBaseOffsetZ);
+
         // diagnol distance from target to robot
         double dist = Math.sqrt(
                 Math.pow(Math.abs(targetTriangle.getX()) - Constants.MechanicalConstants.armBaseOffsetX, 2)
                 + Math.pow(targetTriangle.getY(), 2));
+
         // length of tangent line from target
         double r = Math.sqrt(Math.pow(dist, 2) - Math.pow(MechanicalConstants.armRotationRadius, 2));
+
         double a = (Math.pow(Constants.MechanicalConstants.armRotationRadius, 2) - Math.pow(r, 2) + Math.pow(dist, 2))
                 / (2 * dist);
         double h = Math.sqrt(Math.pow(Constants.MechanicalConstants.armRotationRadius, 2) - Math.pow(a, 2));
+
         double x2 = a * targetTriangle.getX() / dist;
         double y2 = a * targetTriangle.getY() / dist;
         double intersectionX = x2 + h * (targetTriangle.getY()) / dist;
         double intersectionY = y2 - h * (targetTriangle.getX()) / dist;
 
         double angle = Math.toDegrees(Math.atan(intersectionY / intersectionX)) + 90;
-        if (angle <= MechanicalConstants.minArmAngle || angle >= MechanicalConstants.maxArmAngle) {
-            throw new Error("auto arm angle should be within mechanical limits: trying to angle to:" + angle);
-        }
 
         return angle;
     }

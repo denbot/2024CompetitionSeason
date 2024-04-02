@@ -38,10 +38,14 @@ public class AutoPrepCommand extends Command {
         // / (PoseEstimation.getEstimatedPose().getX() - target.getX())));
 
         // maybe should do shooter regression instead if we have time
-        double targetAngle = calculateArmAngleFromRotationCenter(target, swerve.getPose().getTranslation());
+        try {
+            double targetAngle = calculateArmAngleFromRotationCenter(target, swerve.getPose().getTranslation());
 
-        shooter.setAngle(targetAngle);
-        shooter.startMotors(speed);
+            shooter.setAngle(targetAngle);
+            shooter.startMotors(speed);
+        } catch (Error e) {
+            this.cancel();
+        }
     }
 
     /***

@@ -53,7 +53,7 @@ public class AutoPrepCommand extends Command {
      * @param robotPosition x,y position of robot
      * @return angle (degrees)
      */
-    public double calculateArmAngleFromRotationCenter(Translation3d target, Translation2d robotPosition) {
+    public double calculateArmAngleFromRotationCenter(Translation3d target, Translation2d robotPosition) throws Error {
         /*
          * the following is a lot of math
          * we first find the length of a tangent line from the target
@@ -89,6 +89,9 @@ public class AutoPrepCommand extends Command {
         double intersectionY = y2 - h * (targetTriangle.getX()) / dist;
 
         double angle = Math.toDegrees(Math.atan(intersectionY / intersectionX)) + 90;
+        if (angle > MechanicalConstants.maxArmAngle || angle < MechanicalConstants.minArmAngle) {
+            throw new Error("auto prep angle should be in between min/max angles.  trying to set to : " + angle);
+        }
 
         return angle;
     }

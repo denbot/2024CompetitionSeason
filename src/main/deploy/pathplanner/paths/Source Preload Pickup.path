@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.1750789215864152,
+        "y": 3.6208860989150553
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.2250789215864153,
+        "y": 3.6208860989150553
+      },
+      "isLocked": false,
+      "linkedName": "Source Preload Drop"
+    },
+    {
+      "anchor": {
+        "x": 1.585543742516057,
+        "y": 2.9318915780688717
+      },
+      "prevControl": {
+        "x": 1.560543742516057,
+        "y": 2.975192848258094
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Source Preload Pickup"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.6,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -60.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Simple Source",
+  "previewStartingState": {
+    "rotation": -60.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

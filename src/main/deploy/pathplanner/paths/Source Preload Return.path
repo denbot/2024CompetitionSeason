@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7139723370355832,
-        "y": 4.41249682499365
+        "x": 1.585543742516057,
+        "y": 2.9318915780688717
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1337659038954442,
-        "y": 4.169949430807953
+        "x": 1.635543742516057,
+        "y": 2.9318915780688717
       },
       "isLocked": false,
-      "linkedName": "Source Subwoofer"
+      "linkedName": "Source Preload Pickup"
     },
     {
       "anchor": {
-        "x": 2.55,
-        "y": 4.1
+        "x": 0.7139723370355832,
+        "y": 4.41249682499365
       },
       "prevControl": {
-        "x": 2.5593287459302188,
-        "y": 4.1
+        "x": 0.7389723370355832,
+        "y": 4.369195554804429
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Close 1-1 Note"
+      "linkedName": "Source Subwoofer"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -44,14 +38,14 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 0,
+    "velocity": 0,
+    "rotation": -60.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Index 2",
+  "folder": "Simple Source",
   "previewStartingState": {
-    "rotation": -60.25511870305779,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

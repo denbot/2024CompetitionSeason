@@ -4,14 +4,16 @@
   "holonomicMode": true,
   "pathFolders": [
     "Index 2",
-    "New Folder",
     "Index 3",
-    "Return"
+    "New Folder",
+    "Return",
+    "Simple Source"
   ],
   "autoFolders": [
     "2pt Folder",
     "3pt",
-    "Move Forward"
+    "Move Forward",
+    "Simple"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

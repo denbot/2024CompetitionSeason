@@ -8,33 +8,43 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1337659038954442,
-        "y": 4.169949430807953
+        "x": 0.7389723370355833,
+        "y": 4.369195554804429
       },
       "isLocked": false,
       "linkedName": "Source Subwoofer"
     },
     {
       "anchor": {
-        "x": 2.55,
-        "y": 4.1
+        "x": 1.3509924162705473,
+        "y": 3.3130374832178244
       },
       "prevControl": {
-        "x": 2.5593287459302188,
-        "y": 4.1
+        "x": 1.2562496115361035,
+        "y": 3.4761638844442873
+      },
+      "nextControl": {
+        "x": 1.4457352210049912,
+        "y": 3.1499110819913616
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.1750789215864152,
+        "y": 3.6208860989150553
+      },
+      "prevControl": {
+        "x": 1.4774774019826669,
+        "y": 3.0971165667371263
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Close 1-1 Note"
+      "linkedName": "Source Preload Drop"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 0,
+    "rotation": -60.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Index 2",
+  "folder": "Simple Source",
   "previewStartingState": {
-    "rotation": -60.25511870305779,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

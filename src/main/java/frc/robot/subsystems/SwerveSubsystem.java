@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
@@ -13,18 +12,22 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.lib.util.FieldUtil;
+import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.VisionConstants;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements subsystem
@@ -78,6 +81,10 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
         return run(() -> this.setControl(requestSupplier.get()));
+    }
+  
+    public Pose2d getPose() {
+        return this.m_odometry.getEstimatedPosition();
     }
 
     public void zeroGyro() {
@@ -163,5 +170,35 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
             newChassisSpeeds = new ChassisSpeeds(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
         }
         setControl(autoRequest.withSpeeds(newChassisSpeeds));
+    }
+
+    public Rotation2d getGyroYaw() {
+        double rawYaw = m_pigeon2.getYaw().getValue();
+        double yawWithRollover = rawYaw > 0 ? rawYaw % 360 : 360 - Math.abs(rawYaw % 360);
+
+        return Rotation2d.fromDegrees(yawWithRollover);
+    }
+
+    public void updateVision() {
+        if (LimelightHelpers.getBotPose2d_wpiBlue("").getX() < 0.1) {
+            return;
+        }
+
+        double tagDistance = LimelightHelpers.getTargetPose3d_CameraSpace(VisionConstants.limelightName)
+                .getTranslation().getNorm(); // Find direct distance to target for std dev calculation
+        if (tagDistance < VisionConstants.maxUsableDistance) {
+
+            double xyStdDev2 = VisionConstants.calcStdDev(tagDistance);
+
+            Pose2d poseFromVision = LimelightHelpers.getBotPose2d_wpiBlue(VisionConstants.limelightName);
+            double poseFromVisionTimestamp = Timer.getFPGATimestamp()
+                    - (LimelightHelpers.getLatency_Capture(VisionConstants.limelightName)
+                            + LimelightHelpers.getLatency_Pipeline(VisionConstants.limelightName)) / 1000;
+
+            Pose2d withGyroData = new Pose2d(poseFromVision.getTranslation(), getGyroYaw());
+
+            addVisionMeasurement(withGyroData, poseFromVisionTimestamp,
+                    VecBuilder.fill(xyStdDev2, xyStdDev2, 0));
+        }
     }
 }

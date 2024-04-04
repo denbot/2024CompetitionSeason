@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+
+import frc.robot.commands.AutoPrepCommand;
 import frc.robot.commands.CommandHolder;
 import frc.robot.commands.PrepCommand;
 import frc.robot.commands.ShootCommand;
@@ -78,6 +80,8 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     private final Telemetry telemetry = new Telemetry(maxSpeed);
 
+    private final AutoPrepCommand autoSpeakerShoot = new AutoPrepCommand(shooterSubsystem, drivetrain, 120);
+
     public RobotContainer() {
         commands = new CommandHolder(
                 intakeSubsystem,
@@ -92,6 +96,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot", shootCommand);
         NamedCommands.registerCommand("Stage Speaker Shoot", stageSpeakerShoot);
         NamedCommands.registerCommand("Trap Shoot", trapShoot);
+        NamedCommands.registerCommand("Auto Speaker", autoSpeakerShoot);
 
         // TODO: tune positions of robot especially with bumpers
         autoChooser = AutoBuilder.buildAutoChooser("");

@@ -28,18 +28,25 @@
                 }
               },
               {
-                "type": "path",
+                "type": "deadline",
                 "data": {
-                  "pathName": "Source Preload Return"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Source Preload Return"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Speaker Shoot"
+                      }
+                    }
+                  ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Speaker Shoot"
           }
         },
         {

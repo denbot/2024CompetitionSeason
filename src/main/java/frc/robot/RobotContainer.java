@@ -24,6 +24,7 @@ import frc.lib.util.FieldUtil;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CommandHolder;
 import frc.robot.commands.PrepCommand;
+import frc.robot.commands.PrepCommandForAuto;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.calibration.CalibrateWristAngleCommand;
 import frc.robot.commands.intake.EjectCommand;
@@ -59,6 +60,8 @@ public class RobotContainer {
     private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
     private final EjectCommand ejectCommand = new EjectCommand(intakeSubsystem);
 
+    private final PrepCommandForAuto autoSpeakerPrep = new PrepCommandForAuto(shooterSubsystem, 65, 80);
+
     public final CommandXboxController driverController =
             new CommandXboxController(OperatorConstants.kDriverControllerPort);
     /**
@@ -89,7 +92,7 @@ public class RobotContainer {
         intakeSubsystem.intakeInit();
         shooterSubsystem.shooterInit();
 
-        NamedCommands.registerCommand("Speaker Shoot", speakerShoot);
+        NamedCommands.registerCommand("Speaker Shoot", autoSpeakerPrep);
         NamedCommands.registerCommand("Shoot", shootCommand);
         NamedCommands.registerCommand("Stage Speaker Shoot", stageSpeakerShoot);
         NamedCommands.registerCommand("Trap Shoot", trapShoot);

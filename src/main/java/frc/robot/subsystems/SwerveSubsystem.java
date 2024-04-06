@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
@@ -73,7 +74,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
     @Override
     public void periodic() {
         Pose2d pose = m_odometry.getEstimatedPosition();
-        SmartDashboard.putNumberArray("pose estimation", new Double[]{pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
+        SmartDashboard.putNumberArray("pose raw", new Double[]{pose.getX(), pose.getY(), m_pigeon2.getRotation2d().getDegrees()});
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
@@ -103,8 +104,9 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
         AutoBuilder.configureHolonomic(
                 () -> {
                     Pose2d curPose = getState().Pose;
+                    curPose = new Pose2d(curPose.getTranslation(), m_pigeon2.getRotation2d());
                     if (!FieldUtil.isAllianceBlue()) {
-                        curPose = new Pose2d(curPose.getTranslation(), curPose.getRotation().plus(Rotation2d.fromDegrees(180)));
+                        curPose = new Pose2d(curPose.getTranslation(), m_pigeon2.getRotation2d().plus(Rotation2d.fromDegrees(180)));
                     }
 
                     return curPose;
@@ -156,12 +158,6 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
      * @param speeds
      */
     public void setChassisSpeedsAuto(ChassisSpeeds speeds) {
-        ChassisSpeeds newChassisSpeeds;
-        if (FieldUtil.isAllianceBlue()) {
-            newChassisSpeeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
-        } else {
-            newChassisSpeeds = new ChassisSpeeds(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
-        }
-        setControl(autoRequest.withSpeeds(newChassisSpeeds));
+        setControl(autoRequest.withSpeeds(speeds));
     }
 }

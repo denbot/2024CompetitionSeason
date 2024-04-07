@@ -12,28 +12,9 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Source Preload Drop"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Source Preload Pickup"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Source Preload Return"
-                }
-              }
-            ]
+            "pathName": "Source Preload"
           }
         },
         {

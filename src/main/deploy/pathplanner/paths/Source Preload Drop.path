@@ -28,7 +28,7 @@
         "y": 3.1499110819913616
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Source Preload Drop Point"
     },
     {
       "anchor": {
@@ -41,7 +41,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source Preload Drop"
+      "linkedName": "Source Preload Drop Return"
     }
   ],
   "rotationTargets": [],

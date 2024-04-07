@@ -1,0 +1,118 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.7139723370355832,
+        "y": 4.41249682499365
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.7389723370355832,
+        "y": 4.369195554804429
+      },
+      "isLocked": false,
+      "linkedName": "Source Subwoofer"
+    },
+    {
+      "anchor": {
+        "x": 1.3509924162705473,
+        "y": 3.3130374832178244
+      },
+      "prevControl": {
+        "x": 1.3259924162705472,
+        "y": 3.3563387534070466
+      },
+      "nextControl": {
+        "x": 1.3759924162705475,
+        "y": 3.2697362130286023
+      },
+      "isLocked": false,
+      "linkedName": "Source Preload Drop Point"
+    },
+    {
+      "anchor": {
+        "x": 1.1750789215864152,
+        "y": 3.6208860989150553
+      },
+      "prevControl": {
+        "x": 1.3468339413951564,
+        "y": 3.324370628376488
+      },
+      "nextControl": {
+        "x": 1.003323901777674,
+        "y": 3.917401569453623
+      },
+      "isLocked": false,
+      "linkedName": "Source Preload Drop Return"
+    },
+    {
+      "anchor": {
+        "x": 1.585543742516057,
+        "y": 2.9318915780688717
+      },
+      "prevControl": {
+        "x": 1.6518344449635334,
+        "y": 2.8185309929320455
+      },
+      "nextControl": {
+        "x": 1.5192530400685806,
+        "y": 3.045252163205698
+      },
+      "isLocked": false,
+      "linkedName": "Source Preload Pickup"
+    },
+    {
+      "anchor": {
+        "x": 0.7139723370355832,
+        "y": 4.41249682499365
+      },
+      "prevControl": {
+        "x": 0.6889723370355832,
+        "y": 4.455798095182872
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Source Subwoofer"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 2.6,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -60.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Simple Source",
+  "previewStartingState": {
+    "rotation": -60.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.71,
-      "y": 4.41
+      "x": 0.7,
+      "y": 6.7
     },
-    "rotation": -59.98000000000002
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -26,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Close Index"
+            "pathName": "Amp Index"
           }
         },
         {
@@ -38,7 +38,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Close Return"
+            "pathName": "Amp Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Index 2-1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Speaker Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Return"
           }
         },
         {
@@ -50,6 +74,6 @@
       ]
     }
   },
-  "folder": "2pt Folder",
+  "folder": "3pt",
   "choreoAuto": false
 }

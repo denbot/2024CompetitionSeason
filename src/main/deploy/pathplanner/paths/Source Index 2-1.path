@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7,
-        "y": 6.7
+        "x": 0.71,
+        "y": 4.41
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.699999999999998,
-        "y": 6.7
+        "x": 1.1578355528139634,
+        "y": 3.7842915200116125
       },
       "isLocked": false,
-      "linkedName": "Far Return"
+      "linkedName": "Source Return"
     },
     {
       "anchor": {
-        "x": 8.284915998403426,
-        "y": 7.417685692514242
+        "x": 3.88707863130012,
+        "y": 2.2575565151130306
       },
       "prevControl": {
-        "x": 7.2849159984034255,
-        "y": 7.417685692514242
+        "x": 2.7750122658559047,
+        "y": 2.9870720508444357
+      },
+      "nextControl": {
+        "x": 5.719510867593163,
+        "y": 1.0554809681047939
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.29957545629377,
+        "y": 0.7769512681882514
+      },
+      "prevControl": {
+        "x": 7.29957545629377,
+        "y": 0.7769512681882514
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Far 2-1 Note"
+      "linkedName": "Source 2-1 Note"
     }
   ],
   "rotationTargets": [],

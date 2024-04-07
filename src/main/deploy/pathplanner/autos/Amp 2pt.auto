@@ -26,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Far Index"
+            "pathName": "Amp Index"
           }
         },
         {
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Far Return"
+            "pathName": "Amp Return"
           }
         },
         {
@@ -50,6 +50,6 @@
       ]
     }
   },
-  "folder": "2pt Folder",
+  "folder": "2pt",
   "choreoAuto": false
 }

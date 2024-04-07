@@ -3,11 +3,13 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
+    "Amp Preload",
     "Index 2",
     "Index 3",
     "New Folder",
+    "Leave",
     "Return",
-    "Simple Source"
+    "Source Preload"
   ],
   "autoFolders": [
     "2pt Folder",

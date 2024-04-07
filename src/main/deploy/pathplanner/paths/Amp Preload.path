@@ -1,0 +1,100 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.71,
+        "y": 6.698039577897338
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.735,
+        "y": 6.741340848086559
+      },
+      "isLocked": false,
+      "linkedName": "Amp Subwoofer"
+    },
+    {
+      "anchor": {
+        "x": 0.8818897637795281,
+        "y": 6.992561413694256
+      },
+      "prevControl": {
+        "x": 0.856889763779528,
+        "y": 6.949260143505034
+      },
+      "nextControl": {
+        "x": 0.9068897637795281,
+        "y": 7.035862683883478
+      },
+      "isLocked": false,
+      "linkedName": "Amp Preload Drop"
+    },
+    {
+      "anchor": {
+        "x": 0.71,
+        "y": 6.698039577897338
+      },
+      "prevControl": {
+        "x": 0.685,
+        "y": 6.654738307708116
+      },
+      "nextControl": {
+        "x": 0.7349999999999999,
+        "y": 6.741340848086559
+      },
+      "isLocked": false,
+      "linkedName": "Amp Subwoofer"
+    },
+    {
+      "anchor": {
+        "x": 1.1750789215864152,
+        "y": 7.4909829819659635
+      },
+      "prevControl": {
+        "x": 1.1500789215864153,
+        "y": 7.447681711776742
+      },
+      "nextControl": {
+        "x": 1.2000789215864152,
+        "y": 7.534284252155185
+      },
+      "isLocked": false,
+      "linkedName": "Amp Preload Pickup"
+    },
+    {
+      "anchor": {
+        "x": 0.71,
+        "y": 6.698039577897338
+      },
+      "prevControl": {
+        "x": 0.6849999999999999,
+        "y": 6.654738307708116
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Amp Subwoofer"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 60.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Amp Preload",
+  "previewStartingState": {
+    "rotation": 60.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

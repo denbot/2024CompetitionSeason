@@ -16,48 +16,48 @@
     },
     {
       "anchor": {
-        "x": 1.3509924162705473,
-        "y": 3.3130374832178244
+        "x": 0.9258681374505612,
+        "y": 4.031350919844697
       },
       "prevControl": {
-        "x": 1.3259924162705472,
-        "y": 3.3563387534070466
+        "x": 0.9383681374505611,
+        "y": 4.009700284750086
       },
       "nextControl": {
-        "x": 1.3759924162705475,
-        "y": 3.2697362130286023
+        "x": 0.9133681374505612,
+        "y": 4.053001554939308
       },
       "isLocked": false,
       "linkedName": "Source Preload Drop Point"
     },
     {
       "anchor": {
-        "x": 1.1750789215864152,
-        "y": 3.6208860989150553
+        "x": 0.7139723370355832,
+        "y": 4.41249682499365
       },
       "prevControl": {
-        "x": 1.3468339413951564,
-        "y": 3.324370628376488
+        "x": 0.7677275371393276,
+        "y": 4.315857184012999
       },
       "nextControl": {
-        "x": 1.003323901777674,
-        "y": 3.917401569453623
+        "x": 0.6602171369318387,
+        "y": 4.509136465974302
       },
       "isLocked": false,
-      "linkedName": "Source Preload Drop Return"
+      "linkedName": "Source Subwoofer"
     },
     {
       "anchor": {
-        "x": 1.585543742516057,
-        "y": 2.9318915780688717
+        "x": 1.1017816321346934,
+        "y": 3.7235023041474657
       },
       "prevControl": {
-        "x": 1.6518344449635334,
-        "y": 2.8185309929320455
+        "x": 1.089670632102273,
+        "y": 3.7455832037934402
       },
       "nextControl": {
-        "x": 1.5192530400685806,
-        "y": 3.045252163205698
+        "x": 1.1138926321671136,
+        "y": 3.7014214045014913
       },
       "isLocked": false,
       "linkedName": "Source Preload Pickup"
@@ -81,7 +81,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 2.6,
+      "waypointRelativePos": 0.8,
       "command": {
         "type": "parallel",
         "data": {
@@ -109,7 +109,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source Preload",
+  "folder": "Source",
   "previewStartingState": {
     "rotation": -60.0,
     "velocity": 0

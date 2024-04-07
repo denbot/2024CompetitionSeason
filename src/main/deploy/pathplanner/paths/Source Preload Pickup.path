@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1750789215864152,
-        "y": 3.6208860989150553
+        "x": 0.7139723370355832,
+        "y": 4.41249682499365
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2250789215864153,
-        "y": 3.6208860989150553
+        "x": 0.7639723370355832,
+        "y": 4.41249682499365
       },
       "isLocked": false,
-      "linkedName": "Source Preload Drop Return"
+      "linkedName": "Source Subwoofer"
     },
     {
       "anchor": {
-        "x": 1.585543742516057,
-        "y": 2.9318915780688717
+        "x": 1.1017816321346934,
+        "y": 3.7235023041474657
       },
       "prevControl": {
-        "x": 1.560543742516057,
-        "y": 2.975192848258094
+        "x": 1.0099768946550909,
+        "y": 3.88251277383766
+      },
+      "nextControl": {
+        "x": 1.1935863696142959,
+        "y": 3.5644918344572716
+      },
+      "isLocked": false,
+      "linkedName": "Source Preload Pickup"
+    },
+    {
+      "anchor": {
+        "x": 0.7139723370355832,
+        "y": 4.41249682499365
+      },
+      "prevControl": {
+        "x": 0.6889723370355832,
+        "y": 4.455798095182873
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source Preload Pickup"
+      "linkedName": "Source Subwoofer"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +49,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.6,
+      "waypointRelativePos": 1.2,
       "command": {
         "type": "sequential",
         "data": {

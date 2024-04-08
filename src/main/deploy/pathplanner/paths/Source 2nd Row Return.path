@@ -8,11 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.191770383540767,
-        "y": 0.5130810261620535
+        "x": 8.34957545629377,
+        "y": 0.7769512681882514
       },
       "isLocked": false,
       "linkedName": "Source 2-1 Note"
+    },
+    {
+      "anchor": {
+        "x": 4.268224536449074,
+        "y": 2.169599767770965
+      },
+      "prevControl": {
+        "x": 6.190618400522516,
+        "y": 1.2613375848180277
+      },
+      "nextControl": {
+        "x": 2.345830672375631,
+        "y": 3.0778619507239022
+      },
+      "isLocked": false,
+      "linkedName": "Source Stage Avoid Waypoint"
     },
     {
       "anchor": {
@@ -20,8 +36,8 @@
         "y": 4.41
       },
       "prevControl": {
-        "x": 1.4363652527305066,
-        "y": 3.1392753728364613
+        "x": 0.6599999999999999,
+        "y": 4.41
       },
       "nextControl": null,
       "isLocked": false,

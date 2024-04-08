@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.913408224998268,
-        "y": 6.99655944766435
+        "x": 0.7585291733701239,
+        "y": 6.710077822454267
       },
       "isLocked": false,
       "linkedName": "Amp Subwoofer"
@@ -20,7 +20,7 @@
         "y": 7.0
       },
       "prevControl": {
-        "x": 1.8968988847068604,
+        "x": 2.8468988847068606,
         "y": 7.0
       },
       "nextControl": null,
@@ -30,8 +30,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0.0,
+      "waypointRelativePos": 0.65,
+      "rotationDegrees": 10.0,
       "rotateFast": false
     }
   ],

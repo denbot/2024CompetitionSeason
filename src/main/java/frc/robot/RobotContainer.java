@@ -123,8 +123,10 @@ public class RobotContainer {
 
         driverController.a().toggleOnTrue(ejectCommand);  // Allow ejecting a note to be stopped on a second a press
         driverController.b().toggleOnTrue(commands.intakeNoteAndKeepRunningCommand());
+
+        // feed to robots from source
         driverController.x().and(shooterSubsystem::isNoteInShooter).onTrue(feedprep);
-        driverController.y().and(shooterSubsystem::isNoteInShooter).onTrue(stageSpeakerShoot);
+        driverController.y().and(shooterSubsystem::isNoteReadyToFire).onTrue(shootCommand);
 
         driverController.leftBumper().and(shooterSubsystem::isNoteInShooter).onTrue(ampShoot);
         driverController.rightBumper().and(shooterSubsystem::isNoteInShooter).onTrue(speakerShoot);

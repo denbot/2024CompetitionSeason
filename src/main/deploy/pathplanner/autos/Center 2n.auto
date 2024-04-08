@@ -30,15 +30,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Speaker Shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Center Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Speaker Shoot"
           }
         },
         {

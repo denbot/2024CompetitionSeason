@@ -30,15 +30,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Speaker Shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Amp Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Speaker Shoot"
           }
         },
         {
@@ -54,15 +54,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Speaker Shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Amp Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Speaker Shoot"
           }
         },
         {

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.71,
-      "y": 4.41
+      "x": 0.7,
+      "y": 6.7
     },
-    "rotation": -59.98000000000002
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -26,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Index"
+            "pathName": "Amp Index 1-1"
           }
         },
         {
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Return"
+            "pathName": "Amp Return"
           }
         },
         {
@@ -50,7 +50,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Index 2-1"
+            "pathName": "Amp Index 2-1"
           }
         },
         {
@@ -62,7 +62,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source 2nd Row Return"
+            "pathName": "Amp Return"
           }
         },
         {
@@ -74,6 +74,6 @@
       ]
     }
   },
-  "folder": "3pt",
+  "folder": "3 Note",
   "choreoAuto": false
 }

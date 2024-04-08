@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 0.71,
-      "y": 4.41249682499365
+      "y": 6.7
     },
-    "rotation": -60.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Preload"
+            "pathName": "Amp Preload"
           }
         },
         {
@@ -32,12 +32,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Leave"
+            "pathName": "Amp Index 1-1"
           }
         }
       ]
     }
   },
-  "folder": "1pt",
+  "folder": "1 Note",
   "choreoAuto": false
 }

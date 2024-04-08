@@ -10,9 +10,9 @@
     "Source Preload"
   ],
   "autoFolders": [
-    "2pt",
-    "3pt",
-    "1pt"
+    "1 Note",
+    "2 Note",
+    "3 Note"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

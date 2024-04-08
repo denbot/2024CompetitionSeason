@@ -51,6 +51,11 @@ public class Shooter extends SubsystemBase {
         return pivotMotor;
     }
 
+    public boolean isAngled() {
+        return Math.abs(pivotMotor.getClosedLoopError().getValue()) <= PIVOT_MOTOR_ANGLE_ERROR_THRESHOLD_ID;
+
+    }
+
     public void shooterInit() {
         leftShootMotor.setNeutralMode(NeutralModeValue.Brake);
         rightShootMotor.setNeutralMode(NeutralModeValue.Brake);

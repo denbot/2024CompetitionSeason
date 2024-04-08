@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CommandHolder;
+import frc.robot.commands.FeedCommand;
 import frc.robot.commands.PrepCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.calibration.CalibrateWristAngleCommand;
@@ -57,6 +58,8 @@ public class RobotContainer {
     //    private final PrepCommand longShot = new PrepCommand(shooterSubsystem, 43.5, 120); //TODO Change angle if necessary
     private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
     private final EjectCommand ejectCommand = new EjectCommand(intakeSubsystem);
+
+    private final FeedCommand feedprep = new FeedCommand(shooterSubsystem, 50, 100);
 
     public final CommandXboxController driverController =
             new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -116,8 +119,10 @@ public class RobotContainer {
 
         driverController.a().toggleOnTrue(ejectCommand);  // Allow ejecting a note to be stopped on a second a press
         driverController.b().toggleOnTrue(commands.intakeNoteAndKeepRunningCommand());
-        driverController.x().and(shooterSubsystem::isNoteInShooter).onTrue(trapShoot);
-        driverController.y().and(shooterSubsystem::isNoteInShooter).onTrue(stageSpeakerShoot);
+
+        // feed to robots from source
+        driverController.x().and(shooterSubsystem::isNoteInShooter).onTrue(feedprep);
+        driverController.y().and(shooterSubsystem::isNoteReadyToFire).onTrue(shootCommand);
 
         driverController.leftBumper().and(shooterSubsystem::isNoteInShooter).onTrue(ampShoot);
         driverController.rightBumper().and(shooterSubsystem::isNoteInShooter).onTrue(speakerShoot);

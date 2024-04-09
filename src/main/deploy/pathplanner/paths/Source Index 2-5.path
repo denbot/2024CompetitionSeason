@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.71,
-        "y": 4.41
+        "x": 0.8525708479988394,
+        "y": 4.368518451322617
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7391006612399386,
-        "y": 4.369341034009725
+        "x": 0.8816715092387781,
+        "y": 4.327859485332342
       },
       "isLocked": false,
       "linkedName": "Source Return"
@@ -44,7 +44,13 @@
       "linkedName": "Source 2-5 Note"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.75,
+      "rotationDegrees": -15.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -61,7 +67,7 @@
   "reversed": false,
   "folder": "Source",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -57.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

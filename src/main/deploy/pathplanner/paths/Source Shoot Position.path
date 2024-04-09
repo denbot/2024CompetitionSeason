@@ -3,32 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.29957545629377,
-        "y": 0.7769512681882514
+        "x": 0.7139723370355832,
+        "y": 4.41249682499365
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.34957545629377,
-        "y": 0.7769512681882514
+        "x": 0.7639723370355832,
+        "y": 4.41249682499365
       },
       "isLocked": false,
-      "linkedName": "Source 2-5 Note"
-    },
-    {
-      "anchor": {
-        "x": 4.268224536449074,
-        "y": 2.169599767770965
-      },
-      "prevControl": {
-        "x": 6.190618400522516,
-        "y": 1.2613375848180277
-      },
-      "nextControl": {
-        "x": 2.345830672375631,
-        "y": 3.0778619507239022
-      },
-      "isLocked": false,
-      "linkedName": "Source Stage Avoid Waypoint"
+      "linkedName": "Source Subwoofer"
     },
     {
       "anchor": {
@@ -61,7 +45,7 @@
   "reversed": false,
   "folder": "Source",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

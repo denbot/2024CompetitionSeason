@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.582386879059473,
-        "y": 4.075329293515731
+        "x": 1.36,
+        "y": 5.550603828480384
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.696156015688655,
-        "y": 4.090546233040519
+        "x": 1.4100000000000001,
+        "y": 5.550603828480384
       },
       "isLocked": false,
-      "linkedName": "Source 1-3 Note"
+      "linkedName": "Center Subwoofer"
     },
     {
       "anchor": {
-        "x": 0.8525708479988394,
-        "y": 4.368518451322617
+        "x": 2.8968988847068604,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 0.8432421020686203,
-        "y": 4.365077898986967
+        "x": 2.8468988847068606,
+        "y": 7.0
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source Return"
+      "linkedName": "Amp 1-1 Note"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.65,
+      "rotationDegrees": 45.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,11 +45,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -50.0,
+    "rotation": 45.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source",
+  "folder": "Center",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

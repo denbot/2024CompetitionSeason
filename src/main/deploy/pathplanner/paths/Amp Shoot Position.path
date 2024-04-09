@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.85,
-        "y": 6.74
+        "x": 0.71,
+        "y": 6.698039577897338
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8499999999999979,
-        "y": 6.74
+        "x": 0.76,
+        "y": 6.698039577897338
       },
       "isLocked": false,
-      "linkedName": "Amp Return"
+      "linkedName": "Amp Subwoofer"
     },
     {
       "anchor": {
-        "x": 8.284915998403426,
-        "y": 7.417685692514242
+        "x": 0.85,
+        "y": 6.74
       },
       "prevControl": {
-        "x": 7.2849159984034255,
-        "y": 7.417685692514242
+        "x": 0.8000000000000002,
+        "y": 6.74
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Amp 2-1 Note"
+      "linkedName": "Amp Return"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 50.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Amp",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 60.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

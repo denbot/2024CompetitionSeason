@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.71,
-        "y": 6.698039577897338
+        "x": 0.85,
+        "y": 6.74
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7585291733701239,
-        "y": 6.710077822454267
+        "x": 0.898529173370124,
+        "y": 6.75203824455693
       },
       "isLocked": false,
-      "linkedName": "Amp Subwoofer"
+      "linkedName": "Amp Return"
     },
     {
       "anchor": {

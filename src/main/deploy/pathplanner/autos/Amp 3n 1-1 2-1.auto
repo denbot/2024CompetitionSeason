@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Shoot Position"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Speaker Shoot"

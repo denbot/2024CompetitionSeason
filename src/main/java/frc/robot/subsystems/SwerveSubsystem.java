@@ -130,7 +130,8 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
 
     public void resetPose(Pose2d pose) {
         this.seedFieldRelative(pose);
-        this.zeroGyroAdjusted(pose.getRotation());
+        // this.zeroGyroAdjusted(pose.getRotation());
+        this.setGyroYaw(pose.getRotation());
     }
 
     public void setGyroYaw(Rotation2d yaw) {

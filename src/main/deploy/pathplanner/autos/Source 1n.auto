@@ -12,12 +12,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Source Preload"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Speaker Shoot"

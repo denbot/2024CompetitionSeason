@@ -12,12 +12,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Amp Preload"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Speaker Shoot"
@@ -38,6 +32,6 @@
       ]
     }
   },
-  "folder": "1 Note",
+  "folder": null,
   "choreoAuto": false
 }

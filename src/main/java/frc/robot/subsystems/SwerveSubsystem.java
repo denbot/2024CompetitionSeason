@@ -71,7 +71,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
     @Override
     public void periodic() {
         Pose2d pose = m_odometry.getEstimatedPosition();
-        SmartDashboard.putNumberArray("pose raw", new Double[]{pose.getX(), pose.getY(), m_pigeon2.getRotation2d().getDegrees()});
+        SmartDashboard.putNumberArray("pose raw", new Double[]{pose.getX(), pose.getY(), m_pigeon2.getRotation2d().getRadians()});
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
@@ -97,17 +97,13 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
         simNotifier.startPeriodic(kSimLoopPeriod);
     }
 
+    public Pose2d getPose() {
+        return new Pose2d(this.m_odometry.getEstimatedPosition().getTranslation(), m_pigeon2.getRotation2d());
+    }
+
     public void configPathPlanner() {
         AutoBuilder.configureHolonomic(
-                () -> {
-                    Pose2d curPose = getState().Pose;
-                    curPose = new Pose2d(curPose.getTranslation(), m_pigeon2.getRotation2d());
-                    if (!FieldUtil.isAllianceBlue()) {
-                        curPose = new Pose2d(curPose.getTranslation(), m_pigeon2.getRotation2d().plus(Rotation2d.fromDegrees(180)));
-                    }
-
-                    return curPose;
-                }, // Robot pose supplier
+                this::getPose, // Robot pose supplier
                 this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getCurrentRobotChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::setChassisSpeedsAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
@@ -129,9 +125,9 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
     }
 
     public void resetPose(Pose2d pose) {
+        this.setGyroYaw(pose.getRotation());
         this.seedFieldRelative(pose);
         // this.zeroGyroAdjusted(pose.getRotation());
-        this.setGyroYaw(pose.getRotation());
     }
 
     public void setGyroYaw(Rotation2d yaw) {

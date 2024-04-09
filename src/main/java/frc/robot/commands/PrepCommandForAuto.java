@@ -5,6 +5,8 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.Utils;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
@@ -34,6 +36,9 @@ public class PrepCommandForAuto extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
+        if (Utils.isSimulation()) {
+            return true;
+        }
         return shooter.canShoot();
     }
 }

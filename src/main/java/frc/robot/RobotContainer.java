@@ -60,7 +60,7 @@ public class RobotContainer {
     private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
     private final EjectCommand ejectCommand = new EjectCommand(intakeSubsystem);
 
-    private final PrepCommandForAuto autoSpeakerPrep = new PrepCommandForAuto(shooterSubsystem, 65, 80);
+    private final PrepCommandForAuto autoSpeakerPrep = new PrepCommandForAuto(shooterSubsystem, 67, 80);
 
     public final CommandXboxController driverController =
             new CommandXboxController(OperatorConstants.kDriverControllerPort);

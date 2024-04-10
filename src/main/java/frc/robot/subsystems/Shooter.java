@@ -133,6 +133,11 @@ public class Shooter extends SubsystemBase {
         double positionOfArm = armPositionEncoder.getAbsolutePosition().getValue() * 360;
         double pivotError = pivotMotor.getClosedLoopError().getValue() * 360;
 
+        String SMART_DASHBOARD_ISNOTEINSHOOTER = "Note in Shooter";
+        SmartDashboard.putBoolean(SMART_DASHBOARD_ISNOTEINSHOOTER, isNoteInShooter());
+        String SMART_DASHBOARD_ISREADYTOFIRE = "Ready To Fire";
+        SmartDashboard.putBoolean(SMART_DASHBOARD_ISREADYTOFIRE, isNoteReadyToFire());
+
         String SMART_DASHBOARD_VELOCITY = "Shooter Motor Velocity";
         SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);
         String SMART_DASHBOARD_TARGET_VELOCITY = "Shooter Motor Target Velocity";

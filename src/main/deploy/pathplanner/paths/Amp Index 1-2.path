@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.85,
-        "y": 6.74
+        "x": 1.01,
+        "y": 7.02
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9,
-        "y": 6.74
+        "x": 1.06,
+        "y": 7.02
       },
       "isLocked": false,
       "linkedName": "Amp Return"
@@ -36,7 +36,25 @@
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.75,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -51,7 +69,7 @@
   "reversed": false,
   "folder": "Amp",
   "previewStartingState": {
-    "rotation": 50.0,
+    "rotation": 45.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

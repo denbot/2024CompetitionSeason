@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "Intake",
       "waypointRelativePos": 0.9500000000000001,
       "command": {
         "type": "parallel",

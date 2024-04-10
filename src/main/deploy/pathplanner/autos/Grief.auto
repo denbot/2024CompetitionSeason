@@ -5,7 +5,7 @@
       "x": 0.51,
       "y": 4.1
     },
-    "rotation": 0.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,30 +14,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Shoot Position"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Speaker Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
+            "pathName": "Source Index 2-5"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Source Leave"
+            "pathName": "Grief"
           }
         }
       ]
     }
   },
-  "folder": "1 Note",
+  "folder": null,
   "choreoAuto": false
 }

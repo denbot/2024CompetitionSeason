@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 0.51,
-      "y": 4.1
+      "y": 7.0
     },
-    "rotation": 0.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -18,7 +18,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Source Shoot Position"
+                  "pathName": "Amp Shoot Position"
                 }
               },
               {
@@ -39,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Index 2-5"
+            "pathName": "Amp Index 1-1"
           }
         },
         {
@@ -49,7 +49,38 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Source Return 2-5"
+                  "pathName": "Amp Return"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Speaker Shoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Index 2-2"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp Return"
                 }
               },
               {
@@ -70,6 +101,6 @@
       ]
     }
   },
-  "folder": "2 Note",
+  "folder": "3 Note",
   "choreoAuto": false
 }

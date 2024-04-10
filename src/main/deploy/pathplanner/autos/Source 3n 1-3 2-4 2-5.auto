@@ -5,7 +5,7 @@
       "x": 0.51,
       "y": 4.1
     },
-    "rotation": 0.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -19,6 +19,37 @@
                 "type": "path",
                 "data": {
                   "pathName": "Source Shoot Position"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Speaker Shoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Index 2-4"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Source Return 2-4"
                 }
               },
               {
@@ -70,6 +101,6 @@
       ]
     }
   },
-  "folder": "2 Note",
+  "folder": "3 Note",
   "choreoAuto": false
 }

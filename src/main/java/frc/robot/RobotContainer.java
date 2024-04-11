@@ -54,8 +54,8 @@ public class RobotContainer {
 
     private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Change angle if necessary
     private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 50); //TODO Change angle if necessary
-    private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 58, 22); //TODO Change angle if necessary
-    private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 65, 70); //TODO Change angle if necessary
+    private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 58, 33); //TODO Change angle if necessary
+    private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 65, 80); //TODO Change angle if necessary
     //    private final PrepCommand longShot = new PrepCommand(shooterSubsystem, 43.5, 120); //TODO Change angle if necessary
     private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
     private final EjectCommand ejectCommand = new EjectCommand(intakeSubsystem);

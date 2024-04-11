@@ -31,7 +31,7 @@ public class IntakeNoteCommand extends Command {
 
     @Override
     public void initialize() {
-        intake.setMotorControl(voltageOut.withOutput(2.4));  // Chosen by fair dice roll
+        intake.setMotorControl(voltageOut.withOutput(4));  // Chosen by fair dice roll
     }
 
     @Override

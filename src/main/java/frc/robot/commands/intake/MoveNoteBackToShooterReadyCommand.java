@@ -46,6 +46,6 @@ public class MoveNoteBackToShooterReadyCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(0.1);
+        return timer.hasElapsed(0.15);
     }
 }

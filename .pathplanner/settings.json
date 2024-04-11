@@ -3,15 +3,17 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "Index 2",
-    "New Folder",
-    "Index 3",
-    "Return"
+    "Amp",
+    "Amp Preload",
+    "Center",
+    "Source",
+    "Source Preload"
   ],
   "autoFolders": [
-    "2pt Folder",
-    "3pt",
-    "Move Forward"
+    "1 Note",
+    "2 Note",
+    "3 Note",
+    "4 Note"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

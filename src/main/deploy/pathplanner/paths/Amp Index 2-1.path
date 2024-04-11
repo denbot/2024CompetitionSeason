@@ -3,34 +3,52 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8968988847068604,
-        "y": 5.550603828480384
+        "x": 1.01,
+        "y": 7.02
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.887570138776641,
-        "y": 5.550603828480384
+        "x": 2.009999999999998,
+        "y": 7.02
       },
       "isLocked": false,
-      "linkedName": "Center 1-2 Note"
+      "linkedName": "Amp Return"
     },
     {
       "anchor": {
-        "x": 1.36,
-        "y": 5.550603828480384
+        "x": 8.284915998403426,
+        "y": 7.417685692514242
       },
       "prevControl": {
-        "x": 1.36932874593022,
-        "y": 5.550603828480384
+        "x": 7.2849159984034255,
+        "y": 7.417685692514242
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Center Return"
+      "linkedName": "Amp 2-1 Note"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.9,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -43,9 +61,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Center",
+  "folder": "Amp",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 45.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

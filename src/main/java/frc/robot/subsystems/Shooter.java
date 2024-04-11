@@ -39,8 +39,8 @@ public class Shooter extends SubsystemBase {
 
     private final VelocityVoltage shooterVelocityControl = new VelocityVoltage(0).withEnableFOC(true);
     private final NeutralOut brake = new NeutralOut();
-    private boolean noteIsInShooter = false;
-    private boolean readyToFire = false;
+    private boolean noteIsInShooter = true;
+    private boolean readyToFire = true;
 
 
     public CANcoder getPivotMotorEncoder() {
@@ -132,6 +132,11 @@ public class Shooter extends SubsystemBase {
         double motorVelocity = leftShootMotor.getVelocity().getValue();
         double positionOfArm = armPositionEncoder.getAbsolutePosition().getValue() * 360;
         double pivotError = pivotMotor.getClosedLoopError().getValue() * 360;
+
+        String SMART_DASHBOARD_ISNOTEINSHOOTER = "Note in Shooter";
+        SmartDashboard.putBoolean(SMART_DASHBOARD_ISNOTEINSHOOTER, isNoteInShooter());
+        String SMART_DASHBOARD_ISREADYTOFIRE = "Ready To Fire";
+        SmartDashboard.putBoolean(SMART_DASHBOARD_ISREADYTOFIRE, isNoteReadyToFire());
 
         String SMART_DASHBOARD_VELOCITY = "Shooter Motor Velocity";
         SmartDashboard.putNumber(SMART_DASHBOARD_VELOCITY, motorVelocity);

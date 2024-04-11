@@ -20,9 +20,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.lib.util.FieldUtil;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CommandHolder;
 import frc.robot.commands.PrepCommand;
+import frc.robot.commands.PrepCommandForAuto;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.calibration.CalibrateWristAngleCommand;
 import frc.robot.commands.intake.EjectCommand;
@@ -58,6 +60,8 @@ public class RobotContainer {
     private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
     private final EjectCommand ejectCommand = new EjectCommand(intakeSubsystem);
 
+    private final PrepCommandForAuto autoSpeakerPrep = new PrepCommandForAuto(shooterSubsystem, 67, 80);
+
     public final CommandXboxController driverController =
             new CommandXboxController(OperatorConstants.kDriverControllerPort);
     /**
@@ -88,10 +92,11 @@ public class RobotContainer {
         intakeSubsystem.intakeInit();
         shooterSubsystem.shooterInit();
 
-        NamedCommands.registerCommand("Speaker Shoot", speakerShoot);
+        NamedCommands.registerCommand("Speaker Shoot", autoSpeakerPrep);
         NamedCommands.registerCommand("Shoot", shootCommand);
         NamedCommands.registerCommand("Stage Speaker Shoot", stageSpeakerShoot);
         NamedCommands.registerCommand("Trap Shoot", trapShoot);
+        NamedCommands.registerCommand("Intake", commands.intakeNoteAndKeepRunningCommand());
 
         // TODO: tune positions of robot especially with bumpers
         autoChooser = AutoBuilder.buildAutoChooser("");
@@ -130,8 +135,8 @@ public class RobotContainer {
 
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> {
-                            double originalX = -driverController.getLeftY();
-                            double originalY = -driverController.getLeftX();
+                            double originalX = -driverController.getLeftY() * (!FieldUtil.isAllianceBlue() ? -1 : 1);
+                            double originalY = -driverController.getLeftX() * (!FieldUtil.isAllianceBlue() ? -1 : 1);
                             double newX = originalX * Math.sqrt(1 - ((originalY * originalY) / 2));
                             double newY = originalY * Math.sqrt(1 - ((originalX * originalX) / 2));
                             return drive.withVelocityX(newX * maxSpeed) // Drive forward with
@@ -146,7 +151,7 @@ public class RobotContainer {
                 .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
 
         // reset the field-centric heading on start button press
-        driverController.start().onTrue(drivetrain.runOnce(drivetrain::zeroGyro));
+        driverController.start().onTrue(drivetrain.runOnce(drivetrain::zeroGyroAdjusted));
 
         BooleanSupplier hasValidPrepCommand = () -> PrepCommand.currentPrepCommand != null;
         driverController.povRight().and(hasValidPrepCommand).onTrue(Commands.runOnce(() -> PrepCommand.currentPrepCommand.changeAngle(+3)));

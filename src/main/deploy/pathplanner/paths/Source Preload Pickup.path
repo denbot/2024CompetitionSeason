@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.52,
+        "y": 4.1
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.5700000000000001,
+        "y": 4.1
+      },
+      "isLocked": false,
+      "linkedName": "Source Subwoofer"
+    },
+    {
+      "anchor": {
+        "x": 1.1017816321346934,
+        "y": 3.7235023041474657
+      },
+      "prevControl": {
+        "x": 1.0099768946550909,
+        "y": 3.88251277383766
+      },
+      "nextControl": {
+        "x": 1.1935863696142959,
+        "y": 3.5644918344572716
+      },
+      "isLocked": false,
+      "linkedName": "Source Preload Pickup"
+    },
+    {
+      "anchor": {
+        "x": 0.52,
+        "y": 4.1
+      },
+      "prevControl": {
+        "x": 0.4950000000000001,
+        "y": 4.143301270189222
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Source Subwoofer"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -60.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Source Preload",
+  "previewStartingState": {
+    "rotation": -60.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

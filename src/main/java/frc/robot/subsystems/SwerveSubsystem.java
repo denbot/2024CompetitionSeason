@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
@@ -24,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.lib.util.FieldUtil;
 import frc.robot.Constants;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements subsystem
@@ -73,7 +71,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
     @Override
     public void periodic() {
         Pose2d pose = m_odometry.getEstimatedPosition();
-        SmartDashboard.putNumberArray("pose estimation", new Double[]{pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
+        SmartDashboard.putNumberArray("pose raw", new Double[]{pose.getX(), pose.getY(), m_pigeon2.getRotation2d().getRadians()});
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
@@ -99,16 +97,13 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
         simNotifier.startPeriodic(kSimLoopPeriod);
     }
 
+    public Pose2d getPose() {
+        return new Pose2d(this.m_odometry.getEstimatedPosition().getTranslation(), m_pigeon2.getRotation2d());
+    }
+
     public void configPathPlanner() {
         AutoBuilder.configureHolonomic(
-                () -> {
-                    Pose2d curPose = getState().Pose;
-                    if (!FieldUtil.isAllianceBlue()) {
-                        curPose = new Pose2d(curPose.getTranslation(), curPose.getRotation().plus(Rotation2d.fromDegrees(180)));
-                    }
-
-                    return curPose;
-                }, // Robot pose supplier
+                this::getPose, // Robot pose supplier
                 this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getCurrentRobotChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::setChassisSpeedsAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
@@ -130,8 +125,10 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
     }
 
     public void resetPose(Pose2d pose) {
-        this.seedFieldRelative(pose);
-        this.zeroGyroAdjusted(pose.getRotation());
+        this.setGyroYaw(pose.getRotation());
+        this.m_odometry.resetPosition(this.m_pigeon2.getRotation2d(), this.m_modulePositions, pose);
+        // this.seedFieldRelative(pose);
+        // this.zeroGyroAdjusted(pose.getRotation());
     }
 
     public void setGyroYaw(Rotation2d yaw) {
@@ -145,6 +142,10 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
         setGyroYaw(FieldUtil.isAllianceBlue() ? rot : rot.plus(Rotation2d.fromDegrees(180)));
     }
 
+    public void zeroGyroAdjusted() {
+        zeroGyroAdjusted(Rotation2d.fromDegrees(0));
+    }
+
     public ChassisSpeeds getCurrentRobotChassisSpeeds() {
         return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
@@ -156,12 +157,6 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
      * @param speeds
      */
     public void setChassisSpeedsAuto(ChassisSpeeds speeds) {
-        ChassisSpeeds newChassisSpeeds;
-        if (FieldUtil.isAllianceBlue()) {
-            newChassisSpeeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
-        } else {
-            newChassisSpeeds = new ChassisSpeeds(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
-        }
-        setControl(autoRequest.withSpeeds(newChassisSpeeds));
+        setControl(autoRequest.withSpeeds(speeds));
     }
 }

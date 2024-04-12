@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 8.270256540513081,
-        "y": 2.44
+        "x": 9.809499618999238,
+        "y": 2.917232120178527
       },
       "prevControl": {
-        "x": 5.426321709786277,
-        "y": 0.8502485576399728
+        "x": 7.977323923219275,
+        "y": 1.0104212779854143
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.9500000000000001,
+      "waypointRelativePos": 0.85,
       "command": {
         "type": "parallel",
         "data": {

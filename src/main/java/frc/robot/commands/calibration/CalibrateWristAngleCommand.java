@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 public class CalibrateWristAngleCommand extends Command {
-    private static final double ANGLE_0_TO_360_AT_WRIST_REST = 29.6;
+    private static final double ANGLE_0_TO_360_AT_WRIST_REST = 28.3;
     private static final double ANGLE_0_TO_1_AT_WRIST_REST = ANGLE_0_TO_360_AT_WRIST_REST / 360;
 
     private final Shooter shooter;

@@ -13,7 +13,7 @@ public class Lights extends SubsystemBase {
     private final Intake intake; 
 
     public Lights(Intake intakeSubsystem) {
-        ledString = new AddressableLED(1); 
+        ledString = new AddressableLED(2);
         this.amountOfLights = 24; 
         ledBuffer = new AddressableLEDBuffer(this.amountOfLights); 
         

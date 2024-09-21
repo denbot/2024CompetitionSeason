@@ -30,6 +30,7 @@ import frc.robot.commands.calibration.CalibrateWristAngleCommand;
 import frc.robot.commands.intake.EjectCommand;
 import frc.robot.generated.SwerveTunerConstants;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -44,7 +45,8 @@ import java.util.function.BooleanSupplier;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final Shooter shooterSubsystem = new Shooter();
-    private final Intake intakeSubsystem = new Intake();
+    private static final Intake intakeSubsystem = new Intake();
+    public static final Lights lightsSubsystem = new Lights(intakeSubsystem); 
 
     private final CommandHolder commands;
 

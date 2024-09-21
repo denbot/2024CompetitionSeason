@@ -58,6 +58,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
+        RobotContainer.lightsSubsystem.solid(0, 24, 120, 255, 255);
     }
 
     /**
@@ -97,6 +98,7 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
+
     }
 
     /**
@@ -104,6 +106,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        RobotContainer.lightsSubsystem.sensorCheck();
     }
 
     @Override

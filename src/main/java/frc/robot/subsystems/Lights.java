@@ -2,22 +2,23 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer; 
-import frc.robot.subsystems.Intake; 
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import frc.robot.LimelightHelpers;
+import frc.robot.subsystems.Shooter; 
 
 
 public class Lights extends SubsystemBase {
     private AddressableLED ledString; 
     private AddressableLEDBuffer ledBuffer; 
     private int amountOfLights; 
-    private final Intake intake; 
+    private final Shooter shooter; 
 
-    public Lights(Intake intakeSubsystem) {
+    public Lights(Shooter shooterSubsystem ) {
         ledString = new AddressableLED(2);
         this.amountOfLights = 24; 
         ledBuffer = new AddressableLEDBuffer(this.amountOfLights); 
         
-        this.intake = intakeSubsystem; 
+        this.shooter = shooterSubsystem; 
         ledString.setLength(this.amountOfLights);
         this.update();  
         ledString.start(); 
@@ -40,13 +41,31 @@ public class Lights extends SubsystemBase {
 
     public void sensorCheck(){
 
-        if (intake.noteAtShooterSensor()) {
-            solid(0, 24, 60, 255, 255); 
+        if (shooter.isNoteInShooter()) {
+            solid(0, 7, 60, 0, 255); 
+            solid(17, 24, 60, 0, 255);
         } else { 
-            solid(0, 24, 0,0,0); 
+            solid(0, 7, 0, 0, 0); 
+            solid(17, 24, 0, 0, 0);
         }
 
     }
 
-    public void alignCheck(){}
+    public void alignCheck(){
+        if (LimelightHelpers.getTX("")!=0.0) {
+
+
+            if (Math.abs(LimelightHelpers.getTX(""))<5) {
+                solid(8,16,60,255,255); 
+
+            }else {
+                 solid(8,16,0,255,255); 
+            }
+
+       
+
+        } else {
+            solid(8, 16, 120, 255, 255);
+        }
+    }
 }

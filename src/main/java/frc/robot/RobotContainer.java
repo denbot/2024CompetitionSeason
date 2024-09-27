@@ -44,9 +44,9 @@ import java.util.function.BooleanSupplier;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private final Shooter shooterSubsystem = new Shooter();
+    private static final Shooter shooterSubsystem = new Shooter();
     private static final Intake intakeSubsystem = new Intake();
-    public static final Lights lightsSubsystem = new Lights(intakeSubsystem); 
+    public static final Lights lightsSubsystem = new Lights(shooterSubsystem); 
 
     private final CommandHolder commands;
 

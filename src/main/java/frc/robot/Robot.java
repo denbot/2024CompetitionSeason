@@ -107,6 +107,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         RobotContainer.lightsSubsystem.sensorCheck();
+        RobotContainer.lightsSubsystem.alignCheck();
     }
 
     @Override

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -47,6 +48,7 @@ public class Robot extends TimedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        SmartDashboard.putNumber("Gyro", RobotContainer.drivetrain.get)
     }
 
     /**
@@ -58,7 +60,16 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        RobotContainer.lightsSubsystem.solid(0, 24, 120, 255, 255);
+        var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+                if (alliance.get() == DriverStation.Alliance.Red) {
+                    RobotContainer.lightsSubsystem.solid(0, 24, 0, 255, 255);
+                } else if (alliance.get() == DriverStation.Alliance.Blue) {
+                    RobotContainer.lightsSubsystem.solid(0, 24, 120, 255, 255);
+                }
+            } else {
+                RobotContainer.lightsSubsystem.rainbow();
+            }
     }
 
     /**
@@ -83,6 +94,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
+        RobotContainer.lightsSubsystem.rainbow();
     }
 
     @Override

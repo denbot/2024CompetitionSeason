@@ -98,7 +98,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot", shootCommand);
         NamedCommands.registerCommand("Stage Speaker Shoot", stageSpeakerShoot);
         NamedCommands.registerCommand("Trap Shoot", trapShoot);
-        NamedCommands.registerCommand("Intake", commands.waitForIntakeCommand());
+        NamedCommands.registerCommand("Intake", commands.autoIntakeCommand());
 
         // TODO: tune positions of robot especially with bumpers
         autoChooser = AutoBuilder.buildAutoChooser("");

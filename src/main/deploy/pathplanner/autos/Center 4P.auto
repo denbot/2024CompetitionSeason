@@ -32,12 +32,6 @@
                 "data": {
                   "pathName": "Center 4P 1G"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
               }
             ]
           }
@@ -76,12 +70,6 @@
                 "data": {
                   "pathName": "Center 4P 2G"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
               }
             ]
           }
@@ -119,12 +107,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "Center 4P 3G"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
                 }
               }
             ]

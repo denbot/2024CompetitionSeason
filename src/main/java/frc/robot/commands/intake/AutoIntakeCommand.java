@@ -79,6 +79,6 @@ public class AutoIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (timer.hasElapsed(0.17) & notePassedShooterSensor) || timer.hasElapsed(60);
+    return (timer.hasElapsed(0.17) & notePassedShooterSensor) || timer.hasElapsed(3);
   }
 }

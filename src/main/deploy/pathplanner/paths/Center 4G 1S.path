@@ -3,52 +3,34 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.36,
-        "y": 5.550603828480384
+        "x": 2.65,
+        "y": 4.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.360000000000001,
-        "y": 5.550603828480384
+        "x": 1.8714622249227981,
+        "y": 4.817074266518475
       },
       "isLocked": false,
-      "linkedName": "Center Subwoofer"
+      "linkedName": "1st Grab"
     },
     {
       "anchor": {
-        "x": 2.8968988847068604,
-        "y": 5.550603828480384
+        "x": 1.2907336797332554,
+        "y": 5.48
       },
       "prevControl": {
-        "x": 1.8968988847068604,
-        "y": 5.550603828480384
+        "x": 2.06244217608171,
+        "y": 4.756096454752779
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Center 1-2 Note"
+      "linkedName": "Center"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "Intake",
-      "waypointRelativePos": 0.75,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -61,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Center",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

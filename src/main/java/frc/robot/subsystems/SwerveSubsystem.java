@@ -98,7 +98,8 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
     }
 
     public Pose2d getPose() {
-        return new Pose2d(this.m_odometry.getEstimatedPosition().getTranslation(), m_pigeon2.getRotation2d());
+        return m_odometry.getEstimatedPosition();
+//        return new Pose2d(this.m_odometry.getEstimatedPosition().getTranslation(), m_pigeon2.getRotation2d());
     }
 
     public void configPathPlanner() {
@@ -129,7 +130,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
 //        this.m_odometry.resetPosition(this.m_pigeon2.getRotation2d(), this.m_modulePositions, pose);
 //         this.zeroGyroAdjusted(pose.getRotation());
         this.seedFieldRelative(pose);
-        this.setGyroYaw(pose.getRotation());
+//        this.setGyroYaw(pose.getRotation());
     }
 
     public void setGyroYaw(Rotation2d yaw) {

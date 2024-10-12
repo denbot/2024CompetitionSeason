@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0138248847926272,
-        "y": 4.075329293515731
+        "x": 1.2907336797332554,
+        "y": 5.48
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.271381399905658,
-        "y": 1.5245836205958143
+        "x": 1.8848809291342778,
+        "y": 4.8175599633115045
       },
       "isLocked": false,
-      "linkedName": "Source Return"
+      "linkedName": "Center"
     },
     {
       "anchor": {
-        "x": 9.809499618999238,
-        "y": 2.917232120178527
+        "x": 2.65,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 7.977323923219275,
-        "y": 1.0104212779854143
+        "x": 1.3934127139104815,
+        "y": 3.9702437041537992
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source 2-4 Note"
+      "linkedName": "1st Grab"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.85,
+      "waypointRelativePos": 0.7,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 30.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source",
+  "folder": null,
   "previewStartingState": {
-    "rotation": -50.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

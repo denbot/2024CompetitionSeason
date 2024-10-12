@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.51,
-      "y": 4.1
+      "x": 0.7,
+      "y": 6.7
     },
-    "rotation": 0.0
+    "rotation": 58.39
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Source Shoot Position"
-          }
-        },
         {
           "type": "named",
           "data": {
@@ -30,14 +24,27 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Source Leave"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Non-Source Side Path"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         }
       ]
     }
   },
-  "folder": "1 Note",
+  "folder": null,
   "choreoAuto": false
 }

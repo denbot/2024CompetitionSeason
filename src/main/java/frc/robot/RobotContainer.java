@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.util.FieldUtil;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AutoCenter;
 import frc.robot.commands.CommandHolder;
 import frc.robot.commands.PrepCommand;
 import frc.robot.commands.PrepCommandForAuto;
@@ -54,32 +55,34 @@ public class RobotContainer {
 
     private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
 
-    private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Change angle if necessary
+    private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 40, 40); //TODO Change angle if necessary
     private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 50); //TODO Change angle if necessary
     private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 64, 33); //TODO Change angle if necessary
     private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 71, 80); //TODO Change angle if necessary
     //    private final PrepCommand longShot = new PrepCommand(shooterSubsystem, 43.5, 120); //TODO Change angle if necessary
     private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
     private final EjectCommand ejectCommand = new EjectCommand(intakeSubsystem);
-
+    
     private final PrepCommandForAuto autoSpeakerPrep = new PrepCommandForAuto(shooterSubsystem, 65, 80);
-
+    
     public final CommandXboxController driverController =
-            new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    new CommandXboxController(OperatorConstants.kDriverControllerPort);
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
-
+    
     private final double maxSpeed = 6; // 6 meters per second desired top speed
     private final double maxAngularRate = 7.33478344093933; // 2 * Math.PI?
-
+    
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveSubsystem drivetrain = SwerveTunerConstants.DriveTrain; // My drivetrain
-
+    
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(maxSpeed * 0.1).withRotationalDeadband(maxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
+    .withDeadband(maxSpeed * 0.1).withRotationalDeadband(maxAngularRate * 0.05) // Add a 10% deadband
+    .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
     // driving in open loop
+    private final AutoCenter autoCenter = new AutoCenter(drivetrain, drive);
+
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     private final Telemetry telemetry = new Telemetry(maxSpeed);
@@ -115,6 +118,7 @@ public class RobotContainer {
      * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
      * joysticks}.
      */
+
     private void configureBindings() {
         // Uncomment this to calibrate the wrist angle
         shooterSubsystem.setDefaultCommand(commands.calibrateWristAngleCommand());
@@ -123,7 +127,7 @@ public class RobotContainer {
 
         driverController.a().toggleOnTrue(ejectCommand);  // Allow ejecting a note to be stopped on a second a press
         driverController.b().toggleOnTrue(commands.intakeNoteAndKeepRunningCommand());
-        driverController.x().and(shooterSubsystem::isNoteInShooter).onTrue(trapShoot);
+        driverController.x().onTrue(autoCenter);
         driverController.y().and(shooterSubsystem::isNoteInShooter).onTrue(stageSpeakerShoot);
 
         driverController.leftBumper().and(shooterSubsystem::isNoteInShooter).onTrue(ampShoot);

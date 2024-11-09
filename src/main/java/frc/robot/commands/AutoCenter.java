@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -13,16 +14,23 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class AutoCenter extends Command {
   
   boolean end = false;
-  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric();
+  double kP = -0.05;
+  private final Timer timer = new Timer();
+  private final SwerveSubsystem driveSubsystem;
+  private final SwerveRequest.FieldCentric drive;
   
   /** Creates a new AutoCenter. */
-  public AutoCenter() {
+  public AutoCenter(SwerveSubsystem driveSubsystem, SwerveRequest.FieldCentric drive) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.driveSubsystem = driveSubsystem;
+    this.drive = drive;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timer.start();
+    System.out.println("this works");
     end = false;
     if (LimelightHelpers.getTX("") == 0) {
         end = true;
@@ -32,20 +40,31 @@ public class AutoCenter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (LimelightHelpers.getTX("") > 2.5) {
-      drive.withRotationalRate(-0.1);
-    } else if (LimelightHelpers.getTX("") < 2.5) {
-      drive.withRotationalRate(0.1);
+    driveSubsystem.setControl(drive.withRotationalRate(LimelightHelpers.getTX("")*kP));
+    if (Math.abs(LimelightHelpers.getTX("")) < 5) {
+      timer.start();
+    } else {
+      timer.reset();
     }
+
+    // if (LimelightHelpers.getTX("") > 2.5) {
+    //   System.out.println("trying to drive clockwise");
+    //   driveSubsystem.setControl(drive.withRotationalRate(-0.8));
+    // } else if (LimelightHelpers.getTX("") < -2.5) {
+    //   System.out.println("trying to drive counterclockwise");
+    //   driveSubsystem.setControl(drive.withRotationalRate(0.8));
+    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("ended");
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return end;
+    return (end || timer.get() > 0.5);
   }
 }

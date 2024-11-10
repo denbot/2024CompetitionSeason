@@ -34,19 +34,28 @@ public class AutoCenter extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
     timer.start();
+    
     end = false;
+    
+    // if the limelight doesn't see an april tag, stop the command
     if (LimelightHelpers.getTX("") == 0) {
-        end = true;
+        end = true; 
     }
 
+    // preps the arm while we are getting to the right angle
     prep.schedule();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSubsystem.setControl(drive.withRotationalRate(LimelightHelpers.getTX("")*kP));
+    
+    // rotates the offset from the april tag, kP scales the movement and is negative so it rotates the right way
+    driveSubsystem.setControl(drive.withRotationalRate(LimelightHelpers.getTX("")*kP)); 
+    
+    // if we are close enough to the april tag, start the timer (the command will end if the timer gets above 0.5 seconds and the robot is still in the range)
     if (Math.abs(LimelightHelpers.getTX("")) < 5) {
       timer.start();
     } else {
@@ -65,6 +74,7 @@ public class AutoCenter extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // when we are in the right place, shoot the note
     shootCommand.schedule();
   }
 

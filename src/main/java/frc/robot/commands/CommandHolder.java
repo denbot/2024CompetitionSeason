@@ -18,6 +18,7 @@ public class CommandHolder {
     private MoveNoteBackToShooterReadyCommand moveNoteBackToShooterReadyCommand;
     private HoldCommand holdCommand;
     private CalibrateWristAngleCommand calibrateWristAngleCommand;
+    private AutoIntakeCommand autoIntakeCommand;
 
     public CommandHolder(
             Intake intake,
@@ -27,6 +28,13 @@ public class CommandHolder {
         this.intake = intake;
         this.shooter = shooter;
         this.controller = controller;
+    }
+
+    public AutoIntakeCommand autoIntakeCommand() {
+        if (autoIntakeCommand == null) {
+            autoIntakeCommand = new AutoIntakeCommand(this, intake, shooter);
+        }
+        return autoIntakeCommand;
     }
 
     public WaitForIntakeCommand waitForIntakeCommand() {

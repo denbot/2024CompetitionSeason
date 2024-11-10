@@ -22,7 +22,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.util.FieldUtil;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AutoCenter;
 import frc.robot.commands.CommandHolder;
+import frc.robot.commands.MoveToPoint;
 import frc.robot.commands.PrepCommand;
 import frc.robot.commands.PrepCommandForAuto;
 import frc.robot.commands.ShootCommand;
@@ -30,6 +32,7 @@ import frc.robot.commands.calibration.CalibrateWristAngleCommand;
 import frc.robot.commands.intake.EjectCommand;
 import frc.robot.generated.SwerveTunerConstants;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -43,8 +46,9 @@ import java.util.function.BooleanSupplier;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private final Shooter shooterSubsystem = new Shooter();
-    private final Intake intakeSubsystem = new Intake();
+    public static final Shooter shooterSubsystem = new Shooter();
+    public static final Intake intakeSubsystem = new Intake();
+    public static final Lights lightsSubsystem = new Lights(shooterSubsystem); 
 
     private final CommandHolder commands;
 
@@ -52,32 +56,42 @@ public class RobotContainer {
 
     private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem, intakeSubsystem);
 
-    private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 52.5, 0.9); //TODO Change angle if necessary
-    private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 50); //TODO Change angle if necessary
-    private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 64, 33); //TODO Change angle if necessary
-    private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 71, 80); //TODO Change angle if necessary
+    private final PrepCommand stageSpeakerShoot = new PrepCommand(shooterSubsystem, 40, 40, false); //TODO Change angle if necessary
+    private final PrepCommand trapShoot = new PrepCommand(shooterSubsystem, 66, 50, false); //TODO Change angle if necessary
+    private final PrepCommand ampShoot = new PrepCommand(shooterSubsystem, 64, 33, false); //TODO Change angle if necessary
+    private final PrepCommand speakerShoot = new PrepCommand(shooterSubsystem, 71, 80, false); //TODO Change angle if necessary
     //    private final PrepCommand longShot = new PrepCommand(shooterSubsystem, 43.5, 120); //TODO Change angle if necessary
-    private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0);
+    private final PrepCommand stopShoot = new PrepCommand(shooterSubsystem, 30, 0, false);
     private final EjectCommand ejectCommand = new EjectCommand(intakeSubsystem);
 
+    public final PrepCommand regressionShoot = new PrepCommand(shooterSubsystem, 30, 80, true);
+    
     private final PrepCommandForAuto autoSpeakerPrep = new PrepCommandForAuto(shooterSubsystem, 65, 80);
-
+    
     public final CommandXboxController driverController =
-            new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    new CommandXboxController(OperatorConstants.kDriverControllerPort);
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
-
+    
     private final double maxSpeed = 6; // 6 meters per second desired top speed
     private final double maxAngularRate = 7.33478344093933; // 2 * Math.PI?
-
+    
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveSubsystem drivetrain = SwerveTunerConstants.DriveTrain; // My drivetrain
-
+    
+    private final SwerveRequest.RobotCentric driveRobotCentric = new SwerveRequest.RobotCentric()
+    .withDeadband(0.2).withRotationalDeadband(maxAngularRate * 0.05) // Add a 10% deadband
+    .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(maxSpeed * 0.1).withRotationalDeadband(maxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
+    .withDeadband(maxSpeed * 0.05).withRotationalDeadband(maxAngularRate * 0.05) // Add a 10% deadband
+    .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
     // driving in open loop
+    
+    private final AutoCenter autoCenter = new AutoCenter(drivetrain, drive);
+    private final MoveToPoint moveToPoint = new MoveToPoint(drivetrain, driveRobotCentric);
+
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     private final Telemetry telemetry = new Telemetry(maxSpeed);
@@ -96,7 +110,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot", shootCommand);
         NamedCommands.registerCommand("Stage Speaker Shoot", stageSpeakerShoot);
         NamedCommands.registerCommand("Trap Shoot", trapShoot);
-        NamedCommands.registerCommand("Intake", commands.intakeNoteAndKeepRunningCommand());
+        NamedCommands.registerCommand("Intake", commands.autoIntakeCommand());
 
         // TODO: tune positions of robot especially with bumpers
         autoChooser = AutoBuilder.buildAutoChooser("");
@@ -113,15 +127,16 @@ public class RobotContainer {
      * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
      * joysticks}.
      */
+
     private void configureBindings() {
         // Uncomment this to calibrate the wrist angle
         shooterSubsystem.setDefaultCommand(commands.calibrateWristAngleCommand());
 
         intakeSubsystem.setDefaultCommand(commands.waitForIntakeCommand());
 
-        driverController.a().toggleOnTrue(ejectCommand);  // Allow ejecting a note to be stopped on a second a press
-        driverController.b().toggleOnTrue(commands.intakeNoteAndKeepRunningCommand());
-        driverController.x().and(shooterSubsystem::isNoteInShooter).onTrue(trapShoot);
+        driverController.a().onTrue(moveToPoint);  // Allow ejecting a note to be stopped on a second a press
+        driverController.b().onTrue(regressionShoot);
+        driverController.x().onTrue(autoCenter);
         driverController.y().and(shooterSubsystem::isNoteInShooter).onTrue(stageSpeakerShoot);
 
         driverController.leftBumper().and(shooterSubsystem::isNoteInShooter).onTrue(ampShoot);
@@ -154,11 +169,11 @@ public class RobotContainer {
         driverController.start().onTrue(drivetrain.runOnce(drivetrain::zeroGyroAdjusted));
 
         BooleanSupplier hasValidPrepCommand = () -> PrepCommand.currentPrepCommand != null;
-        driverController.povRight().and(hasValidPrepCommand).onTrue(Commands.runOnce(() -> PrepCommand.currentPrepCommand.changeAngle(+3)));
-        driverController.povLeft().and(hasValidPrepCommand).onTrue(Commands.runOnce(() -> PrepCommand.currentPrepCommand.changeAngle(-3)));
+        driverController.povUp().and(hasValidPrepCommand).onTrue(Commands.runOnce(() -> PrepCommand.currentPrepCommand.changeAngle(+5)));
+        driverController.povDown().and(hasValidPrepCommand).onTrue(Commands.runOnce(() -> PrepCommand.currentPrepCommand.changeAngle(-5)));
 
-        driverController.povUp().and(hasValidPrepCommand).onTrue(Commands.runOnce(() -> PrepCommand.currentPrepCommand.changeSpeed(+5)));
-        driverController.povDown().and(hasValidPrepCommand).onTrue(Commands.runOnce(() -> PrepCommand.currentPrepCommand.changeSpeed(-5)));
+        // driverController.povUp().and(hasValidPrepCommand).onTrue(Commands.runOnce(() -> PrepCommand.currentPrepCommand.changeSpeed(+5)));
+        // driverController.povDown().and(hasValidPrepCommand).onTrue(Commands.runOnce(() -> PrepCommand.currentPrepCommand.changeSpeed(-5)));
 
         if (Utils.isSimulation()) {
             drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));

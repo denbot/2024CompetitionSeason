@@ -2,32 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.51,
-      "y": 4.1
+      "x": 0.7,
+      "y": 4.43
     },
-    "rotation": 0
+    "rotation": -58.389999999999986
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Source Shoot Position"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Speaker Shoot"
-                }
-              }
-            ]
+            "name": "Speaker Shoot"
           }
         },
         {
@@ -35,10 +22,29 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Open Side Speaker Path"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
         }
       ]
     }
   },
-  "folder": "1 Note",
+  "folder": null,
   "choreoAuto": false
 }

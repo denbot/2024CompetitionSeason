@@ -25,7 +25,6 @@ public class MoveToPoint extends Command {
 
   private final PrepCommand prep = new PrepCommand(RobotContainer.shooterSubsystem, 45, 50, false);
 
-  boolean end = false;
   double kP = 1.2;
   double rotationalKP = -0.05;
 
@@ -40,10 +39,10 @@ public class MoveToPoint extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    end = false;
 
     // prep the arm while we are moving to the given spot
     prep.schedule();
+
   }
   
   // Called every time the scheduler runs while the command is scheduled.
@@ -61,7 +60,7 @@ public class MoveToPoint extends Command {
     } else {
       framesDropped++;
       if (framesDropped > 5) {
-        end = true;
+        this.cancel();
       }
       return;
     }
@@ -108,7 +107,7 @@ public class MoveToPoint extends Command {
 
     // if we are rotated to about where we want to be and we are close enough to our desired direction, we can end the command
     if (LimelightHelpers.getTX("") < 5 && Math.sqrt(Math.pow(translate.getZ(), 2) + Math.pow(translate.getX(), 2)) < 0.25){
-      end = true;
+      this.cancel();
     }
   }
 
@@ -122,6 +121,6 @@ public class MoveToPoint extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return end;
+    return false;
   }
 }

@@ -35,13 +35,11 @@ public class AutoCenter extends Command {
   @Override
   public void initialize() {
     
-    timer.start();
-    
-    end = false;
+    timer.reset();
     
     // if the limelight doesn't see an april tag, stop the command
     if (LimelightHelpers.getTX("") == 0) {
-        end = true; 
+      this.cancel();  
     }
 
     // preps the arm while we are getting to the right angle
@@ -81,6 +79,6 @@ public class AutoCenter extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (end || timer.get() > 0.5);
+    return timer.get() > 0.5;
   }
 }

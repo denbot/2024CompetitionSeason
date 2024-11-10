@@ -25,8 +25,8 @@ public class AutoIntakeCommand extends Command {
     private final NeutralOut brake = new NeutralOut();
   
     boolean noteAtShooterSensor;
-    boolean noteTrippedShooterSensor = false;
-    boolean notePassedShooterSensor = false;
+    boolean noteTrippedShooterSensor;
+    boolean notePassedShooterSensor;
     /** Creates a new IntakeCommand. */
   public AutoIntakeCommand(CommandHolder commands,
   Intake intake,
@@ -45,7 +45,7 @@ public class AutoIntakeCommand extends Command {
     System.out.println("Hello");
     intake.setMotorControl(voltageOut.withOutput(4));
     shooter.readyArmForNewNote();
-    timer.start();
+    timer.restart();
     noteAtShooterSensor = false;
     noteTrippedShooterSensor = false;
     notePassedShooterSensor = false;

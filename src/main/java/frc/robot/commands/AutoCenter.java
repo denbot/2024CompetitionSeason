@@ -9,6 +9,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class AutoCenter extends Command {
@@ -18,6 +19,10 @@ public class AutoCenter extends Command {
   private final Timer timer = new Timer();
   private final SwerveSubsystem driveSubsystem;
   private final SwerveRequest.FieldCentric drive;
+
+  private final ShootCommand shootCommand = new ShootCommand(RobotContainer.shooterSubsystem, RobotContainer.intakeSubsystem);
+
+  private final PrepCommand prep = new PrepCommand(RobotContainer.shooterSubsystem, 45, 50, true);
   
   /** Creates a new AutoCenter. */
   public AutoCenter(SwerveSubsystem driveSubsystem, SwerveRequest.FieldCentric drive) {
@@ -30,11 +35,12 @@ public class AutoCenter extends Command {
   @Override
   public void initialize() {
     timer.start();
-    System.out.println("this works");
     end = false;
     if (LimelightHelpers.getTX("") == 0) {
         end = true;
     }
+
+    prep.schedule();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -59,7 +65,7 @@ public class AutoCenter extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("ended");
+    shootCommand.schedule();
   }
 
   // Returns true when the command should end.
